@@ -9,8 +9,15 @@
     tools:context=".MainActivity">
 
     <io.doist.material.widget.MaterialButton
+        android:id="@android:id/button1"
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <io.doist.material.widget.MaterialImageView
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_below="@android:id/button1"
+        android:src="@drawable/btn_default_material" />
 
 </RelativeLayout>
