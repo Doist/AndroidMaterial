@@ -11,9 +11,9 @@ import java.util.Map;
 public class ReflectionUtils {
     private static final String TAG = ReflectionUtils.class.getSimpleName();
 
-    private static Map<String, Class<?>> sClassCache = new HashMap<>();
-    private static Map<Class<?>, Map<String, Method>> sClassMethodCache = new HashMap<>();
-    private static Map<Class<?>, Map<String, Field>> sClassFieldCache = new HashMap<>();
+    private static final Map<String, Class<?>> sClassCache = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new HashMap<>();
+    private static final Map<Class<?>, Map<String, Field>> sClassFieldCache = new HashMap<>();
 
     private static Map<String, Method> ensureMethodCache(Class<?> clazz) {
         Map<String, Method> methodCache = sClassMethodCache.get(clazz);

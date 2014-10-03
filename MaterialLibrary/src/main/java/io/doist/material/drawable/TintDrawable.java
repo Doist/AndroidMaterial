@@ -23,7 +23,7 @@ import io.doist.material.R;
 public class TintDrawable extends WrapperDrawable {
     private WeakReference<Context> mContext;
 
-    private TintState mTintState;
+    private final TintState mTintState;
     private boolean mMutated = false;
 
     public TintDrawable(Context context, Drawable drawable) {

@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -20,7 +21,7 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class LayerMaterialDrawable extends LayerDrawable {
-    private WeakReference<Context> mContext;
+    final private WeakReference<Context> mContext;
 
     public LayerMaterialDrawable(Context context) {
         super(new Drawable[0]);
@@ -36,7 +37,9 @@ public class LayerMaterialDrawable extends LayerDrawable {
 
         super.setOpacity(a.getInt(R.styleable.LayerDrawable_android_opacity, PixelFormat.UNKNOWN));
 
-        setAutoMirrored(a.getBoolean(R.styleable.LayerDrawable_android_autoMirrored, false));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setAutoMirrored(a.getBoolean(R.styleable.LayerDrawable_android_autoMirrored, false));
+        }
 
         a.recycle();
 

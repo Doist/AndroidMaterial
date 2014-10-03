@@ -19,7 +19,7 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class AnimationMaterialDrawable extends AnimationDrawable {
-    private WeakReference<Context> mContext;
+    private final WeakReference<Context> mContext;
 
     AnimationMaterialDrawable(Context context) {
         mContext = new WeakReference<>(context);
@@ -114,9 +114,9 @@ public class AnimationMaterialDrawable extends AnimationDrawable {
      * Helper class to manipulate internal member mAnimationState.
      */
     private static class AnimationState {
-        Class<?> AnimationStateClass;
-        Class<?> DrawableContainerStateClass;
-        Object mAnimationState;
+        final Class<?> AnimationStateClass;
+        final Class<?> DrawableContainerStateClass;
+        final Object mAnimationState;
 
         public AnimationState(AnimationMaterialDrawable receiver) {
             AnimationStateClass =

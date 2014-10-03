@@ -13,7 +13,7 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
-    private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
+    final private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
 
     private static int[] sOriginalViewStyleable;
     private static int[] sOriginalImageViewStyleable;

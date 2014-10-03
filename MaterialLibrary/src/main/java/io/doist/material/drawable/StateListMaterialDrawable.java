@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.StateSet;
 
@@ -21,7 +22,7 @@ import io.doist.material.res.MaterialResources;
 public class StateListMaterialDrawable extends StateListDrawable {
     private static final boolean DEFAULT_DITHER = true;
 
-    private WeakReference<Context> mContext;
+    private final WeakReference<Context> mContext;
 
     StateListMaterialDrawable(Context context) {
         mContext = new WeakReference<>(context);
@@ -47,7 +48,9 @@ public class StateListMaterialDrawable extends StateListDrawable {
 
         setDither(a.getBoolean(R.styleable.StateListDrawable_android_dither, DEFAULT_DITHER));
 
-        setAutoMirrored(a.getBoolean(R.styleable.StateListDrawable_android_autoMirrored, false));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setAutoMirrored(a.getBoolean(R.styleable.StateListDrawable_android_autoMirrored, false));
+        }
 
         a.recycle();
 
@@ -122,8 +125,8 @@ public class StateListMaterialDrawable extends StateListDrawable {
      * Helper class to manipulate internal member mStateListState.
      */
     private static class StateListState {
-        Class<?> StateListStateClass;
-        Object mStateListState;
+        final Class<?> StateListStateClass;
+        final Object mStateListState;
 
         public StateListState(StateListMaterialDrawable receiver) {
             StateListStateClass =
