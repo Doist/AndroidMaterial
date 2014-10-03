@@ -10,20 +10,15 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableContainer;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import io.doist.material.R;
+import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class AnimationMaterialDrawable extends AnimationDrawable {
-    private static final String TAG = AnimationMaterialDrawable.class.getSimpleName();
-
     private WeakReference<Context> mContext;
 
     AnimationMaterialDrawable(Context context) {
@@ -98,39 +93,21 @@ public class AnimationMaterialDrawable extends AnimationDrawable {
     }
 
     private void inflateWithAttributes(Resources r, XmlPullParser parser, TypedArray attrs, int visibleAttr) {
-        try {
-            final Method inflateWithAttributes = Drawable.class.getDeclaredMethod(
-                    "inflateWithAttributes",
-                    Resources.class,
-                    XmlPullParser.class,
-                    TypedArray.class,
-                    int.class);
-
-            inflateWithAttributes.setAccessible(true);
-            inflateWithAttributes.invoke(
-                    this,
-                    r,
-                    parser,
-                    attrs,
-                    visibleAttr);
-
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                Drawable.class,
+                "inflateWithAttributes",
+                new Class<?>[]{Resources.class, XmlPullParser.class, TypedArray.class, int.class},
+                this,
+                new Object[]{r, parser, attrs, visibleAttr});
     }
 
     private void setFrame(int frame, boolean unschedule, boolean animate) {
-        try {
-            final Method setFrame = AnimationDrawable.class.getDeclaredMethod(
-                    "setFrame",
-                    int.class,
-                    boolean.class,
-                    boolean.class);
-            setFrame.setAccessible(true);
-            setFrame.invoke(this, frame, unschedule, animate);
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                AnimationDrawable.class,
+                "setFrame",
+                new Class<?>[] {int.class, boolean.class, boolean.class},
+                this,
+                new Object[] {frame, unschedule, animate});
     }
 
     /**
@@ -141,71 +118,42 @@ public class AnimationMaterialDrawable extends AnimationDrawable {
         Class<?> DrawableContainerStateClass;
         Object mAnimationState;
 
-        public AnimationState(AnimationMaterialDrawable owner) {
-            try {
-                AnimationStateClass = Class.forName(AnimationDrawable.class.getName() + "$AnimationState");
-            } catch (ClassNotFoundException e) {
-                AnimationStateClass = null;
-                Log.w(TAG, e);
-            }
+        public AnimationState(AnimationMaterialDrawable receiver) {
+            AnimationStateClass =
+                    ReflectionUtils.getClass(AnimationDrawable.class.getName() + "$AnimationState");
+            DrawableContainerStateClass =
+                    ReflectionUtils.getClass(DrawableContainer.class.getName() + "$DrawableContainerState");
 
-            try {
-                DrawableContainerStateClass = Class.forName(DrawableContainer.class.getName() + "$DrawableContainerState");
-            } catch (ClassNotFoundException e) {
-                DrawableContainerStateClass = null;
-                Log.w(TAG, e);
-            }
-
-            if (AnimationStateClass != null) {
-                try {
-                    Field mAnimationStateField = AnimationDrawable.class.getDeclaredField("mAnimationState");
-                    mAnimationStateField.setAccessible(true);
-                    mAnimationState = mAnimationStateField.get(owner);
-                } catch (IllegalAccessException | NoSuchFieldException e) {
-                    mAnimationState = null;
-                    Log.w(TAG, e);
-                }
-            } else {
-                mAnimationState = null;
-            }
+            mAnimationState = ReflectionUtils.getDeclaredFieldValue(
+                    AnimationStateClass,
+                    "mAnimationState",
+                    receiver);
         }
 
         public void setVariablePadding(boolean variable) {
-            if (DrawableContainerStateClass != null && mAnimationState != null) {
-                try {
-                    final Method setVariablePadding =
-                            DrawableContainerStateClass.getDeclaredMethod("setVariablePadding", boolean.class);
-                    setVariablePadding.setAccessible(true);
-                    setVariablePadding.invoke(mAnimationState, variable);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    DrawableContainerStateClass,
+                    "setVariablePadding",
+                    new Class<?>[] {boolean.class},
+                    mAnimationState,
+                    new Object[] {variable});
         }
 
         public void setOneShot(boolean oneShot) {
-            if (AnimationStateClass != null && mAnimationState != null) {
-                try {
-                    final Field mOneShotField = AnimationStateClass.getDeclaredField("mOneShot");
-                    mOneShotField.setAccessible(true);
-                    mOneShotField.set(mAnimationState, oneShot);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.setDeclaredFieldValue(
+                    AnimationStateClass,
+                    "mOneShot",
+                    mAnimationState,
+                    oneShot);
         }
 
         public void addFrame(Drawable dr, int dur) {
-            if (AnimationStateClass != null && mAnimationState != null) {
-                try {
-                    final Method addFrame =
-                            AnimationStateClass.getDeclaredMethod("addFrame", Drawable.class, int.class);
-                    addFrame.setAccessible(true);
-                    addFrame.invoke(mAnimationState, dr, dur);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    AnimationStateClass,
+                    "addFrame",
+                    new Class<?>[] {Drawable.class, int.class},
+                    mAnimationState,
+                    new Object[] {dr, dur});
         }
     }
 }

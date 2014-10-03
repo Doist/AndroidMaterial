@@ -9,21 +9,16 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.StateSet;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import io.doist.material.R;
+import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class StateListMaterialDrawable extends StateListDrawable {
-    private static final String TAG = StateListMaterialDrawable.class.getSimpleName();
-
     private static final boolean DEFAULT_DITHER = true;
 
     private WeakReference<Context> mContext;
@@ -115,25 +110,12 @@ public class StateListMaterialDrawable extends StateListDrawable {
     }
 
     private void inflateWithAttributes(Resources r, XmlPullParser parser, TypedArray attrs, int visibleAttr) {
-        try {
-            final Method inflateWithAttributes = Drawable.class.getDeclaredMethod(
-                    "inflateWithAttributes",
-                    Resources.class,
-                    XmlPullParser.class,
-                    TypedArray.class,
-                    int.class);
-
-            inflateWithAttributes.setAccessible(true);
-            inflateWithAttributes.invoke(
-                    this,
-                    r,
-                    parser,
-                    attrs,
-                    visibleAttr);
-
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                Drawable.class,
+                "inflateWithAttributes",
+                new Class<?>[]{Resources.class, XmlPullParser.class, TypedArray.class, int.class},
+                this,
+                new Object[]{r, parser, attrs, visibleAttr});
     }
 
     /**
@@ -143,92 +125,60 @@ public class StateListMaterialDrawable extends StateListDrawable {
         Class<?> StateListStateClass;
         Object mStateListState;
 
-        public StateListState(StateListMaterialDrawable owner) {
-            try {
-                StateListStateClass = Class.forName(StateListDrawable.class.getName() + "$StateListState");
-            } catch (ClassNotFoundException e) {
-                StateListStateClass = null;
-                Log.w(TAG, e);
-            }
+        public StateListState(StateListMaterialDrawable receiver) {
+            StateListStateClass =
+                    ReflectionUtils.getClass(StateListDrawable.class.getName() + "$StateListState");
 
-            if (StateListStateClass != null) {
-                try {
-                    Field mStateListStateField = StateListDrawable.class.getDeclaredField("mStateListState");
-                    mStateListStateField.setAccessible(true);
-                    mStateListState = mStateListStateField.get(owner);
-                } catch (IllegalAccessException | NoSuchFieldException e) {
-                    mStateListState = null;
-                    Log.w(TAG, e);
-                }
-            } else {
-                mStateListState = null;
-            }
+            mStateListState = ReflectionUtils.getDeclaredFieldValue(
+                    StateListStateClass,
+                    "mStateListState",
+                    receiver);
         }
 
         public int addStateSet(int[] stateSet, Drawable drawable) {
-            if (StateListStateClass != null && mStateListState != null) {
-                try {
-                    final Method addStateSet =
-                            StateListStateClass.getDeclaredMethod("addStateSet", int[].class, Drawable.class);
-                    addStateSet.setAccessible(true);
-                    return (int) addStateSet.invoke(mStateListState, stateSet, drawable);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
-            return 0;
+            Object result = ReflectionUtils.invokeDeclaredMethod(
+                    StateListStateClass,
+                    "addStateSet",
+                    new Class<?>[] {int[].class, Drawable.class},
+                    mStateListState,
+                    new Object[] {stateSet, drawable});
+            return result != null ? (int) result : 0;
         }
 
         public final void setVariablePadding(boolean variable) {
-            if (StateListStateClass != null && mStateListState != null) {
-                try {
-                    final Method setVariablePadding =
-                            StateListStateClass.getSuperclass().getDeclaredMethod("setVariablePadding", boolean.class);
-                    setVariablePadding.setAccessible(true);
-                    setVariablePadding.invoke(mStateListState, variable);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    StateListStateClass,
+                    "setVariablePadding",
+                    new Class<?>[] {boolean.class},
+                    mStateListState,
+                    new Object[] {variable});
         }
 
         public final void setConstantSize(boolean constant) {
-            if (StateListStateClass != null && mStateListState != null) {
-                try {
-                    final Method setConstantSize =
-                            StateListStateClass.getSuperclass().getDeclaredMethod("setConstantSize", boolean.class);
-                    setConstantSize.setAccessible(true);
-                    setConstantSize.invoke(mStateListState, constant);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    StateListStateClass,
+                    "setConstantSize",
+                    new Class<?>[] {boolean.class},
+                    mStateListState,
+                    new Object[] {constant});
         }
 
         public final void setEnterFadeDuration(int duration) {
-            if (StateListStateClass != null && mStateListState != null) {
-                try {
-                    final Method setEnterFadeDuration =
-                            StateListStateClass.getSuperclass().getDeclaredMethod("setEnterFadeDuration", int.class);
-                    setEnterFadeDuration.setAccessible(true);
-                    setEnterFadeDuration.invoke(mStateListState, duration);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    StateListStateClass,
+                    "setEnterFadeDuration",
+                    new Class<?>[] {int.class},
+                    mStateListState,
+                    new Object[] {duration});
         }
 
         public final void setExitFadeDuration(int duration) {
-            if (StateListStateClass != null && mStateListState != null) {
-                try {
-                    final Method setExitFadeDuration =
-                            StateListStateClass.getSuperclass().getDeclaredMethod("setExitFadeDuration", int.class);
-                    setExitFadeDuration.setAccessible(true);
-                    setExitFadeDuration.invoke(mStateListState, duration);
-                } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-                    Log.w(TAG, e);
-                }
-            }
+            ReflectionUtils.invokeDeclaredMethod(
+                    StateListStateClass,
+                    "setExitFadeDuration",
+                    new Class<?>[] {int.class},
+                    mStateListState,
+                    new Object[] {duration});
         }
     }
 }

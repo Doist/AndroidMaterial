@@ -10,20 +10,16 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import io.doist.material.R;
+import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class LayerMaterialDrawable extends LayerDrawable {
-    private static final String TAG = LayerMaterialDrawable.class.getSimpleName();
-
     private WeakReference<Context> mContext;
 
     public LayerMaterialDrawable(Context context) {
@@ -91,51 +87,29 @@ public class LayerMaterialDrawable extends LayerDrawable {
     }
 
     private void inflateWithAttributes(Resources r, XmlPullParser parser, TypedArray attrs, int visibleAttr) {
-        try {
-            final Method inflateWithAttributes = Drawable.class.getDeclaredMethod(
-                    "inflateWithAttributes",
-                    Resources.class,
-                    XmlPullParser.class,
-                    TypedArray.class,
-                    int.class);
-
-            inflateWithAttributes.setAccessible(true);
-            inflateWithAttributes.invoke(
-                    this,
-                    r,
-                    parser,
-                    attrs,
-                    visibleAttr);
-
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                Drawable.class,
+                "inflateWithAttributes",
+                new Class<?>[]{Resources.class, XmlPullParser.class, TypedArray.class, int.class},
+                this,
+                new Object[]{r, parser, attrs, visibleAttr});
     }
 
     private void addLayer(Drawable layer, int id, int left, int top, int right, int bottom) {
-        try {
-            final Method addLayer = LayerDrawable.class.getDeclaredMethod(
-                    "addLayer",
-                    Drawable.class,
-                    int.class,
-                    int.class,
-                    int.class,
-                    int.class,
-                    int.class);
-            addLayer.setAccessible(true);
-            addLayer.invoke(this, layer, id, left, top, right, bottom);
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                LayerDrawable.class,
+                "addLayer",
+                new Class<?>[] {Drawable.class, int.class, int.class, int.class, int.class, int.class},
+                this,
+                new Object[] {layer, id, left, top, right, bottom});
     }
 
     private void ensurePadding() {
-        try {
-            final Method ensurePadding = LayerDrawable.class.getDeclaredMethod("ensurePadding");
-            ensurePadding.setAccessible(true);
-            ensurePadding.invoke(this);
-        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-            Log.w(TAG, e);
-        }
+        ReflectionUtils.invokeDeclaredMethod(
+                LayerDrawable.class,
+                "ensurePadding",
+                new Class<?>[0],
+                this,
+                new Object[0]);
     }
 }

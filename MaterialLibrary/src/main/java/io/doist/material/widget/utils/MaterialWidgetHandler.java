@@ -6,83 +6,72 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.lang.reflect.Field;
-
+import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
-    private static final String TAG = MaterialWidgetHandler.class.getSimpleName();
+    private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
 
     private static int[] sOriginalViewStyleable;
     private static int[] sOriginalImageViewStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, int... attrs) {
-        try {
-            Class<?> StyleableClass = Class.forName("com.android.internal.R$styleable");
+        for (int attr : attrs) {
+            switch (attr) {
+                case android.R.attr.background:
+                    if (sOriginalViewStyleable == null) {
+                        // Keep original view styleable values.
+                        sOriginalViewStyleable =
+                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "View", null);
+                    }
 
-            for (int attr : attrs) {
-                switch (attr) {
-                    case android.R.attr.background:
-                        Field viewBackgroundField = StyleableClass.getField("View_background");
-                        viewBackgroundField.setAccessible(true);
-                        int viewBackground = (int) viewBackgroundField.get(null);
+                    int viewBackgroundIndex =
+                            (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "View_background", null);
 
-                        Field viewStyleableField = StyleableClass.getField("View");
-                        viewStyleableField.setAccessible(true);
-                        // Keep original styleable values.
-                        if (sOriginalViewStyleable == null) {
-                            sOriginalViewStyleable = (int[]) viewStyleableField.get(null);
-                        }
-                        viewStyleableField.set(null, hideValue(sOriginalViewStyleable, viewBackground));
-                        break;
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            "View",
+                            null,
+                            hideValue(sOriginalViewStyleable, viewBackgroundIndex));
+                    break;
 
-                    case android.R.attr.src:
-                        Field imageViewSrcField = StyleableClass.getField("ImageView_src");
-                        imageViewSrcField.setAccessible(true);
-                        int imageViewSrc = (int) imageViewSrcField.get(null);
+                case android.R.attr.src:
+                    if (sOriginalImageViewStyleable == null) {
+                        // Keep original image view styleable values.
+                        sOriginalImageViewStyleable =
+                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "ImageView", null);
+                    }
 
-                        Field imageViewStyleableField = StyleableClass.getField("ImageView");
-                        imageViewStyleableField.setAccessible(true);
-                        // keep original styleable values.
-                        if (sOriginalImageViewStyleable == null) {
-                            sOriginalImageViewStyleable = (int[]) imageViewStyleableField.get(null);
-                        }
-                        imageViewStyleableField.set(null, hideValue(sOriginalImageViewStyleable, imageViewSrc));
-                        break;
-                }
+                    int imageViewSrcIndex =
+                            (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "ImageView_src", null);
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            "ImageView",
+                            null,
+                            hideValue(sOriginalImageViewStyleable, imageViewSrcIndex));
+                    break;
             }
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
-            Log.w(TAG, e);
         }
-
         return set;
     }
 
     public static void restoreStyleableAttributes(int... attrs) {
-        try {
-            Class<?> StyleableClass = Class.forName("com.android.internal.R$styleable");
+        for (int attr : attrs) {
+            switch (attr) {
+                case android.R.attr.background:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, "View", null, sOriginalViewStyleable);
+                    break;
 
-            for (int attr : attrs) {
-                switch (attr) {
-                    case android.R.attr.background:
-                        Field viewStyleableField = StyleableClass.getField("View");
-                        viewStyleableField.setAccessible(true);
-                        viewStyleableField.set(null, sOriginalViewStyleable);
-                        break;
-
-                    case android.R.attr.src:
-                        Field imageViewStyleableField = StyleableClass.getField("ImageView");
-                        imageViewStyleableField.setAccessible(true);
-                        imageViewStyleableField.set(null, sOriginalImageViewStyleable);
-                        break;
-                }
+                case android.R.attr.src:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, "ImageView", null, sOriginalImageViewStyleable);
+                    break;
             }
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
-            Log.w(TAG, e);
         }
     }
 
@@ -130,11 +119,9 @@ public class MaterialWidgetHandler {
 
     private static int[] hideValue(int[] array, int index) {
         final int[] newArray = new int[array.length];
-
         for (int i = 0; i < array.length; i++) {
             newArray[i] = i == index ? 0 : array[i];
         }
-
         return newArray;
     }
 }
