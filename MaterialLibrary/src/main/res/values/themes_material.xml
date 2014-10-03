@@ -47,6 +47,7 @@ please see themes_device_defaults.xml.
 
         <item name="colorControlActivated">?attr/colorAccent</item>
 
+        <item name="colorControlHighlight">@color/ripple_material_light</item>
         <item name="colorButtonNormal">@color/btn_default_material_light</item>
     </style>
 
