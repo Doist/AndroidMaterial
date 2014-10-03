@@ -13,12 +13,16 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
+    private static final boolean sSkip = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
+
     final private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
 
     private static int[] sOriginalViewStyleable;
     private static int[] sOriginalImageViewStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, int... attrs) {
+        if (sSkip) return set;
+
         for (int attr : attrs) {
             switch (attr) {
                 case android.R.attr.background:
@@ -60,6 +64,8 @@ public class MaterialWidgetHandler {
     }
 
     public static void restoreStyleableAttributes(int... attrs) {
+        if (sSkip) return;
+
         for (int attr : attrs) {
             switch (attr) {
                 case android.R.attr.background:
@@ -77,6 +83,8 @@ public class MaterialWidgetHandler {
 
     @SuppressWarnings("deprecation")
     public static void init(View view, AttributeSet set, int defStyle, int[] attrs) {
+        if (sSkip) return;
+
         final Context context = view.getContext();
         final Resources resources = view.getResources();
 
