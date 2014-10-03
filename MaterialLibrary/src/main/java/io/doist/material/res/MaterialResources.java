@@ -165,7 +165,7 @@ public class MaterialResources {
         synchronized (mAccessLock) {
             Drawable.ConstantState cs = drawableCache.get(key);
             if (cs != null) {
-                cs.newDrawable(r);
+                return cs.newDrawable(r);
             }
         }
         return null;
