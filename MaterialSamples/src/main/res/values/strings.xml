@@ -2,7 +2,30 @@
 <resources>
 
     <string name="app_name">MaterialSamples</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="roboto_regular">This is a phrase (Roboto regular)</string>
+    <string name="roboto_regular_bold">This is a phrase (Roboto regular (bold))</string>
+    <string name="roboto_regular_italic">This is a phrase (Roboto regular (italic))</string>
+    <string name="roboto_regular_bold_italic">This is a phrase (Roboto regular (bold / italic))</string>
+    <string name="roboto_light">This is a phrase (Roboto light)</string>
+    <string name="roboto_light_bold">This is a phrase (Roboto light (fake bold))</string>
+    <string name="roboto_light_italic">This is a phrase (Roboto light (italic))</string>
+    <string name="roboto_light_bold_italic">This is a phrase (Roboto light (fake bold / italic))</string>
+    <string name="roboto_medium">This is a phrase (Roboto medium)</string>
+    <string name="roboto_medium_bold">This is a phrase (Roboto medium (fake bold))</string>
+    <string name="roboto_medium_italic">This is a phrase (Roboto medium (italic))</string>
+    <string name="roboto_medium_bold_italic">This is a phrase (Roboto medium (fake bold / italic))</string>
+    <string name="roboto_condensed">This is a phrase (Roboto condensed)</string>
+    <string name="roboto_condensed_bold">This is a phrase (Roboto condensed (bold))</string>
+    <string name="roboto_condensed_italic">This is a phrase (Roboto condensed (italic))</string>
+    <string name="roboto_condensed_bold_italic">This is a phrase (Roboto condensed (bold / italic))</string>
+    <string name="roboto_condensed_light">This is a phrase (Roboto condensed light)</string>
+    <string name="roboto_condensed_light_bold">This is a phrase (Roboto condensed light (fake bold))</string>
+    <string name="roboto_condensed_light_italic">This is a phrase (Roboto condensed light (italic))</string>
+    <string name="roboto_condensed_light_bold_italic">This is a phrase (Roboto condensed light (fake bold / italic))</string>
+
 
 </resources>

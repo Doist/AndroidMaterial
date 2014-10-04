@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <declare-styleable name="TextAppearance">
+
+        <!-- Style (bold, italic, bolditalic) for the text. -->
+        <attr name="android:textStyle" />
+
+        <!-- Font family (named by string) for the text. -->
+        <attr name="android:fontFamily" />
+
+    </declare-styleable>
+</resources>

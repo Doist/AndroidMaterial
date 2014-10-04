@@ -2,11 +2,10 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Button;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialButton extends Button {
+public class MaterialButton extends RobotoButton {
     private static final int[] sHiddenAttrs = {android.R.attr.background};
 
     public MaterialButton(Context context) {
