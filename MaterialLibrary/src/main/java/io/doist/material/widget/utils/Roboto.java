@@ -27,8 +27,8 @@ public class Roboto {
         }
 
         // Extract the font family and text style.
-        TypedArray a = context.obtainStyledAttributes(attrs, io.doist.material.R.styleable.TextAppearance, defStyle, 0);
-        String fontFamily = a.getString(io.doist.material.R.styleable.TextAppearance_android_fontFamily);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextAppearance, defStyle, 0);
+        String fontFamily = a.getString(R.styleable.TextAppearance_android_fontFamily);
         int textStyle = a.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
         a.recycle();
 

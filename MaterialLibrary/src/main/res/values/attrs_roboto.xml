@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <declare-styleable name="TextAppearance">
-
+        <!-- Text color. -->
+        <attr name="android:textColor" />
+        <!-- Size of the text. Recommended dimension type for text is "sp" for scaled-pixels (example: 15sp). -->
+        <attr name="android:textSize" />
         <!-- Style (bold, italic, bolditalic) for the text. -->
         <attr name="android:textStyle" />
-
+        <!-- Typeface (normal, sans, serif, monospace) for the text. -->
+        <attr name="android:typeface" />
         <!-- Font family (named by string) for the text. -->
         <attr name="android:fontFamily" />
-
+        <!-- Color of the text selection highlight. -->
+        <attr name="android:textColorHighlight" />
+        <!-- Color of the hint text. -->
+        <attr name="android:textColorHint" />
+        <!-- Color of the links. -->
+        <attr name="android:textColorLink" />
+        <!-- Present the text in ALL CAPS. This may use a small-caps form when available. -->
+        <attr name="android:textAllCaps" />
+        <!--&lt;!&ndash; Place a shadow of the specified color behind the text. &ndash;&gt;-->
+        <!--<attr name="android:shadowColor" />-->
+        <!--&lt;!&ndash; Horizontal offset of the shadow. &ndash;&gt;-->
+        <!--<attr name="android:shadowDx" />-->
+        <!--&lt;!&ndash; Vertical offset of the shadow. &ndash;&gt;-->
+        <!--<attr name="android:shadowDy" />-->
+        <!--&lt;!&ndash; Radius of the shadow. &ndash;&gt;-->
+        <!--<attr name="android:shadowRadius" />-->
+        <!--&lt;!&ndash; Elegant text height, especially for less compacted complex script text. &ndash;&gt;-->
+        <!--<attr name="android:elegantTextHeight" />-->
     </declare-styleable>
 </resources>
