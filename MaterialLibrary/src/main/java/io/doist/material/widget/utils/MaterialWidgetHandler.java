@@ -100,12 +100,36 @@ public class MaterialWidgetHandler {
                         final int attr = attrs[i];
                         switch (attr) {
                             case android.R.attr.background:
+                                final int paddingLeft = view.getPaddingLeft();
+                                final int paddingTop = view.getPaddingTop();
+                                final int paddingRight = view.getPaddingRight();
+                                final int paddingBottom = view.getPaddingBottom();
+
                                 // Init background.
                                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                                     view.setBackgroundDrawable(d);
                                 } else {
                                     view.setBackground(d);
                                 }
+
+                                // Maintain horizontal and vertical padding.
+
+                                if (paddingLeft > 0 && paddingRight > 0) {
+                                    view.setPadding(
+                                            paddingLeft,
+                                            view.getPaddingTop(),
+                                            paddingRight,
+                                            view.getPaddingBottom());
+                                }
+
+                                if (paddingTop > 0 && paddingBottom > 0) {
+                                    view.setPadding(
+                                            view.getPaddingLeft(),
+                                            paddingTop,
+                                            view.getPaddingRight(),
+                                            paddingBottom);
+                                }
+
                                 break;
 
                             case android.R.attr.src:
