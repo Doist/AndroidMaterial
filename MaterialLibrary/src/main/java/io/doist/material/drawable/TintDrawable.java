@@ -133,7 +133,7 @@ public class TintDrawable extends WrapperDrawable {
 
     @Override
     protected WrapperState createConstantState(WrapperState state) {
-        return new TintState(state, this);
+        return new TintState(state);
     }
 
     protected static class TintState extends WrapperState {
@@ -141,8 +141,8 @@ public class TintDrawable extends WrapperDrawable {
         ColorStateList mTintColorStateList;
         boolean mTintColorEnabled = false;
 
-        public TintState(WrapperState state, WrapperDrawable owner) {
-            super(state, owner);
+        public TintState(WrapperState state) {
+            super(state);
 
             if (state != null) {
                 mTintColor = ((TintState) state).mTintColor;
@@ -153,12 +153,17 @@ public class TintDrawable extends WrapperDrawable {
 
         @Override
         public Drawable newDrawable() {
-            return new TintDrawable(this);
+            return newDrawable(null);
+        }
+
+        @Override
+        public Drawable newDrawable(Resources res) {
+            return new TintDrawable(this, res);
         }
     }
 
-    protected TintDrawable(TintState state) {
-        super(state);
+    protected TintDrawable(TintState state, Resources res) {
+        super(state, res);
         mTintState = (TintState) getConstantState();
     }
 }

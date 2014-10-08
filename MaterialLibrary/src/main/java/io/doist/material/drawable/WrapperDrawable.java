@@ -176,16 +176,16 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     }
 
     protected WrapperState createConstantState(WrapperState state) {
-        return new WrapperState(state, this);
+        return new WrapperState(state);
     }
 
     protected static class WrapperState extends ConstantState {
         Drawable mDrawable;
         int mChangingConfigurations;
 
-        public WrapperState(WrapperState state, WrapperDrawable owner) {
+        public WrapperState(WrapperState state) {
             if (state != null) {
-                setDrawable(state.mDrawable.getConstantState().newDrawable(), owner);
+                mDrawable = state.mDrawable;
                 mChangingConfigurations = state.mChangingConfigurations;
             }
         }
@@ -197,7 +197,12 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
         @Override
         public Drawable newDrawable() {
-            return new WrapperDrawable(this);
+            return newDrawable(null);
+        }
+
+        @Override
+        public Drawable newDrawable(Resources res) {
+            return new WrapperDrawable(this, res);
         }
 
         @Override
@@ -210,8 +215,16 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         }
     }
 
-    protected WrapperDrawable(WrapperState state) {
+    protected WrapperDrawable(WrapperState state, Resources res) {
         mWrapperState = createConstantState(state);
+
+        final Drawable drawable;
+        if (res != null) {
+            drawable = mWrapperState.mDrawable.getConstantState().newDrawable(res);
+        } else {
+            drawable = mWrapperState.mDrawable.getConstantState().newDrawable();
+        }
+        mWrapperState.setDrawable(drawable, this);
     }
 
     /*
