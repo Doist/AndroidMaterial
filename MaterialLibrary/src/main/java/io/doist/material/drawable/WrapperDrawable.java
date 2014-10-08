@@ -185,7 +185,7 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
         public WrapperState(WrapperState state, WrapperDrawable owner) {
             if (state != null) {
-                setDrawable(state.mDrawable, owner);
+                setDrawable(state.mDrawable.getConstantState().newDrawable(), owner);
                 mChangingConfigurations = state.mChangingConfigurations;
             }
         }
