@@ -12,6 +12,7 @@ import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 
@@ -120,6 +121,10 @@ public class TintDrawable extends WrapperDrawable {
     public Drawable mutate() {
         if (!mMutated && super.mutate() == this) {
             super.mutate();
+
+            final Parcel p = Parcel.obtain();
+            mTintState.mTintColorStateList.writeToParcel(p, 0);
+            mTintState.mTintColorStateList = ColorStateList.CREATOR.createFromParcel(p);
 
             mMutated = true;
         }
