@@ -11,7 +11,7 @@ import io.doist.material.R;
 
 
 public class Roboto {
-    public static final String TAG = Roboto.class.getSimpleName();
+    public static final String LOG_TAG = Roboto.class.getSimpleName();
 
     private static final String REGULAR_FAMILY = "sans-serif"; // Styles: italic, bold.
     private static final String LIGHT_FAMILY = "sans-serif-light"; // Styles: italic.
@@ -92,7 +92,7 @@ public class Roboto {
                     return condensedLightStyle.get(context, style);
                 }
             } catch (Exception e) {
-                Log.e(TAG, "Failed to load Roboto font (family: " + family + ", style: " + style + ")", e);
+                Log.e(LOG_TAG, "Failed to load Roboto font (family: " + family + ", style: " + style + ")", e);
             }
 
             return null;

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReflectionUtils {
-    private static final String TAG = ReflectionUtils.class.getSimpleName();
+    private static final String LOG_TAG = ReflectionUtils.class.getSimpleName();
 
     private static final Map<String, Class<?>> sClassCache = new HashMap<>();
     private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new HashMap<>();
@@ -40,7 +40,7 @@ public class ReflectionUtils {
                 clazz = Class.forName(className);
                 sClassCache.put(className, clazz);
             } catch (ClassNotFoundException e) {
-                Log.w(TAG, e);
+                Log.w(LOG_TAG, e);
             }
         }
         return clazz;
@@ -58,7 +58,7 @@ public class ReflectionUtils {
                     // Cache method.
                     methodCache.put(methodName, method);
                 } catch (NoSuchMethodException e) {
-                    Log.w(TAG, e);
+                    Log.w(LOG_TAG, e);
                 }
             }
         }
@@ -77,7 +77,7 @@ public class ReflectionUtils {
                     // Cache field.
                     fieldCache.put(fieldName, field);
                 } catch (NoSuchFieldException e) {
-                    Log.w(TAG, e);
+                    Log.w(LOG_TAG, e);
                 }
             }
         }
@@ -93,7 +93,7 @@ public class ReflectionUtils {
                 try {
                     result = method.invoke(receiver, parameters);
                 } catch (InvocationTargetException | IllegalAccessException e) {
-                    Log.w(TAG, e);
+                    Log.w(LOG_TAG, e);
                 }
             }
         }
@@ -108,7 +108,7 @@ public class ReflectionUtils {
                 try {
                     value = field.get(receiver);
                 } catch (IllegalAccessException e) {
-                    Log.w(TAG, e);
+                    Log.w(LOG_TAG, e);
                 }
             }
         }
@@ -122,7 +122,7 @@ public class ReflectionUtils {
                 try {
                     field.set(receiver, value);
                 } catch (IllegalAccessException e) {
-                    Log.w(TAG, e);
+                    Log.w(LOG_TAG, e);
                 }
             }
         }
