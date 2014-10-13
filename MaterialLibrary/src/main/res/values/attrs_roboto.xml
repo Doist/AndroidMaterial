@@ -30,4 +30,9 @@
         <!--&lt;!&ndash; Elegant text height, especially for less compacted complex script text. &ndash;&gt;-->
         <!--<attr name="android:elegantTextHeight" />-->
     </declare-styleable>
+
+    <declare-styleable name="TextViewAppearance">
+        <!-- Base text color, typeface, size, and style. -->
+        <attr name="android:textAppearance" />
+    </declare-styleable>
 </resources>

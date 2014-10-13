@@ -26,10 +26,35 @@ public class Roboto {
             return;
         }
 
+        String fontFamily = null;
+        int textStyle = Typeface.NORMAL;
+
+        // Look the appearance up without checking first if it exists because
+        // almost every TextView has one and it greatly simplifies the logic
+        // to be able to parse the appearance first and then let specific tags
+        // for this View override it.
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextViewAppearance, defStyle, 0);
+        TypedArray appearance = null;
+        int ap = a.getResourceId(R.styleable.TextViewAppearance_android_textAppearance, -1);
+        a.recycle();
+        if (ap != -1) {
+            appearance = context.obtainStyledAttributes(ap, R.styleable.TextAppearance);
+        }
+        if (appearance != null) {
+            fontFamily = appearance.getString(R.styleable.TextAppearance_android_fontFamily);
+            textStyle = a.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
+            appearance.recycle();
+        }
+
         // Extract the font family and text style.
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextAppearance, defStyle, 0);
-        String fontFamily = a.getString(R.styleable.TextAppearance_android_fontFamily);
-        int textStyle = a.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
+        // Override textAppearance if the view has its own fontFamily or textStyle attributes.
+        a = textView.getContext().obtainStyledAttributes(attrs, R.styleable.TextAppearance, defStyle, 0);
+        if (a.hasValue(R.styleable.TextAppearance_android_fontFamily)) {
+            fontFamily = a.getString(R.styleable.TextAppearance_android_fontFamily);
+        }
+        if (a.hasValue(R.styleable.TextAppearance_android_textStyle)) {
+            textStyle = a.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
+        }
         a.recycle();
 
         // Grab the appropriate variant and apply it.
