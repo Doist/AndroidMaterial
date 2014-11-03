@@ -125,7 +125,7 @@ public class AnimationMaterialDrawable extends AnimationDrawable {
                     ReflectionUtils.getClass(DrawableContainer.class.getName() + "$DrawableContainerState");
 
             mAnimationState = ReflectionUtils.getDeclaredFieldValue(
-                    AnimationStateClass,
+                    AnimationDrawable.class,
                     "mAnimationState",
                     receiver);
         }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.DrawableContainer;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -126,14 +127,17 @@ public class StateListMaterialDrawable extends StateListDrawable {
      */
     private static class StateListState {
         final Class<?> StateListStateClass;
+        final Class<?> DrawableContainerStateClass;
         final Object mStateListState;
 
         public StateListState(StateListMaterialDrawable receiver) {
             StateListStateClass =
                     ReflectionUtils.getClass(StateListDrawable.class.getName() + "$StateListState");
+            DrawableContainerStateClass =
+                    ReflectionUtils.getClass(DrawableContainer.class.getName() + "$DrawableContainerState");
 
             mStateListState = ReflectionUtils.getDeclaredFieldValue(
-                    StateListStateClass,
+                    StateListDrawable.class,
                     "mStateListState",
                     receiver);
         }
@@ -150,7 +154,7 @@ public class StateListMaterialDrawable extends StateListDrawable {
 
         public final void setVariablePadding(boolean variable) {
             ReflectionUtils.invokeDeclaredMethod(
-                    StateListStateClass,
+                    DrawableContainerStateClass,
                     "setVariablePadding",
                     new Class<?>[] {boolean.class},
                     mStateListState,
@@ -159,7 +163,7 @@ public class StateListMaterialDrawable extends StateListDrawable {
 
         public final void setConstantSize(boolean constant) {
             ReflectionUtils.invokeDeclaredMethod(
-                    StateListStateClass,
+                    DrawableContainerStateClass,
                     "setConstantSize",
                     new Class<?>[] {boolean.class},
                     mStateListState,
@@ -168,7 +172,7 @@ public class StateListMaterialDrawable extends StateListDrawable {
 
         public final void setEnterFadeDuration(int duration) {
             ReflectionUtils.invokeDeclaredMethod(
-                    StateListStateClass,
+                    DrawableContainerStateClass,
                     "setEnterFadeDuration",
                     new Class<?>[] {int.class},
                     mStateListState,
@@ -177,7 +181,7 @@ public class StateListMaterialDrawable extends StateListDrawable {
 
         public final void setExitFadeDuration(int duration) {
             ReflectionUtils.invokeDeclaredMethod(
-                    StateListStateClass,
+                    DrawableContainerStateClass,
                     "setExitFadeDuration",
                     new Class<?>[] {int.class},
                     mStateListState,
