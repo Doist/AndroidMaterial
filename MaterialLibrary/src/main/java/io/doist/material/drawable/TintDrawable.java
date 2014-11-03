@@ -122,9 +122,12 @@ public class TintDrawable extends WrapperDrawable {
         if (!mMutated && super.mutate() == this) {
             super.mutate();
 
-            final Parcel p = Parcel.obtain();
-            mTintState.mTintColorStateList.writeToParcel(p, 0);
-            mTintState.mTintColorStateList = ColorStateList.CREATOR.createFromParcel(p);
+            if (mTintState.mTintColorStateList != null) {
+                // Clone mTintColorStateList if not null.
+                final Parcel p = Parcel.obtain();
+                mTintState.mTintColorStateList.writeToParcel(p, 0);
+                mTintState.mTintColorStateList = ColorStateList.CREATOR.createFromParcel(p);
+            }
 
             mMutated = true;
         }
