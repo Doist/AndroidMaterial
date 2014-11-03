@@ -5,20 +5,20 @@ import android.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReflectionUtils {
     private static final String LOG_TAG = ReflectionUtils.class.getSimpleName();
 
-    private static final Map<String, Class<?>> sClassCache = new HashMap<>();
-    private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new HashMap<>();
-    private static final Map<Class<?>, Map<String, Field>> sClassFieldCache = new HashMap<>();
+    private static final Map<String, Class<?>> sClassCache = new ConcurrentHashMap<>(8);
+    private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new ConcurrentHashMap<>(8);
+    private static final Map<Class<?>, Map<String, Field>> sClassFieldCache = new ConcurrentHashMap<>(8);
 
     private static Map<String, Method> ensureMethodCache(Class<?> clazz) {
         Map<String, Method> methodCache = sClassMethodCache.get(clazz);
         if (methodCache == null) {
-            methodCache = new HashMap<>();
+            methodCache = new ConcurrentHashMap<>(4);
             sClassMethodCache.put(clazz, methodCache);
         }
         return methodCache;
@@ -27,7 +27,7 @@ public class ReflectionUtils {
     private static Map<String, Field> ensureFieldCache(Class<?> clazz) {
         Map<String, Field> fieldCache = sClassFieldCache.get(clazz);
         if (fieldCache == null) {
-            fieldCache = new HashMap<>();
+            fieldCache = new ConcurrentHashMap<>(4);
             sClassFieldCache.put(clazz, fieldCache);
         }
         return fieldCache;
