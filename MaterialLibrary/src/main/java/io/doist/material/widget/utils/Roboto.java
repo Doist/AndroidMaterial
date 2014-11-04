@@ -42,7 +42,7 @@ public class Roboto {
         }
         if (appearance != null) {
             fontFamily = appearance.getString(R.styleable.TextAppearance_android_fontFamily);
-            textStyle = a.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
+            textStyle = appearance.getInt(R.styleable.TextAppearance_android_textStyle, Typeface.NORMAL);
             appearance.recycle();
         }
 
