@@ -2,6 +2,7 @@ package io.doist.material.widget.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -63,6 +64,9 @@ public class Roboto {
             typeface = Typeface.create(fontFamily, textStyle);
         }
         textView.setTypeface(typeface, textStyle);
+
+        // Enable subpixel positioning of text. Improves font look, specially on lower resolution devices.
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
     }
 
     private static class RobotoTypeface {
