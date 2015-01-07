@@ -1,24 +1,38 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:scrollbarStyle="outsideOverlay"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="72dip"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:scrollbarStyle="outsideOverlay"
+        tools:context=".MainActivity">
 
-        <include layout="@layout/sample_material" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/sample_roboto" />
+            <include layout="@layout/sample_material" />
 
-    </LinearLayout>
+            <include layout="@layout/sample_roboto" />
 
-</ScrollView>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <io.doist.material.widget.FloatingActionButton
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dip" />
+
+</FrameLayout>
