@@ -1,0 +1,14 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <io.doist.material.widget.MaterialButton
+        android:id="@android:id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+
+    <io.doist.material.widget.MaterialImageView
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:src="@drawable/btn_default_material" />
+
+</merge>
