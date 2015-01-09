@@ -29,10 +29,6 @@
 
     </ScrollView>
 
-    <io.doist.material.widget.FloatingActionButton
-        android:layout_width="40dip"
-        android:layout_height="40dip"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dip" />
+    <include layout="@layout/sample_fab" />
 
 </FrameLayout>

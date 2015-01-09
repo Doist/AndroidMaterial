@@ -191,6 +191,15 @@ public class TintDrawable extends WrapperDrawable {
         }
 
         @Override
+        public void setDrawable(Drawable drawable, WrapperDrawable owner) {
+            if (drawable.getClass() == TintDrawable.class) {
+                // Chained instances of TintDrawables are not possible and thus are unnecessary.
+                drawable = ((WrapperState)drawable.getConstantState()).mDrawable;
+            }
+            super.setDrawable(drawable, owner);
+        }
+
+        @Override
         public Drawable newDrawable() {
             return newDrawable(null);
         }

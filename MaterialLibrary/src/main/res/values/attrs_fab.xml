@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FloatingActionButton">
+        <attr name="android:src" />
+        <attr name="android:color" />
+        <attr name="isMini" format="boolean" />
+    </declare-styleable>
+
+</resources>

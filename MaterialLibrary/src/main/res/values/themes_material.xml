@@ -44,6 +44,7 @@ please see themes_device_defaults.xml.
 
         <!-- Color palette -->
         <item name="colorAccent">@color/material_light_blue_A200</item>
+        <item name="android:colorAccent">@color/material_light_blue_A200</item>
 
         <item name="colorControlActivated">?attr/colorAccent</item>
 

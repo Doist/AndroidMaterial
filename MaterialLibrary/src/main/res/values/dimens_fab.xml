@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="fab_radius">28dip</dimen>
+    <dimen name="fab_mini_radius">20dip</dimen>
+    <dimen name="fab_margin">16dip</dimen>
+
+</resources>

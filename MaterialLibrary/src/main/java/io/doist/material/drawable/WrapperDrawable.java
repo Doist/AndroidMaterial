@@ -35,7 +35,7 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
     @Override
     public int getChangingConfigurations() {
-        return mWrapperState.mChangingConfigurations;
+        return super.getChangingConfigurations() | mWrapperState.mChangingConfigurations;
     }
 
     @Override
@@ -182,17 +182,20 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     protected static class WrapperState extends ConstantState {
         Drawable mDrawable;
         int mChangingConfigurations;
+        int mChildChangingConfigurations;
 
         public WrapperState(WrapperState state) {
             if (state != null) {
                 mDrawable = state.mDrawable;
                 mChangingConfigurations = state.mChangingConfigurations;
+                mChildChangingConfigurations = state.mChildChangingConfigurations;;
             }
         }
 
         public void setDrawable(Drawable drawable, WrapperDrawable owner) {
             mDrawable = drawable;
             mDrawable.setCallback(owner);
+            mChildChangingConfigurations = mDrawable.getChangingConfigurations();
         }
 
         @Override
