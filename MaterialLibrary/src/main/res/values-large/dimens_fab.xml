@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="fab_margin">24dip</dimen>
+    <dimen name="fab_padding">24dip</dimen>
 
 </resources>

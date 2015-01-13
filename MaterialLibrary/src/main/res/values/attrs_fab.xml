@@ -5,6 +5,7 @@
         <attr name="android:src" />
         <attr name="android:color" />
         <attr name="isMini" format="boolean" />
+        <attr name="inCompat" format="boolean" /> <!-- Used for debugging or to force consistent behaviour. -->
     </declare-styleable>
 
 </resources>

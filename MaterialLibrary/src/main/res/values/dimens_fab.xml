@@ -3,6 +3,6 @@
 
     <dimen name="fab_radius">28dip</dimen>
     <dimen name="fab_mini_radius">20dip</dimen>
-    <dimen name="fab_margin">16dip</dimen>
+    <dimen name="fab_padding">16dip</dimen>
 
 </resources>
