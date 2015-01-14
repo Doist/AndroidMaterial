@@ -27,10 +27,10 @@ import io.doist.material.drawable.RippleDrawableSimpleCompat;
 import io.doist.material.drawable.TintDrawable;
 
 public class FloatingActionButton extends ImageButton {
-    private static final int SHADOW_MAX_ALPHA = 240;
+    private static final int SHADOW_MAX_ALPHA = 86;
     // Manually tested to better replicate the elevation result.
     private static final int DEFAULT_ELEVATION_SP = 6;
-    private static final double LIGHT_ELEVATION_SP = 28;
+    private static final double LIGHT_ELEVATION_SP = 30;
 
     private boolean mInCompat;
     private ColorStateList mColor;
@@ -233,7 +233,10 @@ public class FloatingActionButton extends ImageButton {
 
                 mShadowRadius = (float) (Math.tan(Math.toRadians(lightAngle)) * (lightElevation + elevation));
                 mShadowCx = mRadius + ((getPaddingLeft() + getPaddingRight()) / 2f);
-                mShadowCy = (mRadius + ((getPaddingTop() + getPaddingBottom()) / 2f)) * 10f / 9.2f;
+                float shadowCyCentered = mRadius + ((getPaddingTop() + getPaddingBottom()) / 2f);
+                // The shadow is on the down side of the button.
+                mShadowCy = shadowCyCentered * 10f / 9.2f;
+                float shadowDy = mShadowCy - shadowCyCentered;
 
                 if (mShadowPaint == null) {
                     mShadowPaint = new Paint();
@@ -246,12 +249,20 @@ public class FloatingActionButton extends ImageButton {
                         0,
                         0);
 
+                int[] colors = new int[]{
+                        translucentBlack,
+                        Color.TRANSPARENT};
+
+                float[] stops = new float[]{
+                        (mRadius - shadowDy) / mShadowRadius,
+                        1.0f};
+
                 mShadowPaint.setShader(new RadialGradient(
                         mShadowCx,
                         mShadowCy,
                         mShadowRadius,
-                        translucentBlack,
-                        Color.TRANSPARENT,
+                        colors,
+                        stops,
                         Shader.TileMode.MIRROR));
             } else {
                 mShadowPaint = null;
