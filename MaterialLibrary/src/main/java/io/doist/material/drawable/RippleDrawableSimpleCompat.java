@@ -6,14 +6,13 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.view.ViewConfiguration;
 import android.view.animation.AccelerateInterpolator;
 
 /**
  * Used to replace {@link android.graphics.drawable.RippleDrawable} in older androids, with a color animation.
  */
 public class RippleDrawableSimpleCompat extends LayerDrawable {
-    public static final int ANIM_DURATION = 400;
-
     Animator mAnimator;
 
     /**
@@ -58,7 +57,7 @@ public class RippleDrawableSimpleCompat extends LayerDrawable {
         if (mAnimator == null) {
             mAnimator = ObjectAnimator.ofInt(getDrawable(1), "alpha", 50, 255);
             mAnimator.setInterpolator(new AccelerateInterpolator());
-            mAnimator.setDuration(ANIM_DURATION);
+            mAnimator.setDuration(ViewConfiguration.getLongPressTimeout());
         } else {
             mAnimator.setTarget(getDrawable(1));
         }
