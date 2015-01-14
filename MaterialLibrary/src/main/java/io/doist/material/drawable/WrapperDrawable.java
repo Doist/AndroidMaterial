@@ -3,6 +3,7 @@ package io.doist.material.drawable;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.annotation.TargetApi;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -10,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 
 import java.io.IOException;
@@ -53,6 +55,7 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         mWrapperState.mDrawable.setAlpha(alpha);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public int getAlpha() {
         return mWrapperState.mDrawable.getAlpha();
@@ -105,11 +108,13 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
                 super.setVisible(mWrapperState.mDrawable.isVisible(), restart);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void setAutoMirrored(boolean mirrored) {
         mWrapperState.mDrawable.setAutoMirrored(mirrored);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean isAutoMirrored() {
         return mWrapperState.mDrawable.isAutoMirrored();
