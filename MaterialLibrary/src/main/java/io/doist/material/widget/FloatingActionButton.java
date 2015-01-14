@@ -14,6 +14,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.InsetDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -270,7 +271,7 @@ public class FloatingActionButton extends ImageButton {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(@NonNull Canvas canvas) {
         if (mShadowPaint != null) {
             canvas.drawCircle(mShadowCx, mShadowCy, mShadowRadius, mShadowPaint);
         }
