@@ -95,6 +95,14 @@ public class TintDrawable extends WrapperDrawable {
 
     @Override
     public void setColorFilter(ColorFilter cf) {
+        // Only apply a color filter, if it is not null,
+        // or if there is no tint applied.
+        if (cf != null || mTintState.mTint == null) {
+            setColorFilterInner(cf);
+        }
+    }
+
+    private void setColorFilterInner(ColorFilter cf) {
         mTintState.mTint = null;
         mTintState.mTintMode = null;
         mTintState.mTintUpdate = false;
@@ -103,7 +111,7 @@ public class TintDrawable extends WrapperDrawable {
 
     @Override
     public void clearColorFilter() {
-        setColorFilter(null);
+        setColorFilterInner(null);
     }
 
     @Override
