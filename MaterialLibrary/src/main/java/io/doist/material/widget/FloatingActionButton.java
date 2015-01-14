@@ -122,7 +122,7 @@ public class FloatingActionButton extends ImageButton {
 
     @SuppressLint("NewApi")
     private void initDrawables(Context context) {
-        // TODO: Make this dependent on the context theme.
+        // TODO: Make this theme dependent.
         int rippleColorResId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
                                R.color.ripple_material_light :
                                R.color.ripple_material_light_compat;
