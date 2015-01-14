@@ -40,7 +40,7 @@ public class FloatingActionButton extends ImageButton {
     private GradientDrawable mCircleDrawable; // To change the color of the circle.
     private TintDrawable mTintDrawable; // To change the color of the circle in compat mode.
 
-    // Used to create a shadow to fake elevation in older androids.
+    // Used to create a shadow to fake elevation in pre-L androids.
     private float mShadowCx;
     private float mShadowCy;
     private float mShadowRadius;
@@ -128,20 +128,24 @@ public class FloatingActionButton extends ImageButton {
                                R.color.ripple_material_light_compat;
         ColorStateList rippleColor = ColorStateList.valueOf(context.getResources().getColor(rippleColorResId));
 
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+        int paddingRight = getPaddingRight();
+        int paddingBottom = getPaddingBottom();
+
         GradientDrawable circleDrawable = new GradientDrawable();
         circleDrawable.setShape(GradientDrawable.OVAL);
 
         Drawable background;
-
         if (mInCompat) {
-            // Older androids or force compat mode.
+            // Pre-L androids or force compat mode.
             mTintDrawable = new TintDrawable(getContext(), circleDrawable);
             RippleDrawableSimpleCompat rippleDrawable = new RippleDrawableSimpleCompat(
                     context,
                     rippleColor,
                     mTintDrawable);
-            rippleDrawable.setLayerInset(0, getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom());
-            rippleDrawable.setLayerInset(1, getPaddingLeft(), getPaddingTop(), getPaddingRight(), getPaddingBottom());
+            rippleDrawable.setLayerInset(0, paddingLeft, paddingTop, paddingRight, paddingBottom);
+            rippleDrawable.setLayerInset(1, paddingLeft, paddingTop, paddingRight, paddingBottom);
             background = rippleDrawable;
         } else {
             // Lollipop androids.
@@ -150,10 +154,11 @@ public class FloatingActionButton extends ImageButton {
                     new RippleDrawable(
                             rippleColor,
                             circleDrawable,
-                            null), getPaddingLeft(),
-                    getPaddingTop(),
-                    getPaddingRight(),
-                    getPaddingBottom());
+                            null),
+                    paddingLeft,
+                    paddingTop,
+                    paddingRight,
+                    paddingBottom);
         }
 
         if (getBackground() != null) {
@@ -161,6 +166,12 @@ public class FloatingActionButton extends ImageButton {
                 setBackground(background);
             } else {
                 setBackgroundDrawable(background);
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                // Make sure the current padding is kept in pre-L androids.
+                // Otherwise, the background drawable would override the current padding.
+                setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
             }
         } else {
             throw new IllegalStateException("FloatingActionButton does not support 'android:background' attribute.");
