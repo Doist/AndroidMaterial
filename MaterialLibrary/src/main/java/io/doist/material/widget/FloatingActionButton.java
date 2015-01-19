@@ -69,8 +69,7 @@ public class FloatingActionButton extends ImageButton {
         int padding = context.getResources().getDimensionPixelSize(R.dimen.fab_padding);
         int paddingLeft, paddingTop, paddingRight, paddingBottom;
         paddingLeft = paddingTop = paddingRight = paddingBottom = padding;
-        Integer color = null;
-        ColorStateList colorList = null;
+        ColorStateList color = null;
         boolean isMini = false;
 
         if (attrs != null) {
@@ -92,9 +91,9 @@ public class FloatingActionButton extends ImageButton {
                 if (ta.getValue(R.styleable.FloatingActionButton_android_color, v)) {
                     if (v.type >= TypedValue.TYPE_FIRST_COLOR_INT
                             && v.type <= TypedValue.TYPE_LAST_COLOR_INT) {
-                        color = v.data;
+                        color = ColorStateList.valueOf(v.data);
                     } else {
-                        colorList = ta.getColorStateList(R.styleable.FloatingActionButton_android_color);
+                        color = ta.getColorStateList(R.styleable.FloatingActionButton_android_color);
                     }
                 }
 
@@ -111,14 +110,7 @@ public class FloatingActionButton extends ImageButton {
 
         initDrawables(context, inCompat);
 
-        if (color != null) {
-            setColor(color);
-        } else if (colorList != null) {
-            setColor(colorList);
-        } else {
-            // If the user didn't specify any color, try to resolve the current theme's accent color.
-            setColor(ColorPalette.resolveAccentColor(context));
-        }
+        initColor(context, color);
 
         internalSetIsMini(isMini);
 
@@ -189,6 +181,15 @@ public class FloatingActionButton extends ImageButton {
             }
         } else {
             throw new IllegalStateException("FloatingActionButton does not support 'android:background' attribute.");
+        }
+    }
+
+    private void initColor(Context context, ColorStateList color) {
+        if (color != null) {
+            setColor(color);
+        } else {
+            // If the user didn't specify any color, try to resolve the current theme's accent color.
+            setColor(ColorPalette.resolveAccentColor(context));
         }
     }
 
