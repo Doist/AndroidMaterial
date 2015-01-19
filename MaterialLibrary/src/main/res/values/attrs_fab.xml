@@ -3,6 +3,12 @@
 
     <declare-styleable name="FloatingActionButton">
         <attr name="android:src" />
+        <attr name="android:elevation" />
+        <attr name="android:padding" />
+        <attr name="android:paddingLeft" />
+        <attr name="android:paddingTop" />
+        <attr name="android:paddingRight" />
+        <attr name="android:paddingBottom" />
         <attr name="android:color" />
         <attr name="isMini" format="boolean" />
         <attr name="inCompat" format="boolean" /> <!-- Used for debugging or to force consistent behaviour. -->

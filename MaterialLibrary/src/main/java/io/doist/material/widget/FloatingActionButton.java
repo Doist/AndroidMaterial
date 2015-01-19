@@ -1,6 +1,7 @@
 package io.doist.material.widget;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -17,7 +18,9 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
@@ -27,24 +30,18 @@ import io.doist.material.drawable.RippleDrawableSimpleCompat;
 import io.doist.material.drawable.TintDrawable;
 
 public class FloatingActionButton extends ImageButton {
-    private static final int SHADOW_MAX_ALPHA = 86;
-    // Manually tested to better replicate the elevation result.
     private static final int DEFAULT_ELEVATION_SP = 6;
-    private static final double LIGHT_ELEVATION_SP = 30;
 
-    private boolean mInCompat;
+    // Used to create a shadow to fake elevation in pre-L androids.
+    private ElevationManager mElevationManager;
+
     private ColorStateList mColor;
+
     private boolean mIsMini;
     private int mRadius;
 
     private GradientDrawable mCircleDrawable; // To change the color of the circle.
     private TintDrawable mTintDrawable; // To change the color of the circle in compat mode.
-
-    // Used to create a shadow to fake elevation in pre-L androids.
-    private float mShadowCx;
-    private float mShadowCy;
-    private float mShadowRadius;
-    Paint mShadowPaint;
 
     public FloatingActionButton(Context context) {
         super(context);
@@ -63,9 +60,15 @@ public class FloatingActionButton extends ImageButton {
 
     @SuppressWarnings("ConstantConditions")
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+
         // Parse attributes.
         // Default attr values.
         boolean inCompat = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+        int elevation = (int) (DEFAULT_ELEVATION_SP * metrics.scaledDensity + .5f);
+        int padding = context.getResources().getDimensionPixelSize(R.dimen.fab_padding);
+        int paddingLeft, paddingTop, paddingRight, paddingBottom;
+        paddingLeft = paddingTop = paddingRight = paddingBottom = padding;
         Integer color = null;
         ColorStateList colorList = null;
         boolean isMini = false;
@@ -74,7 +77,15 @@ public class FloatingActionButton extends ImageButton {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FloatingActionButton, defStyleAttr, 0);
             try {
                 // Resolve if in compatibility mode.
-                inCompat = ta.getBoolean(R.styleable.FloatingActionButton_inCompat, inCompat);
+                inCompat |= ta.getBoolean(R.styleable.FloatingActionButton_inCompat, inCompat);
+
+                elevation = ta.getDimensionPixelOffset(R.styleable.FloatingActionButton_android_elevation, elevation);
+
+                padding = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_padding, padding);
+                paddingLeft = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingLeft, padding);
+                paddingTop = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingTop, padding);
+                paddingRight = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingRight, padding);
+                paddingBottom = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingBottom, padding);
 
                 // Resolve color or colorStateList.
                 TypedValue v = new TypedValue();
@@ -94,13 +105,11 @@ public class FloatingActionButton extends ImageButton {
             }
         }
 
-        mInCompat |= inCompat;
+        initElevation(inCompat, elevation);
 
-        // Set default padding.
-        int padding = context.getResources().getDimensionPixelSize(R.dimen.fab_padding);
-        setPadding(padding, padding, padding, padding);
+        setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
 
-        initDrawables(context);
+        initDrawables(context, inCompat);
 
         if (color != null) {
             setColor(color);
@@ -111,17 +120,22 @@ public class FloatingActionButton extends ImageButton {
             setColor(ColorPalette.resolveAccentColor(context));
         }
 
-        setIsMiniInner(isMini);
+        internalSetIsMini(isMini);
 
         setFocusable(true);
         setClickable(true);
-
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        setElevation(DEFAULT_ELEVATION_SP * metrics.scaledDensity);
     }
 
+    private void initElevation(boolean inCompat, float elevation) {
+        if (inCompat) {
+            mElevationManager = new ElevationManager(this);
+        }
+        setElevation(elevation);
+    }
+
+    @SuppressWarnings("deprecation")
     @SuppressLint("NewApi")
-    private void initDrawables(Context context) {
+    private void initDrawables(Context context, boolean inCompat) {
         // TODO: Make this theme dependent.
         int rippleColorResId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
                                R.color.ripple_material_light :
@@ -137,7 +151,7 @@ public class FloatingActionButton extends ImageButton {
         circleDrawable.setShape(GradientDrawable.OVAL);
 
         Drawable background;
-        if (mInCompat) {
+        if (inCompat) {
             // Pre-L androids or force compat mode.
             mTintDrawable = new TintDrawable(getContext(), circleDrawable);
             RippleDrawableSimpleCompat rippleDrawable = new RippleDrawableSimpleCompat(
@@ -178,8 +192,24 @@ public class FloatingActionButton extends ImageButton {
         }
     }
 
-    public ColorStateList getColor() {
-        return mColor;
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setElevation(float elevation) {
+        if (mElevationManager != null) {
+            mElevationManager.setElevation(elevation);
+        } else {
+            super.setElevation(elevation);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public float getElevation() {
+        if (mElevationManager != null) {
+            return mElevationManager.getElevation();
+        } else {
+            return super.getElevation();
+        }
     }
 
     public void setColor(int color) {
@@ -199,79 +229,39 @@ public class FloatingActionButton extends ImageButton {
         }
     }
 
-    public boolean isMini() {
-        return mIsMini;
+    public ColorStateList getColor() {
+        return mColor;
     }
 
     public void setIsMini(boolean isMini) {
         if (mIsMini != isMini) {
-            setIsMiniInner(isMini);
+            internalSetIsMini(isMini);
             requestLayout();
             invalidate();
         }
     }
 
     @SuppressLint("NewApi")
-    private void setIsMiniInner(boolean isMini) {
+    private void internalSetIsMini(boolean isMini) {
         mIsMini = isMini;
         int radiusResId = isMini ? R.dimen.fab_mini_radius : R.dimen.fab_radius;
         mRadius = getContext().getResources().getDimensionPixelOffset(radiusResId);
 
-        if (mShadowPaint != null) {
-            setElevation(getElevation());
+        if (mElevationManager != null) {
+            mElevationManager.setRadius(mRadius);
         }
     }
 
-    @SuppressLint("NewApi")
+    public boolean isMini() {
+        return mIsMini;
+    }
+
     @Override
-    public void setElevation(float elevation) {
-        if (mInCompat) {
-            if (elevation > 0) {
-                DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-                double lightElevation = LIGHT_ELEVATION_SP * metrics.scaledDensity;
-                double lightAngle = Math.toDegrees(Math.atan(mRadius / lightElevation));
+    public void setPadding(int left, int top, int right, int bottom) {
+        super.setPadding(left, top, right, bottom);
 
-                mShadowRadius = (float) (Math.tan(Math.toRadians(lightAngle)) * (lightElevation + elevation));
-                mShadowCx = mRadius + ((getPaddingLeft() + getPaddingRight()) / 2f);
-                float shadowCyCentered = mRadius + ((getPaddingTop() + getPaddingBottom()) / 2f);
-                // The shadow is on the down side of the button.
-                mShadowCy = shadowCyCentered * 10f / 9.2f;
-                float shadowDy = mShadowCy - shadowCyCentered;
-
-                if (mShadowPaint == null) {
-                    mShadowPaint = new Paint();
-                    mShadowPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-                }
-
-                int translucentBlack = Color.argb(
-                        Math.max(SHADOW_MAX_ALPHA - (int)((elevation + lightElevation) * 0.6 + .5f), 6),
-                        0,
-                        0,
-                        0);
-
-                int[] colors = new int[]{
-                        translucentBlack,
-                        Color.TRANSPARENT};
-
-                float[] stops = new float[]{
-                        (mRadius - shadowDy) / mShadowRadius,
-                        1.0f};
-
-                mShadowPaint.setShader(new RadialGradient(
-                        mShadowCx,
-                        mShadowCy,
-                        mShadowRadius,
-                        colors,
-                        stops,
-                        Shader.TileMode.MIRROR));
-            } else {
-                mShadowPaint = null;
-            }
-
-            requestLayout();
-            invalidate();
-        } else {
-            super.setElevation(elevation);
+        if (mElevationManager != null) {
+            mElevationManager.setPadding(left, top);
         }
     }
 
@@ -294,9 +284,113 @@ public class FloatingActionButton extends ImageButton {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mShadowPaint != null) {
-            canvas.drawCircle(mShadowCx, mShadowCy, mShadowRadius, mShadowPaint);
+        if (mElevationManager != null) {
+            mElevationManager.drawShadow(canvas);
         }
         super.draw(canvas);
+    }
+
+    private static class ElevationManager {
+        // Manually tested to better replicate the elevation result.
+        private static final double LIGHT_ELEVATION_SP = 30;
+        private static final int SHADOW_MAX_ALPHA = 86;
+        private static final float SHADOW_DY_RATIO = 1.1f;
+
+        private View mView;
+        private DisplayMetrics mMetrics;
+        private Paint mShadowPaint;
+
+        private float mElevation;
+        private int mRadius;
+        private int mPaddingLeft;
+        private int mPaddingTop;
+
+        private boolean mInvalidate;
+        private float mShadowCx;
+        private float mShadowCy;
+        private float mShadowRadius;
+
+        public ElevationManager(View view) {
+            mView = view;
+            mMetrics = view.getContext().getResources().getDisplayMetrics();
+            mShadowPaint = new Paint();
+            mShadowPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        }
+
+        public void setElevation(float elevation) {
+            if (mElevation != elevation) {
+                mElevation = elevation;
+                mInvalidate = true;
+                // Force view to redraw the shadow.
+                mView.invalidate();
+                mView.requestLayout();
+            }
+        }
+
+        public float getElevation() {
+            return mElevation;
+        }
+
+        public void setRadius(int radius) {
+            if (mRadius != radius) {
+                mRadius = radius;
+                mInvalidate = true;
+            }
+        }
+
+        public void setPadding(int left, int top) {
+            if (mPaddingLeft != left || mPaddingTop != top) {
+                mPaddingLeft = left;
+                mPaddingTop = top;
+                mInvalidate = true;
+            }
+        }
+
+        private void calculateShadow() {
+            double lightElevation = LIGHT_ELEVATION_SP * mMetrics.scaledDensity;
+            //double lightAngle = Math.atan(mRadius / lightElevation);
+            //mShadowRadius = (float) (Math.tan(lightAngle) * (lightElevation + mElevation));
+            // Calculates shadow radius in a single statement.
+            mShadowRadius = (float) (mRadius * (1 + mElevation / lightElevation));
+            Log.i("wut", "mshadowradius: "+mShadowRadius);
+
+            mShadowCx = mRadius + mPaddingLeft;
+            float shadowCyCentered = mRadius + mPaddingTop;
+            // The shadow is on the down side of the button.
+            mShadowCy = shadowCyCentered * SHADOW_DY_RATIO;
+            float shadowDy = mShadowCy - shadowCyCentered;
+
+            int translucentBlack = Color.argb(
+                    Math.max(SHADOW_MAX_ALPHA - (int)((mElevation + lightElevation) * 0.6 + .5f), 6),
+                    0,
+                    0,
+                    0);
+
+            int[] colors = new int[]{
+                    translucentBlack,
+                    Color.TRANSPARENT};
+
+            float[] stops = new float[]{
+                    (mRadius - shadowDy) / mShadowRadius,
+                    1.0f};
+
+            mShadowPaint.setShader(new RadialGradient(
+                    mShadowCx,
+                    mShadowCy,
+                    mShadowRadius,
+                    colors,
+                    stops,
+                    Shader.TileMode.MIRROR));
+        }
+
+        public void drawShadow(Canvas canvas) {
+            if (mElevation > 0) {
+                if (mInvalidate) {
+                    mInvalidate = false;
+                    calculateShadow();
+                }
+                canvas.drawCircle(mShadowCx, mShadowCy, mShadowRadius, mShadowPaint);
+            }
+        }
     }
 }
