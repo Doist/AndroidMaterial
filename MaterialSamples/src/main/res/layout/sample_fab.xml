@@ -2,18 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <io.doist.material.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom" />
-
-    <io.doist.material.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="140dip"
-        android:layout_marginRight="140dip"
-        app:inCompat="true" />
+    <!-- Top FABs -->
 
     <io.doist.material.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -26,10 +15,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:layout_marginEnd="100dip"
         android:layout_marginRight="100dip"
         android:color="@color/btn_sample"
         app:isMini="true"
+        app:inCompat="true" />
+
+    <!-- Bottom FABs -->
+
+    <io.doist.material.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom" />
+
+    <io.doist.material.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginRight="140dip"
+        android:paddingRight="140dip"
         app:inCompat="true" />
 
 </merge>
