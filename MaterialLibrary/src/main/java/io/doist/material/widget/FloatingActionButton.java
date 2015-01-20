@@ -18,7 +18,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -354,7 +353,6 @@ public class FloatingActionButton extends ImageButton {
             //mShadowRadius = (float) (Math.tan(lightAngle) * (lightElevation + mElevation));
             // Calculates shadow radius in a single statement.
             mShadowRadius = (float) (mRadius * (1 + mElevation / lightElevation));
-            Log.i("wut", "mshadowradius: "+mShadowRadius);
 
             mShadowCx = mRadius + mPaddingLeft;
             float shadowCyCentered = mRadius + mPaddingTop;
