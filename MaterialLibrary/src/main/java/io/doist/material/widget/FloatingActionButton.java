@@ -294,6 +294,7 @@ public class FloatingActionButton extends ImageButton {
     private static class ElevationManager {
         // Manually tested to better replicate the elevation result.
         private static final double LIGHT_ELEVATION_SP = 30;
+        private static final int SHADOW_MIN_ALPHA = 6;
         private static final int SHADOW_MAX_ALPHA = 86;
         private static final float SHADOW_DY_RATIO = 1.1f;
 
@@ -362,7 +363,7 @@ public class FloatingActionButton extends ImageButton {
             float shadowDy = mShadowCy - shadowCyCentered;
 
             int translucentBlack = Color.argb(
-                    Math.max(SHADOW_MAX_ALPHA - (int)((mElevation + lightElevation) * 0.6 + .5f), 6),
+                    Math.max(SHADOW_MAX_ALPHA - (int) ((mElevation + lightElevation) * 0.6 + .5f), SHADOW_MIN_ALPHA),
                     0,
                     0,
                     0);
