@@ -368,20 +368,12 @@ public class FloatingActionButton extends ImageButton {
                     0,
                     0);
 
-            int[] colors = new int[]{
-                    translucentBlack,
-                    Color.TRANSPARENT};
-
-            float[] stops = new float[]{
-                    (mRadius - shadowDy) / mShadowRadius,
-                    1.0f};
-
             mShadowPaint.setShader(new RadialGradient(
                     mShadowCx,
                     mShadowCy,
                     mShadowRadius,
-                    colors,
-                    stops,
+                    new int[]{translucentBlack, Color.TRANSPARENT},
+                    new float[]{(mRadius - shadowDy) / mShadowRadius, 1.0f},
                     Shader.TileMode.MIRROR));
         }
 
