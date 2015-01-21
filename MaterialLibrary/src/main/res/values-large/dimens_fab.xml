@@ -3,4 +3,7 @@
 
     <dimen name="fab_padding">24dip</dimen>
 
+    <dimen name="fab_size">104dip</dimen>
+    <dimen name="fab_mini_size">88dip</dimen>
+
 </resources>

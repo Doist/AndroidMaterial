@@ -5,4 +5,7 @@
     <dimen name="fab_mini_radius">20dip</dimen>
     <dimen name="fab_padding">16dip</dimen>
 
+    <dimen name="fab_size">88dip</dimen>
+    <dimen name="fab_mini_size">72dip</dimen>
+
 </resources>
