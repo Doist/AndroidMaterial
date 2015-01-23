@@ -35,7 +35,7 @@ please see themes_device_defaults.xml.
         <item name="android:textColorPrimary">@color/primary_text_material_light</item>
         <item name="android:textColorHint">@color/hint_foreground_material_light</item>
         <item name="android:textColorHighlight">@color/highlighted_text_material_light</item>
-        <item name="android:textColorLink">@color/material_teal_500</item>
+        <item name="android:textColorLink">@color/link_text_material_light</item>
 
         <item name="android:textAppearanceButton">@style/TextAppearance.Material.Widget.Button</item>
 
@@ -43,7 +43,8 @@ please see themes_device_defaults.xml.
         <item name="android:buttonStyle">@style/Widget.Material.Button</item>
 
         <!-- Color palette -->
-        <item name="colorAccent">@color/material_light_blue_A200</item>
+        <item name="colorAccent">@color/accent_material_light</item>
+        <item name="android:colorAccent">@color/accent_material_light</item>
 
         <item name="colorControlActivated">?attr/colorAccent</item>
 

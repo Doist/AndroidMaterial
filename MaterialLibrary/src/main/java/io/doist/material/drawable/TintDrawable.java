@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -24,13 +25,21 @@ import io.doist.material.R;
 public class TintDrawable extends WrapperDrawable {
     private WeakReference<Context> mContext;
 
-    private final TintState mTintState;
+    private TintState mTintState;
     private boolean mMutated = false;
 
     public TintDrawable(Context context, Drawable drawable) {
+        this(context, drawable, null);
+    }
+    public TintDrawable(Context context, Drawable drawable, int tint) {
+        this(context, drawable, ColorStateList.valueOf(tint));
+    }
+    public TintDrawable(Context context, Drawable drawable, ColorStateList tint) {
         super(drawable);
         mContext = new WeakReference<>(context);
         mTintState = (TintState) getConstantState();
+        mTintState.mTint = tint;
+        mTintState.mTintUpdate = mTintState.mTint != null;
     }
 
     @Override
@@ -50,14 +59,16 @@ public class TintDrawable extends WrapperDrawable {
         try {
             final TypedValue v = new TypedValue();
             if (a.getValue(R.styleable.TintDrawable_android_tint, v)) {
+                // Tint was successfully retrieved.
 
                 if (v.type >= TypedValue.TYPE_FIRST_COLOR_INT
                         && v.type <= TypedValue.TYPE_LAST_COLOR_INT) {
-                    setTintColorInner(a.getColor(R.styleable.TintDrawable_android_tint, Color.TRANSPARENT));
+                    mTintState.mTint = ColorStateList.valueOf(
+                            a.getColor(R.styleable.TintDrawable_android_tint, Color.TRANSPARENT));
                 } else {
-                    mTintState.mTintColorStateList = a.getColorStateList(R.styleable.TintDrawable_android_tint);
-                    setTintColorInner(mTintState.mTintColorStateList.getDefaultColor());
+                    mTintState.mTint = a.getColorStateList(R.styleable.TintDrawable_android_tint);
                 }
+                mTintState.mTintUpdate = true;
             }
         }
         finally {
@@ -68,16 +79,15 @@ public class TintDrawable extends WrapperDrawable {
     @Override
     public boolean isStateful() {
         // If tint has multiple states, the drawable is stateful.
-        return super.isStateful() || (mTintState.mTintColorStateList != null && mTintState.mTintColorEnabled);
+        return super.isStateful() || (mTintState.mTint != null);
     }
 
     @Override
     protected boolean onStateChange(int[] state) {
-        if (mTintState.mTintColorStateList != null) {
-            final int defaultColor = mTintState.mTintColorStateList.getDefaultColor();
-            final int tintColor = mTintState.mTintColorStateList.getColorForState(state, defaultColor);
-
-            return setTintColorInner(tintColor);
+        if (mTintState.mTint != null) {
+            mTintState.mTintUpdate = true;
+            invalidateSelf();
+            return true;
         }
 
         return false;
@@ -85,50 +95,84 @@ public class TintDrawable extends WrapperDrawable {
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-        if (cf != null) {
-            super.setColorFilter(cf);
-            mTintState.mTintColorEnabled = false;
-        } else {
-            setTintColorInner(mTintState.mTintColor);
+        // Only apply a color filter, if it is not null,
+        // or if there is no tint applied.
+        if (cf != null || mTintState.mTint == null) {
+            setColorFilterInner(cf);
         }
+    }
+
+    private void setColorFilterInner(ColorFilter cf) {
+        mTintState.mTint = null;
+        mTintState.mTintMode = null;
+        mTintState.mTintUpdate = false;
+        super.setColorFilter(cf);
     }
 
     @Override
     public void clearColorFilter() {
-        setColorFilter(null);
+        setColorFilterInner(null);
     }
 
-    public void setTintColor(int color) {
-        setTintColorInner(color);
-    }
-
-    private boolean setTintColorInner(int color) {
-        if (mTintState.mTintColor != color || !mTintState.mTintColorEnabled) {
-            mTintState.mTintColor = color;
-            mTintState.mTintColorEnabled = true;
-
-            final ColorFilter cf = color != Color.TRANSPARENT ?
-                                   new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN) : null;
-            super.setColorFilter(cf);
-
-            return true;
-        } else {
-            return false;
+    @Override
+    public void setTintList(ColorStateList tint) {
+        if (mTintState.mTint != tint) {
+            mTintState.mTint = tint;
+            mTintState.mTintUpdate = true;
+            invalidateSelf();
         }
+    }
+
+    @Override
+    public void setTintMode(PorterDuff.Mode tintMode) {
+        if (mTintState.mTintMode != tintMode) {
+            mTintState.mTintMode = tintMode;
+            mTintState.mTintUpdate = true;
+            invalidateSelf();
+        }
+    }
+
+    private void updateTintFilter() {
+        if (mTintState.mTintUpdate && mTintState.mTint != null) {
+            mTintState.mTintUpdate = false;
+
+            if (mTintState.mTintMode == null) {
+                // Default tint mode.
+                mTintState.mTintMode = PorterDuff.Mode.SRC_IN;
+            }
+
+            super.setColorFilter(new PorterDuffColorFilter(
+                    mTintState.mTint.getColorForState(getState(), mTintState.mTint.getDefaultColor()),
+                    mTintState.mTintMode));
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        updateTintFilter();
+        super.draw(canvas);
     }
 
     @Override
     public Drawable mutate() {
         if (!mMutated && super.mutate() == this) {
-            super.mutate();
+            TintState tintState = (TintState) getConstantState();
 
-            if (mTintState.mTintColorStateList != null) {
-                // Clone mTintColorStateList if not null.
+            if (mTintState.mTint != null) {
+                // Clone mTint if not null.
                 final Parcel p = Parcel.obtain();
-                mTintState.mTintColorStateList.writeToParcel(p, 0);
-                mTintState.mTintColorStateList = ColorStateList.CREATOR.createFromParcel(p);
+                mTintState.mTint.writeToParcel(p, 0);
+                p.setDataPosition(0);
+                tintState.mTint = ColorStateList.CREATOR.createFromParcel(p);
             }
 
+            if (mTintState.mTintMode != null) {
+                tintState.mTintMode = PorterDuff.Mode.values()[mTintState.mTintMode.ordinal()];
+            }
+
+            tintState.mTintUpdate = tintState.mTint != null;
+
+            mTintState = tintState;
             mMutated = true;
         }
         return this;
@@ -140,18 +184,27 @@ public class TintDrawable extends WrapperDrawable {
     }
 
     protected static class TintState extends WrapperState {
-        int mTintColor = Color.TRANSPARENT;
-        ColorStateList mTintColorStateList;
-        boolean mTintColorEnabled = false;
+        ColorStateList mTint;
+        PorterDuff.Mode mTintMode;
+        boolean mTintUpdate;
 
         public TintState(WrapperState state) {
             super(state);
 
             if (state != null) {
-                mTintColor = ((TintState) state).mTintColor;
-                mTintColorStateList = ((TintState) state).mTintColorStateList;
-                mTintColorEnabled = ((TintState) state).mTintColorEnabled;
+                mTint = ((TintState) state).mTint;
+                mTintMode = ((TintState) state).mTintMode;
+                mTintUpdate = ((TintState) state).mTintUpdate;
             }
+        }
+
+        @Override
+        public void setDrawable(Drawable drawable, WrapperDrawable owner) {
+            if (drawable.getClass() == TintDrawable.class) {
+                // Chained instances of TintDrawables are not possible and thus are unnecessary.
+                drawable = ((WrapperState)drawable.getConstantState()).mDrawable;
+            }
+            super.setDrawable(drawable, owner);
         }
 
         @Override

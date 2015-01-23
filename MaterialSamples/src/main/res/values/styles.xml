@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.Material.Light">
-        <!-- Customize your theme here. -->
+        <item name="colorButtonNormal">@color/btn_sample</item>
     </style>
 
 </resources>
