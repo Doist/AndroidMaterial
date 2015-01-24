@@ -106,14 +106,9 @@ public class MaterialWidgetHandler {
                                 final int paddingBottom = view.getPaddingBottom();
 
                                 // Init background.
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                                    view.setBackgroundDrawable(d);
-                                } else {
-                                    view.setBackground(d);
-                                }
+                                view.setBackground(d);
 
                                 // Maintain horizontal and vertical padding.
-
                                 if (paddingLeft > 0 && paddingRight > 0) {
                                     view.setPadding(
                                             paddingLeft,

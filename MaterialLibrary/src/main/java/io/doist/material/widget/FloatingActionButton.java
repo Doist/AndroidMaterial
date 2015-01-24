@@ -167,11 +167,7 @@ public class FloatingActionButton extends ImageButton {
         }
 
         if (getBackground() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                setBackground(background);
-            } else {
-                setBackgroundDrawable(background);
-            }
+            setBackground(background);
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 // Make sure the current padding is kept in pre-L androids.
