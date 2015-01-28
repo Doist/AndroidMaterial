@@ -10,6 +10,7 @@
         <attr name="android:paddingRight" />
         <attr name="android:paddingBottom" />
         <attr name="android:color" />
+        <attr name="elevation" format="dimension" />
         <attr name="isMini" format="boolean" />
         <attr name="inCompat" format="boolean" /> <!-- Used for debugging or to force consistent behaviour. -->
     </declare-styleable>

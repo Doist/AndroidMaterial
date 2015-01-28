@@ -77,7 +77,15 @@ public class FloatingActionButton extends ImageButton {
                 // Resolve if in compatibility mode.
                 inCompat |= ta.getBoolean(R.styleable.FloatingActionButton_inCompat, inCompat);
 
-                elevation = ta.getDimensionPixelOffset(R.styleable.FloatingActionButton_android_elevation, elevation);
+                if (inCompat) {
+                    elevation = ta.getDimensionPixelOffset(
+                            R.styleable.FloatingActionButton_elevation,
+                            elevation);
+                } else {
+                    elevation = ta.getDimensionPixelOffset(
+                            R.styleable.FloatingActionButton_android_elevation,
+                            elevation);
+                }
 
                 padding = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_padding, padding);
                 paddingLeft = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingLeft, padding);
