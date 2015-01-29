@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="ActionBar">
+        <!-- Declare elevation attribute inside ActionBar styleable
+            to make it compatible with android support v7 appcompat library. -->
+        <attr name="elevation" format="dimension" />
+    </declare-styleable>
 
     <declare-styleable name="FloatingActionButton">
         <attr name="android:src" />
@@ -10,7 +15,7 @@
         <attr name="android:paddingRight" />
         <attr name="android:paddingBottom" />
         <attr name="android:color" />
-        <attr name="elevation" format="dimension" />
+        <attr name="elevation" />
         <attr name="isMini" format="boolean" />
         <attr name="inCompat" format="boolean" /> <!-- Used for debugging or to force consistent behaviour. -->
     </declare-styleable>
