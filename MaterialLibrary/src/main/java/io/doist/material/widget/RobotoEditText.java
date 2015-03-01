@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
-import io.doist.material.widget.utils.Roboto;
+import io.doist.material.utils.Roboto;
 
 public class RobotoEditText extends EditText {
     private boolean mAllowSetTypeface;

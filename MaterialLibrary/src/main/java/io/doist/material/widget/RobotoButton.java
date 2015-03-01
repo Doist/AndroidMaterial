@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
 
-import io.doist.material.widget.utils.Roboto;
+import io.doist.material.utils.Roboto;
 
 public class RobotoButton extends Button {
     private boolean mAllowSetTypeface;

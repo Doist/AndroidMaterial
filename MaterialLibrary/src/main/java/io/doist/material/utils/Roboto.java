@@ -1,4 +1,4 @@
-package io.doist.material.widget.utils;
+package io.doist.material.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -30,10 +30,9 @@ public class Roboto {
         String fontFamily = null;
         int textStyle = Typeface.NORMAL;
 
-        // Look the appearance up without checking first if it exists because
-        // almost every TextView has one and it greatly simplifies the logic
-        // to be able to parse the appearance first and then let specific tags
-        // for this View override it.
+        // Look up the appearance without checking first if it exists because almost every TextView has one and i
+        // greatly simplifies the logic to be able to parse the appearance first and then let specific tags for this
+        // View override it.
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextViewAppearance, defStyle, 0);
         TypedArray appearance = null;
         int ap = a.getResourceId(R.styleable.TextViewAppearance_android_textAppearance, -1);
@@ -59,14 +58,18 @@ public class Roboto {
         a.recycle();
 
         // Grab the appropriate variant and apply it.
+        textView.setTypeface(getTypeface(context, fontFamily, textStyle), textStyle);
+
+        // Enable subpixel positioning of text. Improves font look, specially on lower resolution devices.
+        textView.setPaintFlags(textView.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
+    }
+
+    public static Typeface getTypeface(Context context, String fontFamily, int textStyle) {
         Typeface typeface = RobotoTypeface.get(context, fontFamily, textStyle);
         if (typeface == null) {
             typeface = Typeface.create(fontFamily, textStyle);
         }
-        textView.setTypeface(typeface, textStyle);
-
-        // Enable subpixel positioning of text. Improves font look, specially on lower resolution devices.
-        textView.setPaintFlags(textView.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
+        return typeface;
     }
 
     private static class RobotoTypeface {
