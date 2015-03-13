@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Make ripple colors less transparent, to enhance fade in and fade out
-        animations in RippleDrawableSimpleCompat. -->
-    <color name="ripple_material_light_compat">#40444444</color>
-    <color name="ripple_material_dark_compat">#40ffffff</color>
-</resources>

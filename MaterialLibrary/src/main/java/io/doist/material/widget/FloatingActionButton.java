@@ -136,10 +136,8 @@ public class FloatingActionButton extends ImageButton {
     @SuppressLint("NewApi")
     private void initDrawables(Context context, boolean inCompat) {
         // TODO: Make this theme dependent.
-        int rippleColorResId = inCompat ?
-                               R.color.ripple_material_light_compat :
-                               R.color.ripple_material_light;
-        ColorStateList rippleColor = ColorStateList.valueOf(context.getResources().getColor(rippleColorResId));
+        ColorStateList rippleColor =
+                ColorStateList.valueOf(context.getResources().getColor(R.color.ripple_material_light));
 
         int paddingLeft = getPaddingLeft();
         int paddingTop = getPaddingTop();
