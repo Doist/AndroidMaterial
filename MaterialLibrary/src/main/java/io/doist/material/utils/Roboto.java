@@ -33,9 +33,9 @@ public class Roboto {
         // Look up the appearance without checking first if it exists because almost every TextView has one and i
         // greatly simplifies the logic to be able to parse the appearance first and then let specific tags for this
         // View override it.
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextViewAppearance, defStyle, 0);
+        TypedArray a = context.obtainStyledAttributes(attrs, new int[]{android.R.attr.textAppearance}, defStyle, 0);
         TypedArray appearance = null;
-        int ap = a.getResourceId(R.styleable.TextViewAppearance_android_textAppearance, -1);
+        int ap = a.getResourceId(0, -1);
         a.recycle();
         if (ap != -1) {
             appearance = context.obtainStyledAttributes(ap, R.styleable.TextAppearance);
