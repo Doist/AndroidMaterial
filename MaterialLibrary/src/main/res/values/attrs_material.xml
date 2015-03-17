@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Style for the "positive" buttons within button bars -->
+    <attr name="buttonBarPositiveButtonStyle" format="reference" />
+
+    <!-- Style for the "negative" buttons within button bars -->
+    <attr name="buttonBarNegativeButtonStyle" format="reference" />
+
+    <!-- Style for the "neutral" buttons within button bars -->
+    <attr name="buttonBarNeutralButtonStyle" format="reference" />
+
     <!-- Drawable used to render several states. Each state is represented by
          a child drawable. -->
     <declare-styleable name="StateListDrawable">
