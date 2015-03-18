@@ -64,10 +64,14 @@ public class MaterialDrawableUtils {
         } else if (name.equals("ripple")) {
             drawable = new LayerMaterialDrawable(c);
         } else {
-            drawable = Drawable.createFromXmlInner(r, parser, attrs);
+            drawable = null;
         }
 
-        drawable.inflate(r, parser, attrs);
+        if (drawable != null) {
+            drawable.inflate(r, parser, attrs);
+        } else {
+            drawable = Drawable.createFromXmlInner(r, parser, attrs);
+        }
 
         return drawable;
     }
