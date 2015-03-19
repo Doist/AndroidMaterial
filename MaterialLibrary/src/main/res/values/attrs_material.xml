@@ -101,4 +101,14 @@
         <!--<attr name="android:tintMode" />-->
     </declare-styleable>
 
+    <declare-styleable name="InsetDrawable">
+        <attr name="android:visible" />
+        <attr name="android:drawable" />
+        <attr name="android:inset" />
+        <attr name="android:insetLeft" />
+        <attr name="android:insetRight" />
+        <attr name="android:insetTop" />
+        <attr name="android:insetBottom" />
+    </declare-styleable>
+
 </resources>
