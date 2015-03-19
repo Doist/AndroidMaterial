@@ -11,4 +11,14 @@
         android:layout_height="100dip"
         android:src="@drawable/btn_default_material" />
 
+    <io.doist.material.widget.RobotoEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_hint_one" />
+
+    <io.doist.material.widget.RobotoEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_text_hint_two" />
+
 </merge>
