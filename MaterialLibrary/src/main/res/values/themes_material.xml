@@ -35,5 +35,8 @@ please see themes_device_defaults.xml.
 
         <!-- Button styles -->
         <item name="android:buttonStyle">@style/Widget.Material.Button</item>
+
+        <!-- EditText styles -->
+        <item name="editTextBackground">@drawable/edit_text_material</item>
     </style>
 </resources>

@@ -3,11 +3,10 @@ package io.doist.material.widget;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import io.doist.material.utils.Roboto;
 
-public class RobotoEditText extends EditText {
+public class RobotoEditText extends MaterialEditText {
     private boolean mAllowSetTypeface;
 
     public RobotoEditText(Context context) {
