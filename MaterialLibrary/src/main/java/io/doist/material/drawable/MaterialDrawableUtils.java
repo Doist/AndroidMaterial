@@ -19,7 +19,7 @@ public class MaterialDrawableUtils {
         AttributeSet attrs = Xml.asAttributeSet(parser);
 
         int type;
-        while ((type=parser.next()) != XmlPullParser.START_TAG &&
+        while ((type = parser.next()) != XmlPullParser.START_TAG &&
                 type != XmlPullParser.END_DOCUMENT) {
             // Empty loop.
         }
@@ -63,6 +63,8 @@ public class MaterialDrawableUtils {
             drawable = new TintDrawable(c, drawable);
         } else if (name.equals("ripple")) {
             drawable = new LayerMaterialDrawable(c);
+        } else if (name.equals("inset")) {
+            drawable = new InsetMaterialDrawable(c);
         } else {
             drawable = Drawable.createFromXmlInner(r, parser, attrs);
         }
