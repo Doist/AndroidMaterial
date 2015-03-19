@@ -161,15 +161,15 @@ public class FloatingActionButton extends ImageButton {
         } else {
             // Lollipop androids.
             mCircleDrawable = circleDrawable;
-            background = new InsetDrawable(
-                    new RippleDrawable(
-                            rippleColor,
+            background = new RippleDrawable(
+                    rippleColor,
+                    new InsetDrawable(
                             circleDrawable,
-                            null),
-                    paddingLeft,
-                    paddingTop,
-                    paddingRight,
-                    paddingBottom);
+                            paddingLeft,
+                            paddingTop,
+                            paddingRight,
+                            paddingBottom),
+                    null);
         }
 
         if (getBackground() != null) {
@@ -184,6 +184,7 @@ public class FloatingActionButton extends ImageButton {
             throw new IllegalStateException("FloatingActionButton does not support 'android:background' attribute.");
         }
     }
+
 
     private void initColor(Context context, ColorStateList color) {
         if (color != null) {
