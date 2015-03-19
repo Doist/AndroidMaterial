@@ -29,7 +29,7 @@ import android.widget.ImageButton;
 
 import io.doist.material.R;
 import io.doist.material.color.ColorPalette;
-import io.doist.material.drawable.RippleDrawableSimpleCompat;
+import io.doist.material.drawable.RippleMaterialDrawable;
 import io.doist.material.drawable.TintDrawable;
 
 public class FloatingActionButton extends ImageButton {
@@ -155,7 +155,7 @@ public class FloatingActionButton extends ImageButton {
         if (inCompat) {
             // Pre-L androids or force compat mode.
             mTintDrawable = new TintDrawable(getContext(), circleDrawable);
-            RippleDrawableSimpleCompat rippleDrawable = new RippleDrawableSimpleCompat(
+            RippleMaterialDrawable rippleDrawable = new RippleMaterialDrawable(
                     context,
                     rippleColor,
                     mTintDrawable);

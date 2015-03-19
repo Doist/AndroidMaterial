@@ -26,6 +26,12 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     }
 
     @Override
+    public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs)
+            throws XmlPullParserException, IOException {
+        mWrapperState.mDrawable.inflate(r, parser, attrs);
+    }
+
+    @Override
     public void draw(Canvas canvas) {
         mWrapperState.mDrawable.draw(canvas);
     }
@@ -163,12 +169,6 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
             mMutated = true;
         }
         return this;
-    }
-
-    @Override
-    public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs)
-            throws XmlPullParserException, IOException {
-        mWrapperState.mDrawable.inflate(r, parser, attrs);
     }
 
     @Override

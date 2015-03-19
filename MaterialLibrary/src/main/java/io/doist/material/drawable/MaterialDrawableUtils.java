@@ -62,7 +62,7 @@ public class MaterialDrawableUtils {
             }
             drawable = new TintDrawable(c, drawable);
         } else if (name.equals("ripple")) {
-            drawable = new LayerMaterialDrawable(c);
+            drawable = new RippleMaterialDrawable(c);
         } else {
             drawable = null;
         }
