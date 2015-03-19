@@ -8,6 +8,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.lang.reflect.Array;
 
 import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
@@ -19,6 +22,7 @@ public class MaterialWidgetHandler {
 
     private static int[] sOriginalViewStyleable;
     private static int[] sOriginalImageViewStyleable;
+    private static int[] sOriginalTextViewStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, int... attrs) {
         if (sSkip) return set;
@@ -58,6 +62,23 @@ public class MaterialWidgetHandler {
                             null,
                             hideValue(sOriginalImageViewStyleable, imageViewSrcIndex));
                     break;
+
+                case android.R.attr.textCursorDrawable:
+                    if (sOriginalTextViewStyleable == null) {
+                        // Keep original text view styleable values.
+                        sOriginalTextViewStyleable =
+                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "TextView", null);
+                    }
+
+                    int textViewTextCursorDrawableIndex = (int) ReflectionUtils
+                            .getDeclaredFieldValue(StyleableClass, "TextView_textCursorDrawable", null);
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            "TextView",
+                            null,
+                            hideValue(sOriginalTextViewStyleable, textViewTextCursorDrawableIndex));
+                    break;
             }
         }
         return set;
@@ -76,6 +97,11 @@ public class MaterialWidgetHandler {
                 case android.R.attr.src:
                     ReflectionUtils.setDeclaredFieldValue(
                             StyleableClass, "ImageView", null, sOriginalImageViewStyleable);
+                    break;
+
+                case android.R.attr.textCursorDrawable:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, "TextView", null, sOriginalTextViewStyleable);
                     break;
             }
         }
@@ -131,6 +157,25 @@ public class MaterialWidgetHandler {
                                 // Init image drawable.
                                 if (view instanceof ImageView) {
                                     ((ImageView) view).setImageDrawable(d);
+                                }
+                                break;
+
+                            case android.R.attr.textCursorDrawable:
+                                if (view instanceof TextView) {
+                                    // Replace cursor drawables in TextView's Editor.
+                                    Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
+                                            ReflectionUtils.getClass("android.widget.Editor"),
+                                            "mCursorDrawable",
+                                            ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", view));
+                                    Array.set(cursorDrawables, 0, d);
+                                    Array.set(cursorDrawables, 1, r.getDrawable(resId));
+
+                                    // Also set TextView#mCursorDrawableRes; if it's 0 Editor skips drawing the cursor.
+                                    ReflectionUtils.setDeclaredFieldValue(
+                                            TextView.class,
+                                            "mCursorDrawableRes",
+                                            view,
+                                            resId);
                                 }
                                 break;
                         }

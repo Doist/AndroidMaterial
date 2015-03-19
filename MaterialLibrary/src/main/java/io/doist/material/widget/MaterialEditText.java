@@ -7,7 +7,7 @@ import android.widget.EditText;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialEditText extends EditText {
-    private static final int[] sHiddenAttrs = {android.R.attr.background};
+    private static final int[] sHiddenAttrs = {android.R.attr.background, android.R.attr.textCursorDrawable};
 
     public MaterialEditText(Context context) {
         super(context);
