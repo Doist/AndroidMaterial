@@ -18,7 +18,8 @@ public class MaterialEditText extends EditText {
     }
 
     public MaterialEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenAttrs), defStyle);
+        super(MaterialWidgetHandler.themifyContext(context, attrs),
+              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenAttrs), defStyle);
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenAttrs);
         MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenAttrs);
     }
