@@ -9,14 +9,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.util.LongSparseArray;
+import android.util.SparseArray;
 import android.util.TypedValue;
 
 import java.lang.ref.WeakReference;
 
 import io.doist.material.drawable.MaterialDrawableUtils;
+import io.doist.material.widget.utils.MaterialContextThemeWrapper;
 
 public class MaterialResources {
-    private static MaterialResources sInstance;
+    private static SparseArray<MaterialResources> sInstances = new SparseArray<>();
 
     final Object mAccessLock = new Object();
     TypedValue mTmpValue = new TypedValue();
@@ -25,40 +27,44 @@ public class MaterialResources {
     WeakReference<Context> mContext = new WeakReference<>(null);
     WeakReference<Resources> mResources = new WeakReference<>(null);
 
-    private static final LongSparseArray<Drawable.ConstantState>[] sDrawableCache;
-    static {
-        sDrawableCache = new LongSparseArray[2];
-        sDrawableCache[0] = new LongSparseArray<>();
-        sDrawableCache[1] = new LongSparseArray<>();
+    private final LongSparseArray<Drawable.ConstantState>[] mDrawableCache = new LongSparseArray[2];
+    private final LongSparseArray<Drawable.ConstantState> mColorDrawableCache = new LongSparseArray<>(0);
+
+    private MaterialResources() {
+        mDrawableCache[0] = new LongSparseArray<>();
+        mDrawableCache[1] = new LongSparseArray<>();
     }
-    final static LongSparseArray<Drawable.ConstantState> sColorDrawableCache = new LongSparseArray<>(0);
 
     public static MaterialResources getInstance(Context context, Resources resources) {
-        if (sInstance == null) {
-            sInstance = new MaterialResources();
+        int themeResId = 0;
+        if (context instanceof MaterialContextThemeWrapper) {
+            themeResId = ((MaterialContextThemeWrapper) context).getThemeResId();
+        }
+
+        MaterialResources instance = sInstances.get(themeResId);
+        if (instance == null) {
+            instance = new MaterialResources();
+            sInstances.put(themeResId, instance);
         }
 
         // Ensure context.
-        if (context != null) {
-            if (sInstance.mApplicationContext.get() == null) {
-                sInstance.mApplicationContext = new WeakReference<>(context.getApplicationContext());
-            }
+        if (instance.mApplicationContext.get() == null) {
+            instance.mApplicationContext = new WeakReference<>(context.getApplicationContext());
+        }
 
-            if (sInstance.mContext.get() == null) {
-                sInstance.mContext = new WeakReference<>(context);
-            }
+        if (instance.mContext.get() == null) {
+            instance.mContext = new WeakReference<>(context);
         }
 
         // Ensure resources.
-        if (resources != null && sInstance.mResources.get() == null) {
-            sInstance.mResources = new WeakReference<>(resources);
+        if (instance.mResources.get() == null) {
+            instance.mResources = new WeakReference<>(resources);
         }
 
-        return sInstance;
+        return instance;
     }
 
     public Drawable getDrawable(int id) throws Resources.NotFoundException {
-        final Context c = mContext.get() != null ? mContext.get() : mApplicationContext.get();
         final Resources r = mResources.get();
 
         TypedValue value;
@@ -71,7 +77,7 @@ public class MaterialResources {
             }
             r.getValue(id, value, true);
         }
-        Drawable res = loadDrawable(c, r, value, id);
+        Drawable res = loadDrawable(value, id);
         synchronized (mAccessLock) {
             if (mTmpValue == null) {
                 mTmpValue = value;
@@ -81,7 +87,10 @@ public class MaterialResources {
     }
 
     @SuppressLint("NewApi")
-    Drawable loadDrawable(Context c, Resources r, TypedValue value, int id) throws Resources.NotFoundException {
+    public Drawable loadDrawable(TypedValue value, int id) throws Resources.NotFoundException {
+        final Context c = mContext.get() != null ? mContext.get() : mApplicationContext.get();
+        final Resources r = mResources.get();
+
         boolean isColorDrawable = false;
         if (value.type >= TypedValue.TYPE_FIRST_COLOR_INT &&
                 value.type <= TypedValue.TYPE_LAST_COLOR_INT) {
@@ -92,13 +101,13 @@ public class MaterialResources {
 
         LongSparseArray<Drawable.ConstantState> drawableCache;
         if (isColorDrawable) {
-            drawableCache = sColorDrawableCache;
+            drawableCache = mColorDrawableCache;
         } else {
             int layoutDirection = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
                                   0 :
                                   r.getConfiguration().getLayoutDirection();
 
-            drawableCache = sDrawableCache[layoutDirection];
+            drawableCache = mDrawableCache[layoutDirection];
         }
 
         Drawable dr = getCachedDrawable(r, drawableCache, key);
@@ -146,13 +155,13 @@ public class MaterialResources {
             if (cs != null) {
                 synchronized (mAccessLock) {
                     if (isColorDrawable) {
-                        sColorDrawableCache.put(key, cs);
+                        mColorDrawableCache.put(key, cs);
                     } else {
                         int layoutDirection = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
                                               0 :
                                               r.getConfiguration().getLayoutDirection();
 
-                        sDrawableCache[layoutDirection].put(key, cs);
+                        mDrawableCache[layoutDirection].put(key, cs);
                     }
                 }
             }

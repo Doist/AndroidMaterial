@@ -1,17 +1,18 @@
 package io.doist.material.widget.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
 
+import io.doist.material.R;
 import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
@@ -117,74 +118,68 @@ public class MaterialWidgetHandler {
             return;
         }
 
-        final Context context = view.getContext();
-        final Resources resources = view.getResources();
-
+        final Context context = themifyContext(view.getContext(), set);
         final TypedArray ta = context.obtainStyledAttributes(set, attrs, defStyle, 0);
         try {
+            MaterialResources res = MaterialResources.getInstance(context, context.getResources());
             for (int i = 0; i < attrs.length; i++) {
-                final int resId = ta.getResourceId(i, 0);
-                if (resId != 0) {
-                    final MaterialResources r = MaterialResources.getInstance(context, resources);
-                    final Drawable d = r.getDrawable(resId);
+                Drawable d = getDrawable(res, ta, i);
+                if (d != null) {
+                    final int attr = attrs[i];
+                    switch (attr) {
+                        case android.R.attr.background:
+                            final int paddingLeft = view.getPaddingLeft();
+                            final int paddingTop = view.getPaddingTop();
+                            final int paddingRight = view.getPaddingRight();
+                            final int paddingBottom = view.getPaddingBottom();
 
-                    if (d != null) {
-                        final int attr = attrs[i];
-                        switch (attr) {
-                            case android.R.attr.background:
-                                final int paddingLeft = view.getPaddingLeft();
-                                final int paddingTop = view.getPaddingTop();
-                                final int paddingRight = view.getPaddingRight();
-                                final int paddingBottom = view.getPaddingBottom();
+                            // Init background.
+                            view.setBackground(d);
 
-                                // Init background.
-                                view.setBackground(d);
+                            // Maintain horizontal and vertical padding.
+                            if (paddingLeft > 0 && paddingRight > 0) {
+                                view.setPadding(
+                                        paddingLeft,
+                                        view.getPaddingTop(),
+                                        paddingRight,
+                                        view.getPaddingBottom());
+                            }
 
-                                // Maintain horizontal and vertical padding.
-                                if (paddingLeft > 0 && paddingRight > 0) {
-                                    view.setPadding(
-                                            paddingLeft,
-                                            view.getPaddingTop(),
-                                            paddingRight,
-                                            view.getPaddingBottom());
-                                }
+                            if (paddingTop > 0 && paddingBottom > 0) {
+                                view.setPadding(
+                                        view.getPaddingLeft(),
+                                        paddingTop,
+                                        view.getPaddingRight(),
+                                        paddingBottom);
+                            }
 
-                                if (paddingTop > 0 && paddingBottom > 0) {
-                                    view.setPadding(
-                                            view.getPaddingLeft(),
-                                            paddingTop,
-                                            view.getPaddingRight(),
-                                            paddingBottom);
-                                }
+                            break;
 
-                                break;
+                        case android.R.attr.src:
+                            // Init image drawable.
+                            if (view instanceof ImageView) {
+                                ((ImageView) view).setImageDrawable(d);
+                            }
+                            break;
 
-                            case android.R.attr.src:
-                                // Init image drawable.
-                                if (view instanceof ImageView) {
-                                    ((ImageView) view).setImageDrawable(d);
-                                }
-                                break;
+                        case android.R.attr.textCursorDrawable:
+                            if (view instanceof TextView) {
+                                // Replace cursor drawables in TextView's Editor.
+                                Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
+                                        ReflectionUtils.getClass("android.widget.Editor"),
+                                        "mCursorDrawable",
+                                        ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", view));
+                                Array.set(cursorDrawables, 0, d);
+                                Array.set(cursorDrawables, 1, d.getConstantState().newDrawable());
 
-                            case android.R.attr.textCursorDrawable:
-                                if (view instanceof TextView) {
-                                    // Replace cursor drawables in TextView's Editor.
-                                    Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
-                                            ReflectionUtils.getClass("android.widget.Editor"),
-                                            "mCursorDrawable",
-                                            ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", view));
-                                    Array.set(cursorDrawables, 0, d);
-                                    Array.set(cursorDrawables, 1, r.getDrawable(resId));
-
-                                    // Also set TextView#mCursorDrawableRes; if it's 0 Editor skips drawing the cursor.
-                                    ReflectionUtils.setDeclaredFieldValue(
-                                            TextView.class,
-                                            "mCursorDrawableRes",
-                                            view,
-                                            resId);
-                                }
-                                break;
-                        }
+                                // Also set TextView#mCursorDrawableRes; if it's 0 Editor skips drawing the cursor.
+                                ReflectionUtils.setDeclaredFieldValue(
+                                        TextView.class,
+                                        "mCursorDrawableRes",
+                                        view,
+                                        ta.getResourceId(i, 0));
+                            }
+                            break;
                     }
                 }
             }
@@ -199,5 +194,41 @@ public class MaterialWidgetHandler {
             newArray[i] = i == index ? 0 : array[i];
         }
         return newArray;
+    }
+
+    private static Drawable getDrawable(MaterialResources r, TypedArray ta, int index) {
+        if (ta.hasValue(index)) {
+            TypedValue v = ta.peekValue(index);
+            if (v.type >= TypedValue.TYPE_FIRST_COLOR_INT && v.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                // Color value.
+                return r.loadDrawable(v, 0);
+            } else {
+                // Resource.
+                int resId = ta.getResourceId(index, 0);
+                if (resId != 0) {
+                    return r.getDrawable(resId);
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Applies {@code android:theme} to {@code context} by wrapping it in a {@link MaterialContextThemeWrapper}.
+     */
+    public static Context themifyContext(Context context, AttributeSet attrs) {
+        if (SKIP) {
+            return context;
+        }
+
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View, 0, 0);
+        int themeId = a.getResourceId(R.styleable.View_android_theme, 0);
+        a.recycle();
+
+        if (themeId != 0 && (!(context instanceof MaterialContextThemeWrapper)
+                || ((MaterialContextThemeWrapper) context).getThemeResId() != themeId)) {
+            context = new MaterialContextThemeWrapper(context, themeId);
+        }
+        return context;
     }
 }

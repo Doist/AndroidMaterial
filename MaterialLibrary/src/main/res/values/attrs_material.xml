@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <declare-styleable name="View">
+        <attr name="android:theme" />
+    </declare-styleable>
+
     <!-- Drawable used to render several states. Each state is represented by
          a child drawable. -->
     <declare-styleable name="StateListDrawable">
