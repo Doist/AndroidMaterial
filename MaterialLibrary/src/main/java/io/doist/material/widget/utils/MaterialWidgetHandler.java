@@ -16,16 +16,18 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
-    private static final boolean sSkip = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
+    private static final boolean SKIP = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
-    final private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
+    private static final Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
 
     private static int[] sOriginalViewStyleable;
     private static int[] sOriginalImageViewStyleable;
     private static int[] sOriginalTextViewStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, int... attrs) {
-        if (sSkip) return set;
+        if (SKIP) {
+            return set;
+        }
 
         for (int attr : attrs) {
             switch (attr) {
@@ -85,7 +87,9 @@ public class MaterialWidgetHandler {
     }
 
     public static void restoreStyleableAttributes(int... attrs) {
-        if (sSkip) return;
+        if (SKIP) {
+            return;
+        }
 
         for (int attr : attrs) {
             switch (attr) {
@@ -109,7 +113,9 @@ public class MaterialWidgetHandler {
 
     @SuppressWarnings("deprecation")
     public static void init(View view, AttributeSet set, int defStyle, int[] attrs) {
-        if (sSkip) return;
+        if (SKIP) {
+            return;
+        }
 
         final Context context = view.getContext();
         final Resources resources = view.getResources();
@@ -182,9 +188,7 @@ public class MaterialWidgetHandler {
                     }
                 }
             }
-
-        }
-        finally {
+        } finally {
             ta.recycle();
         }
     }
