@@ -122,11 +122,7 @@ public class InsetMaterialDrawable extends InsetDrawable {
         }
 
         private void setField(String fieldName, Object value) {
-            ReflectionUtils.setDeclaredFieldValue(
-                    ReflectionUtils.getClass(InsetDrawable.class.getName() + "$InsetState"),
-                    fieldName,
-                    mInsetState,
-                    value);
+            ReflectionUtils.setDeclaredFieldValue(InsetStateClass, fieldName, mInsetState, value);
         }
     }
 }
