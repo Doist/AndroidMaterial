@@ -158,7 +158,8 @@ public class FloatingActionButton extends ImageButton {
             RippleMaterialDrawable rippleDrawable = new RippleMaterialDrawable(
                     context,
                     rippleColor,
-                    mTintDrawable);
+                    mTintDrawable,
+                    null);
             rippleDrawable.setLayerInset(0, paddingLeft, paddingTop, paddingRight, paddingBottom);
             rippleDrawable.setLayerInset(1, paddingLeft, paddingTop, paddingRight, paddingBottom);
             background = rippleDrawable;
