@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,8 +13,13 @@
      limitations under the License.
 -->
 
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?attr/colorControlHighlight">
-    <item android:id="@id/mask"
-        android:drawable="@drawable/btn_default_mtrl_shape" />
-</ripple>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="16dp"
+    android:insetLeft="16dp"
+    android:insetRight="16dp"
+    android:insetTop="16dp">
+    <shape android:shape="rectangle">
+        <corners android:radius="2dp" />
+        <solid android:color="?android:attr/colorBackground" />
+    </shape>
+</inset>
