@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        This theme is used to block a windowBackground attribute to be set in the AlertDialog theme.
+        We do this to be able to use drawables with styled attributes, that are not supported in pre-L androids.
+    -->
+    <style name="MaterialDialog.NoWindowBackground" parent="">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>
