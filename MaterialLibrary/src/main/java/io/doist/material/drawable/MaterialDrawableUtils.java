@@ -65,6 +65,8 @@ public class MaterialDrawableUtils {
             drawable = new RippleMaterialDrawable(c);
         } else if (name.equals("inset")) {
             drawable = new InsetMaterialDrawable(c);
+        } else if (name.equals("shape")) {
+            drawable = new GradientMaterialDrawable(c);
         } else {
             drawable = null;
         }
