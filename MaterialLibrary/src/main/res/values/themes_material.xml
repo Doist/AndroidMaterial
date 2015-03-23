@@ -20,6 +20,11 @@
         <item name="colorButtonNormal">@color/btn_default_material_light</item>
     </style>
 
+    <style name="Theme.Material.Light.NoActionBar" parent="Theme.Material.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <style name="Theme.Material.Light.BaseDialog">
         <item name="android:colorBackground">@color/background_floating_material_light</item>
 
