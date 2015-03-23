@@ -67,6 +67,8 @@ public class MaterialDrawableUtils {
             drawable = new InsetMaterialDrawable(c);
         } else if (name.equals("shape")) {
             drawable = new GradientMaterialDrawable(c);
+        } else if (name.equals("layer-list")) {
+            drawable = new LayerMaterialDrawable(c);
         } else {
             drawable = null;
         }
