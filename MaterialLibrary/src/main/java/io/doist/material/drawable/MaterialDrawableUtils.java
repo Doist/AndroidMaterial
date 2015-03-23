@@ -47,8 +47,26 @@ public class MaterialDrawableUtils {
         // TODO: add the remaining drawables that are not covered.
         if (name.equals("selector")) {
             drawable = new StateListMaterialDrawable(c);
+        //} else if (name.equals("animated-selector")) {
+        //} else if (name.equals("level-list")) {
+        } else if (name.equals("layer-list")) {
+            drawable = new LayerMaterialDrawable(c);
+        //} else if (name.equals("transition")) {
+        } else if (name.equals("ripple")) {
+            drawable = new RippleMaterialDrawable(c);
+        //} else if (name.equals("color")) {
+        } else if (name.equals("shape")) {
+            drawable = new GradientMaterialDrawable(c);
+        //} else if (name.equals("vector")) {
+        //} else if (name.equals("animated-vector")) {
+        //} else if (name.equals("scale")) {
+        //} else if (name.equals("clip")) {
+        //} else if (name.equals("rotate")) {
+        //} else if (name.equals("animated-rotate")) {
         } else if (name.equals("animation-list")) {
             drawable = new AnimationMaterialDrawable(c);
+        } else if (name.equals("inset")) {
+            drawable = new InsetMaterialDrawable(c);
         } else if (name.equals("bitmap")) {
             drawable = new BitmapDrawable();
             if (r != null) {
@@ -61,14 +79,6 @@ public class MaterialDrawableUtils {
                 ((NinePatchDrawable) drawable).setTargetDensity(r.getDisplayMetrics());
             }
             drawable = new TintDrawable(c, drawable);
-        } else if (name.equals("ripple")) {
-            drawable = new RippleMaterialDrawable(c);
-        } else if (name.equals("inset")) {
-            drawable = new InsetMaterialDrawable(c);
-        } else if (name.equals("shape")) {
-            drawable = new GradientMaterialDrawable(c);
-        } else if (name.equals("layer-list")) {
-            drawable = new LayerMaterialDrawable(c);
         } else {
             drawable = null;
         }
