@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical|start"
-            android:paddingStart="@dimen/alert_dialog_padding_material"
-            android:paddingEnd="@dimen/alert_dialog_padding_material"
+            android:paddingLeft="@dimen/alert_dialog_padding_material"
+            android:paddingRight="@dimen/alert_dialog_padding_material"
             android:paddingTop="@dimen/alert_dialog_padding_top_material">
             <ImageView android:id="@android:id/icon"
                 android:layout_width="32dip"
@@ -95,8 +95,8 @@
         android:layout_height="wrap_content"
         android:layoutDirection="locale"
         android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
         <io.doist.material.widget.MaterialButton android:id="@android:id/button3"
