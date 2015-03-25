@@ -9,7 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.view.ViewConfiguration;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 import io.doist.material.R;
 
@@ -124,8 +124,8 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
         Drawable rippleDrawable = getDrawableSafe(((RippleState) mLayerMaterialState).mRippleIndex);
         if (rippleDrawable != null) {
             if (mAnimator == null) {
-                mAnimator = ObjectAnimator.ofInt(null, "alpha", 50, 255);
-                mAnimator.setInterpolator(new AccelerateInterpolator());
+                mAnimator = ObjectAnimator.ofInt(null, "alpha", 0, 255);
+                mAnimator.setInterpolator(new DecelerateInterpolator());
                 mAnimator.setDuration(ViewConfiguration.getLongPressTimeout());
             }
             if (mAnimatorTarget == null) {
