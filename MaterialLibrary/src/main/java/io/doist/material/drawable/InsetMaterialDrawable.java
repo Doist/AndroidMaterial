@@ -37,10 +37,11 @@ public class InsetMaterialDrawable extends InsetDrawable {
 
         int drawableRes = a.getResourceId(R.styleable.InsetDrawable_android_drawable, 0);
 
-        int inLeft = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetLeft, 0);
-        int inTop = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetTop, 0);
-        int inRight = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetRight, 0);
-        int inBottom = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetBottom, 0);
+        int inset = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_inset, 0);
+        int inLeft = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetLeft, inset);
+        int inTop = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetTop, inset);
+        int inRight = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetRight, inset);
+        int inBottom = a.getDimensionPixelOffset(R.styleable.InsetDrawable_android_insetBottom, inset);
 
         a.recycle();
 

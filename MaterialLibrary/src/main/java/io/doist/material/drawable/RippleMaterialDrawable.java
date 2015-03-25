@@ -78,7 +78,7 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
 
     @Override
     protected void addLayer(Drawable layer, int id, int left, int top, int right, int bottom) {
-        if (id != R.id.mask) {
+        if (id != android.R.id.mask) {
             super.addLayer(layer, id, left, top, right, bottom);
         }
 

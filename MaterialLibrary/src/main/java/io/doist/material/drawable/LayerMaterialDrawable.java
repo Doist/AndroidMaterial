@@ -112,6 +112,8 @@ public class LayerMaterialDrawable extends LayerDrawable {
             setAutoMirrored(a.getBoolean(R.styleable.LayerDrawable_android_autoMirrored, false));
         }
 
+        setPaddingMode(a.getInteger(R.styleable.LayerDrawable_android_paddingMode, mLayerMaterialState.mPaddingMode));
+
         a.recycle();
 
         int type;

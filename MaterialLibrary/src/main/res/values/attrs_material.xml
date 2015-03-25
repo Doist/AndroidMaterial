@@ -72,7 +72,7 @@
         <attr name="android:autoMirrored" />
         <!-- Indicates how layer padding should affect the bounds of subsequent layers.
              The default padding mode value is nest. -->
-        <!--<attr name="android:paddingMode" />-->
+        <attr name="android:paddingMode" />
     </declare-styleable>
 
     <!-- Describes an item (or child) of a LayerDrawable. -->
