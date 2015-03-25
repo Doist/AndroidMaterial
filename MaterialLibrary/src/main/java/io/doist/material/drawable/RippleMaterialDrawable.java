@@ -157,7 +157,7 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
     }
 
     private boolean hasRipple() {
-        return getRippleIndex() != -1;
+        return getNumberOfLayers() > 0 && getRippleIndex() != -1;
     }
 
     @Override
