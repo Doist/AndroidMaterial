@@ -76,7 +76,7 @@ public class MaterialAlertDialog extends AlertDialog {
         private void configureWindowBackgroundAndContentView(AlertDialog dialog) {
             final Window window = dialog.getWindow();
 
-            final Drawable windowBackground = getAndRemoveWindowBackground(window.getContext());
+            final Drawable windowBackground = getAndRemoveWindowBackground(dialog.getContext());
 
             window.setCallback(new WindowCallbackWrapper(window.getCallback()) {
                 @Override
