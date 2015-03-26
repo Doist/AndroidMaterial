@@ -1,18 +1,19 @@
 package io.doist.material.res;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.util.LongSparseArray;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
@@ -21,58 +22,72 @@ import io.doist.material.drawable.MaterialDrawableUtils;
 import io.doist.material.reflection.ReflectionUtils;
 
 public class MaterialResources {
-    private static MaterialResources sInstance;
+    private static ArrayMap<Integer, MaterialResources> sInstances = new ArrayMap<>();
+    private static WeakReference<Context> sApplicationContext = new WeakReference<>(null);
 
-    final Object mAccessLock = new Object();
-    TypedValue mTmpValue = new TypedValue();
+    private final Object mAccessLock = new Object();
+    private TypedValue mTmpValue = new TypedValue();
 
-    WeakReference<Context> mApplicationContext = new WeakReference<>(null);
-    WeakReference<Context> mContext = new WeakReference<>(null);
-    WeakReference<Resources> mResources = new WeakReference<>(null);
-    WeakHashMap<Resources, MaterialConfiguration> mConfigurations = new WeakHashMap<>();
+    private WeakReference<Context> mContext = new WeakReference<>(null);
+    private WeakReference<Resources> mResources = new WeakReference<>(null);
+    private WeakHashMap<Resources, MaterialConfiguration> mConfiguration = new WeakHashMap<>();
 
-    private static final LongSparseArray<Drawable.ConstantState>[] sDrawableCache;
-    static {
-        //noinspection unchecked
-        sDrawableCache = new LongSparseArray[2];
-        sDrawableCache[0] = new LongSparseArray<>();
-        sDrawableCache[1] = new LongSparseArray<>();
-    }
-    final static LongSparseArray<Drawable.ConstantState> sColorDrawableCache = new LongSparseArray<>();
+    private LongSparseArray<WeakReference<Drawable.ConstantState>> mDrawableCache;
+    private LongSparseArray<WeakReference<Drawable.ConstantState>> mColorDrawableCache;
 
     public static MaterialResources getInstance(Context context, Resources resources) {
-        if (sInstance == null) {
-            sInstance = new MaterialResources();
+        int themeResId = getThemeResId(context);
+        MaterialResources instance = sInstances.get(themeResId);
+        if (instance == null) {
+            instance = new MaterialResources();
+            sInstances.put(themeResId, instance);
         }
 
         // Ensure context.
         if (context != null) {
-            if (sInstance.mApplicationContext.get() == null) {
-                sInstance.mApplicationContext = new WeakReference<>(context.getApplicationContext());
+            if (sApplicationContext.get() == null) {
+                sApplicationContext = new WeakReference<>(context.getApplicationContext());
             }
 
-            if (sInstance.mContext.get() == null) {
-                sInstance.mContext = new WeakReference<>(context);
+            if (instance.mContext.get() == null) {
+                instance.mContext = new WeakReference<>(context);
             }
         }
 
         // Ensure resources.
-        if (resources != null && sInstance.mResources.get() == null) {
-            sInstance.mResources = new WeakReference<>(resources);
-            sInstance.mConfigurations.put(resources, new MaterialConfiguration(resources));
+        if (resources != null && instance.mResources.get() == null) {
+            instance.mResources = new WeakReference<>(resources);
+            instance.mConfiguration.put(resources, new MaterialConfiguration(resources));
         }
 
-        return sInstance;
+        return instance;
+    }
+
+    private static int getThemeResId(Context context) {
+        if (context instanceof ContextThemeWrapper) {
+            try {
+                return (int) ReflectionUtils.invokeDeclaredMethod(
+                        ContextThemeWrapper.class,
+                        "getThemeResId",
+                        new Class<?>[0],
+                        context,
+                        new Object[0]);
+            } catch (Exception e) {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
     }
 
     public Drawable getDrawable(int id) throws Resources.NotFoundException {
-        final Context c = mContext.get() != null ? mContext.get() : mApplicationContext.get();
-        final Resources r = mResources.get();
-        final MaterialConfiguration configuration = mConfigurations.get(r);
-        final int configChanges = configuration.updateConfiguration(r);
+        final Context context = mContext.get() != null ? mContext.get() : sApplicationContext.get();
+        final Resources resources = mResources.get();
+        final MaterialConfiguration configuration = mConfiguration.get(resources);
+        final int configChanges = configuration.updateConfiguration(resources);
         if (configChanges != 0) {
-            clearDrawableCachesLocked(sDrawableCache, configChanges);
-            clearDrawableCacheLocked(sColorDrawableCache, configChanges);
+            clearDrawableCacheLocked(mDrawableCache, configChanges);
+            clearDrawableCacheLocked(mColorDrawableCache, configChanges);
         }
 
         TypedValue value;
@@ -83,9 +98,9 @@ public class MaterialResources {
             } else {
                 mTmpValue = null;
             }
-            r.getValue(id, value, true);
+            resources.getValue(id, value, true);
         }
-        Drawable res = loadDrawable(c, r, configuration, value, id);
+        Drawable res = loadDrawable(context, resources, configuration, value, id);
         synchronized (mAccessLock) {
             if (mTmpValue == null) {
                 mTmpValue = value;
@@ -94,117 +109,154 @@ public class MaterialResources {
         return res;
     }
 
-    @SuppressLint("NewApi")
-    Drawable loadDrawable(Context c, Resources r, MaterialConfiguration configuration, TypedValue value, int id)
+    Drawable loadDrawable(Context context, Resources resources, MaterialConfiguration configuration, TypedValue value,
+                          int id)
             throws Resources.NotFoundException {
-
-        boolean isColorDrawable = false;
-        if (value.type >= TypedValue.TYPE_FIRST_COLOR_INT &&
-                value.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+        final boolean isColorDrawable;
+        final LongSparseArray<WeakReference<Drawable.ConstantState>> cache;
+        final long key;
+        if (value.type >= TypedValue.TYPE_FIRST_COLOR_INT
+                && value.type <= TypedValue.TYPE_LAST_COLOR_INT) {
             isColorDrawable = true;
-        }
-        final long key = isColorDrawable ? value.data :
-                         (((long) value.assetCookie) << 32) | value.data;
-
-        LongSparseArray<Drawable.ConstantState> drawableCache;
-        if (isColorDrawable) {
-            drawableCache = sColorDrawableCache;
+            if (mColorDrawableCache == null) {
+                mColorDrawableCache = new LongSparseArray<>(1);
+            }
+            cache = mColorDrawableCache;
+            key = value.data;
         } else {
-            int layoutDirection = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
-                                  0 :
-                                  r.getConfiguration().getLayoutDirection();
-
-            drawableCache = sDrawableCache[layoutDirection];
+            isColorDrawable = false;
+            if (mDrawableCache == null) {
+                mDrawableCache = new LongSparseArray<>(1);
+            }
+            cache = mDrawableCache;
+            key = (((long) value.assetCookie) << 32) | value.data;
         }
 
-        Drawable dr = getCachedDrawable(r, drawableCache, key);
-
-        if (dr != null) {
-            return dr;
+        // First, check whether we have a cached version of this drawable.
+        final Drawable cachedDrawable = getCachedDrawable(resources, cache, key);
+        if (cachedDrawable != null) {
+            return cachedDrawable;
         }
 
         // Drawable is not cached.
 
+        final Drawable dr;
         if (isColorDrawable) {
             dr = new ColorDrawable(value.data);
         } else {
-            if (value.string == null) {
-                throw new Resources.NotFoundException("Resource is not a Drawable (color or path): " + value);
-            }
-
-            String file = value.string.toString();
-
-            if (file.endsWith(".xml")) {
-                try {
-                    configuration.forceAssetsSdkVersion(r.getAssets(), Build.VERSION_CODES.LOLLIPOP);
-                    XmlPullParser parser = r.getXml(id);
-                    configuration.forceAssetsSdkVersion(r.getAssets(), Build.VERSION.SDK_INT);
-                    dr = MaterialDrawableUtils.createFromXml(c, r, parser);
-                } catch (Exception e) {
-                    Resources.NotFoundException rnf = new Resources.NotFoundException(
-                            "File " + file + " from drawable resource ID #0x" + Integer.toHexString(id));
-                    rnf.initCause(e);
-                    throw rnf;
-                }
-            } else {
-                try {
-                    dr = r.getDrawable(id);
-                } catch (Exception e) {
-                    Resources.NotFoundException rnf = new Resources.NotFoundException(
-                            "File " + file + " from drawable resource ID #0x" + Integer.toHexString(id));
-                    rnf.initCause(e);
-                    throw rnf;
-                }
-            }
+            dr = loadDrawableForCookie(context, resources, configuration, value, id);
         }
 
+        // If we were able to obtain a drawable, store it in the appropriate
+        // cache (either preload or themed).
         if (dr != null) {
             dr.setChangingConfigurations(value.changingConfigurations);
-            Drawable.ConstantState cs = dr.getConstantState();
-            if (cs != null) {
-                synchronized (mAccessLock) {
-                    if (isColorDrawable) {
-                        sColorDrawableCache.put(key, cs);
-                    } else {
-                        int layoutDirection = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
-                                              0 :
-                                              r.getConfiguration().getLayoutDirection();
-
-                        sDrawableCache[layoutDirection].put(key, cs);
-                    }
-                }
-            }
+            cacheDrawable(cache, key, dr);
         }
 
         return dr;
     }
 
-    private Drawable getCachedDrawable(Resources r, LongSparseArray<Drawable.ConstantState> drawableCache, long key) {
+    /**
+     * Loads a drawable from XML or resources stream.
+     */
+    private Drawable loadDrawableForCookie(Context context, Resources resources, MaterialConfiguration configuration,
+                                           TypedValue value, int id) {
+        if (value.string == null) {
+            throw new Resources.NotFoundException(
+                    "Resource \"" + resources.getResourceName(id) + "\" (" + Integer.toHexString(id)
+                            + ")  is not a Drawable (color or path): " + value);
+        }
+
+        final String file = value.string.toString();
+
+        final Drawable dr;
+
+        try {
+            if (file.endsWith(".xml")) {
+                configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION_CODES.LOLLIPOP);
+                final XmlResourceParser rp = resources.getXml(id);
+                configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION.SDK_INT);
+                dr = MaterialDrawableUtils.createFromXml(context, resources, rp);
+                rp.close();
+            } else {
+                dr = resources.getDrawable(id);
+            }
+        } catch (Exception e) {
+            final Resources.NotFoundException rnf = new Resources.NotFoundException(
+                    "File " + file + " from drawable resource ID #0x" + Integer.toHexString(id));
+            rnf.initCause(e);
+            throw rnf;
+        }
+
+        return dr;
+    }
+
+    private Drawable getCachedDrawable(Resources resources,
+                                       LongSparseArray<WeakReference<Drawable.ConstantState>> cache,
+                                       long key) {
         synchronized (mAccessLock) {
-            Drawable.ConstantState cs = drawableCache.get(key);
-            if (cs != null) {
-                return cs.newDrawable(r);
+            if (cache != null) {
+                final Drawable drawable = getCachedDrawableLocked(resources, cache, key);
+                if (drawable != null) {
+                    return drawable;
+                }
+            }
+
+            // No cached drawable, we'll need to create a new one.
+            return null;
+        }
+    }
+
+    private void cacheDrawable(LongSparseArray<WeakReference<Drawable.ConstantState>> cache,
+                               long key,
+                               Drawable dr) {
+        final Drawable.ConstantState cs = dr.getConstantState();
+
+        if (cs == null) {
+            return;
+        }
+        synchronized (mAccessLock) {
+            cache.put(key, new WeakReference<>(cs));
+        }
+    }
+
+    private Drawable.ConstantState getConstantStateLocked(
+            LongSparseArray<WeakReference<Drawable.ConstantState>> drawableCache, long key) {
+        final WeakReference<Drawable.ConstantState> wr = drawableCache.get(key);
+        if (wr != null) {   // we have the key
+            final Drawable.ConstantState entry = wr.get();
+            if (entry != null) {
+                return entry;
+            } else {  // our entry has been purged
+                drawableCache.delete(key);
             }
         }
         return null;
     }
 
-    private static void clearDrawableCachesLocked(LongSparseArray<Drawable.ConstantState>[] caches,
-                                                  int configChanges) {
-        for (LongSparseArray<Drawable.ConstantState> cache : caches) {
-            clearDrawableCacheLocked(cache, configChanges);
+    private Drawable getCachedDrawableLocked(Resources resources,
+                                             LongSparseArray<WeakReference<Drawable.ConstantState>> drawableCache,
+                                             long key) {
+        final Drawable.ConstantState entry = getConstantStateLocked(drawableCache, key);
+        if (entry != null) {
+            return entry.newDrawable(resources);
         }
+        return null;
     }
 
-    private static void clearDrawableCacheLocked(LongSparseArray<Drawable.ConstantState> cache,
-                                                 int configChanges) {
-        final int N = cache.size();
+    private void clearDrawableCacheLocked(LongSparseArray<WeakReference<Drawable.ConstantState>> cache,
+                                          int configChanges) {
+        final int N = cache != null ? cache.size() : 0;
         for (int i = 0; i < N; i++) {
-            final Drawable.ConstantState cs = cache.valueAt(i);
-            if (cs != null) {
-                if (Configuration.needNewResources(
-                        configChanges, cs.getChangingConfigurations())) {
-                    cache.setValueAt(i, null);
+            final WeakReference<Drawable.ConstantState> ref = cache.valueAt(i);
+            if (ref != null) {
+                final Drawable.ConstantState cs = ref.get();
+                if (cs != null) {
+                    if (Configuration.needNewResources(
+                            configChanges, cs.getChangingConfigurations())) {
+                        cache.setValueAt(i, null);
+                    }
                 }
             }
         }
@@ -277,7 +329,7 @@ public class MaterialResources {
                 keyboardHidden = KEYBOARDHIDDEN_SOFT;
             }
             int densityDpi = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 ?
-                             (int)(metrics.density*160) :
+                             (int) (metrics.density * 160) :
                              mConfiguration.densityDpi;
             int width, height;
             if (metrics.widthPixels >= metrics.heightPixels) {
