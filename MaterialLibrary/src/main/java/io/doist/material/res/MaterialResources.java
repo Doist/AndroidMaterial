@@ -69,9 +69,9 @@ public class MaterialResources {
                 return (int) ReflectionUtils.invokeDeclaredMethod(
                         ContextThemeWrapper.class,
                         "getThemeResId",
-                        new Class<?>[0],
+                        ReflectionUtils.EMPTY_TYPES,
                         context,
-                        new Object[0]);
+                        ReflectionUtils.EMPTY_PARAMETERS);
             } catch (Exception e) {
                 return 0;
             }

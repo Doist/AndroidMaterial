@@ -66,8 +66,8 @@ public class GradientMaterialDrawable extends GradientDrawable {
 
         final int innerDepth = parser.getDepth() + 1;
         int depth;
-        while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
-                && ((depth=parser.getDepth()) >= innerDepth
+        while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
+                && ((depth = parser.getDepth()) >= innerDepth
                 || type != XmlPullParser.END_TAG)) {
             if (type != XmlPullParser.START_TAG) {
                 continue;
@@ -109,7 +109,7 @@ public class GradientMaterialDrawable extends GradientDrawable {
                 st.setGradient(gradientType);
 
                 if (gradientType == LINEAR_GRADIENT) {
-                    int angle = (int)a.getFloat(R.styleable.GradientDrawableGradient_android_angle, 0);
+                    int angle = (int) a.getFloat(R.styleable.GradientDrawableGradient_android_angle, 0);
                     angle %= 360;
                     if (angle % 45 != 0) {
                         throw new XmlPullParserException(a.getPositionDescription()
@@ -211,7 +211,7 @@ public class GradientMaterialDrawable extends GradientDrawable {
                 if (topLeftRadius != radius || topRightRadius != radius ||
                         bottomLeftRadius != radius || bottomRightRadius != radius) {
                     // The corner radii are specified in clockwise order (see Path.addRoundRect())
-                    setCornerRadii(new float[] {
+                    setCornerRadii(new float[]{
                             topLeftRadius, topLeftRadius,
                             topRightRadius, topRightRadius,
                             bottomRightRadius, bottomRightRadius,
@@ -351,9 +351,9 @@ public class GradientMaterialDrawable extends GradientDrawable {
             ReflectionUtils.invokeDeclaredMethod(
                     GradientStateClass,
                     "computeOpacity",
-                    new Class<?>[0],
+                    ReflectionUtils.EMPTY_TYPES,
                     mGradientState,
-                    new Object[0]);
+                    ReflectionUtils.EMPTY_PARAMETERS);
         }
 
         private void setField(String fieldName, Object value) {

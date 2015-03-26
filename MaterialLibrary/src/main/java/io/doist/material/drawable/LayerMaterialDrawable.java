@@ -328,9 +328,9 @@ public class LayerMaterialDrawable extends LayerDrawable {
         ReflectionUtils.invokeDeclaredMethod(
                 LayerDrawable.class,
                 "ensurePadding",
-                new Class<?>[0],
+                ReflectionUtils.EMPTY_TYPES,
                 this,
-                new Object[0]);
+                ReflectionUtils.EMPTY_PARAMETERS);
 
         final int N = getNumberOfLayers();
         if (mPaddingL != null && mPaddingL.length >= N) {
