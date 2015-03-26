@@ -1,7 +1,7 @@
 package io.doist.material.drawable;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -19,8 +19,14 @@ import io.doist.material.R;
 public class RippleMaterialDrawable extends LayerMaterialDrawable {
     ColorStateList mColor;
 
-    Animator mAnimator;
-    Drawable mAnimatorTarget;
+    int mAnimationDuration = ViewConfiguration.getLongPressTimeout();
+
+    ValueAnimator mShowRippleAnimator;
+    Drawable mShowAnimatorTarget;
+    ValueAnimator mHideRippleAnimator;
+    Drawable mHideAnimatorTarget;
+
+    boolean mPressed = false;
 
     RippleMaterialDrawable(Context context) {
         this(context, null);
@@ -79,6 +85,7 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
 
     RippleMaterialDrawable(LayerMaterialState state, Resources res) {
         super(state, res);
+        setRippleIndex(((RippleState) mLayerMaterialState).mRippleIndex);
     }
 
     @Override
@@ -89,8 +96,8 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
 
         // If ripple drawable is not yet added.
         if (((RippleState) mLayerMaterialState).mRippleIndex == -1) {
-            setRippleIndex(getNumberOfLayers());
             super.addLayer(createRippleDrawable(mContext.get(), mColor, layer), 0, left, top, right, bottom);
+            setRippleIndex(getNumberOfLayers() - 1);
         }
     }
 
@@ -111,51 +118,83 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
             }
         }
 
-        if (pressed) {
-            startRippleAnimation();
-        } else {
-            cancelRippleAnimation();
+        if (mPressed != pressed) {
+            mPressed = pressed;
+            if (pressed) {
+                startShowRippleAnimation();
+            } else {
+                startHideRippleAnimation();
+            }
         }
 
         return changed;
     }
 
-    private void startRippleAnimation() {
+    private void startShowRippleAnimation() {
+        if (mHideRippleAnimator != null && mHideRippleAnimator.isStarted()) {
+            mHideRippleAnimator.cancel();
+        }
+
         Drawable rippleDrawable = getDrawableSafe(((RippleState) mLayerMaterialState).mRippleIndex);
         if (rippleDrawable != null) {
-            if (mAnimator == null) {
-                mAnimator = ObjectAnimator.ofInt(null, "alpha", 0, 255);
-                mAnimator.setInterpolator(new DecelerateInterpolator());
-                mAnimator.setDuration(ViewConfiguration.getLongPressTimeout());
+            if (mShowRippleAnimator == null) {
+                mShowRippleAnimator = ObjectAnimator.ofInt(null, "alpha", 0, 255);
+                mShowRippleAnimator.setInterpolator(new DecelerateInterpolator());
+                mShowRippleAnimator.setDuration(mAnimationDuration);
             }
-            if (mAnimatorTarget == null) {
-                mAnimatorTarget = rippleDrawable;
-                mAnimator.setTarget(rippleDrawable);
+            if (mShowAnimatorTarget == null) {
+                mShowAnimatorTarget = rippleDrawable;
+                mShowRippleAnimator.setTarget(rippleDrawable);
             }
-            if (!mAnimator.isStarted()) {
-                mAnimator.start();
+            if (!mShowRippleAnimator.isStarted()) {
+                mShowRippleAnimator.start();
             }
         }
     }
 
-    private void cancelRippleAnimation() {
-        if (mAnimator != null && mAnimator.isStarted()) {
-            mAnimator.cancel();
+    private void startHideRippleAnimation() {
+        long currentTime;
+        if (mShowRippleAnimator != null && mShowRippleAnimator.isStarted()) {
+            currentTime = Math.min(mShowRippleAnimator.getCurrentPlayTime(), mAnimationDuration / 2);
+            mShowRippleAnimator.cancel();
+        } else {
+            currentTime = mAnimationDuration / 2;
         }
+
         Drawable rippleDrawable = getDrawableSafe(((RippleState) mLayerMaterialState).mRippleIndex);
         if (rippleDrawable != null) {
-            rippleDrawable.setAlpha(0);
+            if (mHideRippleAnimator == null) {
+                mHideRippleAnimator = ObjectAnimator.ofInt(null, "alpha", 0, 160, 0);
+                mHideRippleAnimator.setInterpolator(new DecelerateInterpolator());
+                mHideRippleAnimator.setDuration(mAnimationDuration);
+            }
+            if (mHideAnimatorTarget == null) {
+                mHideAnimatorTarget = rippleDrawable;
+                mHideRippleAnimator.setTarget(rippleDrawable);
+            }
+            if (!mHideRippleAnimator.isStarted()) {
+                mHideRippleAnimator.start();
+                mHideRippleAnimator.setCurrentPlayTime(currentTime);
+            }
         }
     }
 
     private void setRippleIndex(int index) {
-        if (mAnimator != null && mAnimatorTarget != getDrawableSafe(index)) {
-            if (mAnimator.isStarted()) {
-                cancelRippleAnimation();
+        Drawable drawable = getDrawableSafe(index);
+        if (mShowRippleAnimator != null && mShowAnimatorTarget != drawable) {
+            if (mShowRippleAnimator.isStarted()) {
+                startHideRippleAnimation();
             }
-            mAnimatorTarget = null;
+            mShowAnimatorTarget = null;
+        }
+        if (mHideAnimatorTarget != null && mHideAnimatorTarget != drawable) {
+            mHideAnimatorTarget = null;
+        }
+        if (drawable != null) {
+            drawable.setAlpha(0); // Init ripple drawable with alpha 0.
         }
         ((RippleState) mLayerMaterialState).mRippleIndex = index;
+
     }
 
     public Drawable getDrawableSafe(int index) {
