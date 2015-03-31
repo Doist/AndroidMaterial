@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="floating_window_z">16dp</dimen>
+
     <!-- Default insets (outer padding) around buttons -->
     <dimen name="button_inset_vertical_material">6dp</dimen>
     <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
