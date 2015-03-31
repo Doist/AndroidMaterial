@@ -6,21 +6,21 @@ import android.util.AttributeSet;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialButton extends RobotoButton {
-    private static final int[] sHiddenAttrs = {android.R.attr.background};
+    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialButton(Context context) {
         super(context);
     }
 
     public MaterialButton(Context context, AttributeSet attrs) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenAttrs));
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenAttrs);
-        MaterialWidgetHandler.init(this, attrs, android.R.attr.buttonStyle, sHiddenAttrs);
+        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
+        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
+        MaterialWidgetHandler.init(this, attrs, android.R.attr.buttonStyle, sHiddenStyleables);
     }
 
     public MaterialButton(Context context, AttributeSet attrs, int defStyle) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenAttrs), defStyle);
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenAttrs);
-        MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenAttrs);
+        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
+        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
+        MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenStyleables);
     }
 }

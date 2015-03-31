@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaterialView">
+        <attr name="android:background" />
+    </declare-styleable>
+
+    <declare-styleable name="MaterialImageView">
+        <attr name="android:src" />
+    </declare-styleable>
+
+    <declare-styleable name="MaterialTextView">
+        <attr name="android:drawableLeft" />
+        <attr name="android:drawableTop" />
+        <attr name="android:drawableRight" />
+        <attr name="android:drawableBottom" />
+        <attr name="android:drawableStart" />
+        <attr name="android:drawableEnd" />
+    </declare-styleable>
+</resources>
