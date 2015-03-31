@@ -34,7 +34,7 @@
 
     <!-- Borderless ink button -->
     <style name="Widget.Material.Button.Borderless">
-        <item name="android:background">@drawable/btn_borderless_material_light</item>
+        <item name="android:background">@drawable/btn_borderless_material</item>
         <!--<item name="stateListAnimator">@null</item>-->
     </style>
 
