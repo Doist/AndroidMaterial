@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The duration (in milliseconds) of the activity open/close and fragment open/close animations. -->
+    <integer name="config_activityShortDur">150</integer>
+
+    <!-- Whether dialogs should close automatically when the user touches outside
+             of them.  This should not normally be modified. -->
+    <bool name="config_closeDialogWhenTouchOutside">true</bool>
+</resources>

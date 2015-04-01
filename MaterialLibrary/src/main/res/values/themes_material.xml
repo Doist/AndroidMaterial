@@ -1,33 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
-<!--
-===============================================================
-                        PLEASE READ
-===============================================================
-
-The Material themes must not be modified in order to pass CTS.
-Many related themes and styles depend on other values defined in this file.
-If you would like to provide custom themes and styles for your device,
-please see themes_device_defaults.xml.
-
-===============================================================
-                        PLEASE READ
-===============================================================
- -->
 <resources>
     <style name="Theme.Material.Light" parent="Theme.AppCompat.Light">
         <!-- Text styles -->
@@ -37,7 +8,66 @@ please see themes_device_defaults.xml.
         <item name="android:buttonStyle">@style/Widget.Material.Button</item>
 
         <!-- EditText styles -->
-        <item name="android:textCursorDrawable">@drawable/text_cursor_material</item>
         <item name="editTextBackground">@drawable/edit_text_material</item>
+
+        <!-- ButtonBar styles -->
+        <item name="buttonBarButtonStyle">@style/Widget.Material.Light.Button.ButtonBar.AlertDialog</item>
+        <item name="buttonBarPositiveButtonStyle">?attr/buttonBarButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">?attr/buttonBarButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">?attr/buttonBarButtonStyle</item>
+
+        <!-- AlertDialog attributes -->
+        <item name="android:alertDialogTheme">@style/Theme.Material.Light.Dialog.Alert</item>
+        <item name="android:alertDialogStyle">@style/AlertDialog.Material.Light</item>
+
+        <!-- Color palette -->
+        <item name="colorButtonNormal">@color/btn_default_material_light</item>
     </style>
+
+    <style name="Theme.Material.Light.NoActionBar" parent="Theme.Material.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Material.Light.BaseDialog">
+        <item name="android:colorBackground">@color/background_floating_material_light</item>
+
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowTitleStyle">@style/DialogWindowTitle.Material.Light</item>
+        <item name="android:windowBackground">@drawable/dialog_background_material</item>
+        <!--<item name="android:windowElevation">@dimen/floating_window_z</item>--> <!-- Not supported. -->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Material.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside</item>
+
+        <item name="android:colorBackgroundCacheHint">@null</item>
+
+        <item name="android:buttonBarStyle">@style/Widget.Material.Light.ButtonBar.AlertDialog</item>
+        <item name="android:borderlessButtonStyle">@style/Widget.Material.Light.Button.Borderless</item>
+
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:textAppearanceInverse">@style/TextAppearance.AppCompat.Inverse</item>
+
+        <item name="android:listPreferredItemPaddingLeft">16dip</item>
+        <item name="android:listPreferredItemPaddingRight">16dip</item>
+        <item name="android:listPreferredItemPaddingStart">16dip</item>
+        <item name="android:listPreferredItemPaddingEnd">16dip</item>
+
+        <item name="android:listDivider">@null</item>
+
+        <!--<item name="android:preferencePanelStyle">@style/PreferencePanel.Dialog</item>--> <!-- Not supported. -->
+    </style>
+
+    <style name="Theme.Material.Light.Dialog" parent="Theme.Material.Light.BaseDialog"/>
+
+    <style name="Theme.Material.Light.Dialog.BaseAlert">
+        <item name="android:windowMinWidthMajor">@dimen/dialog_min_width_major</item>
+        <item name="android:windowMinWidthMinor">@dimen/dialog_min_width_minor</item>
+    </style>
+
+    <style name="Theme.Material.Light.Dialog.Alert" parent="Theme.Material.Light.Dialog.BaseAlert"/>
 </resources>

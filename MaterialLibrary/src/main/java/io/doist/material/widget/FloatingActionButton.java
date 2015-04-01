@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
@@ -19,17 +20,20 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import io.doist.material.R;
 import io.doist.material.color.ColorPalette;
-import io.doist.material.drawable.RippleDrawableSimpleCompat;
+import io.doist.material.drawable.RippleMaterialDrawable;
 import io.doist.material.drawable.TintDrawable;
 
 public class FloatingActionButton extends ImageButton {
-    private static final int DEFAULT_ELEVATION_SP = 6;
+    private static final int DEFAULT_ELEVATION_DP = 6;
 
     // Used to create a shadow to fake elevation in pre-L androids.
     private ElevationManager mElevationManager;
@@ -64,7 +68,7 @@ public class FloatingActionButton extends ImageButton {
         // Parse attributes.
         // Default attr values.
         boolean inCompat = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-        int elevation = (int) (DEFAULT_ELEVATION_SP * metrics.scaledDensity + .5f);
+        int elevation = (int) (DEFAULT_ELEVATION_DP * metrics.density + .5f);
         int padding = context.getResources().getDimensionPixelSize(R.dimen.fab_padding);
         int paddingLeft, paddingTop, paddingRight, paddingBottom;
         paddingLeft = paddingTop = paddingRight = paddingBottom = padding;
@@ -151,25 +155,26 @@ public class FloatingActionButton extends ImageButton {
         if (inCompat) {
             // Pre-L androids or force compat mode.
             mTintDrawable = new TintDrawable(getContext(), circleDrawable);
-            RippleDrawableSimpleCompat rippleDrawable = new RippleDrawableSimpleCompat(
+            RippleMaterialDrawable rippleDrawable = new RippleMaterialDrawable(
                     context,
                     rippleColor,
-                    mTintDrawable);
+                    mTintDrawable,
+                    null);
             rippleDrawable.setLayerInset(0, paddingLeft, paddingTop, paddingRight, paddingBottom);
             rippleDrawable.setLayerInset(1, paddingLeft, paddingTop, paddingRight, paddingBottom);
             background = rippleDrawable;
         } else {
             // Lollipop androids.
             mCircleDrawable = circleDrawable;
-            background = new InsetDrawable(
-                    new RippleDrawable(
-                            rippleColor,
+            background = new RippleDrawable(
+                    rippleColor,
+                    new InsetDrawable(
                             circleDrawable,
-                            null),
-                    paddingLeft,
-                    paddingTop,
-                    paddingRight,
-                    paddingBottom);
+                            paddingLeft,
+                            paddingTop,
+                            paddingRight,
+                            paddingBottom),
+                    null);
         }
 
         if (getBackground() != null) {
@@ -184,6 +189,7 @@ public class FloatingActionButton extends ImageButton {
             throw new IllegalStateException("FloatingActionButton does not support 'android:background' attribute.");
         }
     }
+
 
     private void initColor(Context context, ColorStateList color) {
         if (color != null) {
@@ -293,15 +299,23 @@ public class FloatingActionButton extends ImageButton {
     }
 
     private static class ElevationManager {
+        private static final float SHADOW_MULTIPLIER = 1.5f;
+
         // Manually tested to better replicate the elevation result.
-        private static final double LIGHT_ELEVATION_SP = 30;
-        private static final int SHADOW_MIN_ALPHA = 6;
-        private static final int SHADOW_MAX_ALPHA = 86;
-        private static final float SHADOW_DY_RATIO = 1.1f;
+        private static final int SHADOW_START_COLOR = Color.argb(125, 0, 0, 0);
+        private static final int SHADOW_FIRST_STEP_COLOR = Color.argb(25, 0, 0, 0);
+        private static final int SHADOW_SECOND_STEP_COLOR = Color.argb(10, 0, 0, 0);
+        private static final int SHADOW_END_COLOR = Color.TRANSPARENT;
+
+        private static final float MAX_LOCATION_SCALE = 0.3f;
+        private static final float SHADOW_TOP_SCALE = 0.25f;
+        private static final float SHADOW_BOTTOM_SCALE = 1f;
 
         private View mView;
-        private DisplayMetrics mMetrics;
         private Paint mShadowPaint;
+        private float mScreenHeight;
+
+        private float mLocationScale;
 
         private float mElevation;
         private int mRadius;
@@ -315,9 +329,38 @@ public class FloatingActionButton extends ImageButton {
 
         public ElevationManager(View view) {
             mView = view;
-            mMetrics = view.getContext().getResources().getDisplayMetrics();
-            mShadowPaint = new Paint();
-            mShadowPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+            mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+
+            WindowManager wm = (WindowManager) mView.getContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            mScreenHeight = size.y;
+
+            onViewLocationUpdate();
+
+            if (mView.isLayoutRequested()) {
+                mView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        mView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                        onViewLocationUpdate();
+                    }
+                });
+            }
+        }
+
+        public void onViewLocationUpdate() {
+            // The location on screen has influence on the shadow vertical size.
+            int[] location = new int[2];
+            mView.getLocationOnScreen(location);
+
+            float locationRatio = location[1] / mScreenHeight;
+            float locationOrigin = 0.5f;
+            mLocationScale = (-(locationOrigin - locationRatio) / (1f - locationOrigin)) * MAX_LOCATION_SCALE;
+
+            mInvalidate = true;
         }
 
         public void setElevation(float elevation) {
@@ -350,31 +393,29 @@ public class FloatingActionButton extends ImageButton {
         }
 
         private void calculateShadow() {
-            double lightElevation = LIGHT_ELEVATION_SP * mMetrics.scaledDensity;
-            //double lightAngle = Math.atan(mRadius / lightElevation);
-            //mShadowRadius = (float) (Math.tan(lightAngle) * (lightElevation + mElevation));
-            // Calculates shadow radius in a single statement.
-            mShadowRadius = (float) (mRadius * (1 + mElevation / lightElevation));
+            float shadowSizeBenchmark = mElevation * SHADOW_MULTIPLIER;
+            float shadowTopSize = shadowSizeBenchmark * SHADOW_TOP_SCALE;
+            float shadowBottomSize = shadowSizeBenchmark * SHADOW_BOTTOM_SCALE;
+            float shadowLocationSize = shadowSizeBenchmark * mLocationScale;
+            float shadowSize = shadowTopSize + shadowBottomSize + shadowLocationSize;
+            mShadowRadius = mRadius + (shadowSize / 2f);
 
             mShadowCx = mRadius + mPaddingLeft;
             float shadowCyCentered = mRadius + mPaddingTop;
             // The shadow is on the down side of the button.
-            mShadowCy = shadowCyCentered * SHADOW_DY_RATIO;
-            float shadowDy = mShadowCy - shadowCyCentered;
+            float shadowDy = (shadowSize / 2f) - shadowTopSize;
+            mShadowCy = shadowCyCentered + shadowDy;
 
-            int translucentBlack = Color.argb(
-                    Math.max(SHADOW_MAX_ALPHA - (int) ((mElevation + lightElevation) * 0.6 + .5f), SHADOW_MIN_ALPHA),
-                    0,
-                    0,
-                    0);
+            float firstStep = mRadius / mShadowRadius;
+            float secondStep = firstStep + ((1f - firstStep) / 2f);
 
             mShadowPaint.setShader(new RadialGradient(
                     mShadowCx,
                     mShadowCy,
                     mShadowRadius,
-                    new int[]{translucentBlack, Color.TRANSPARENT},
-                    new float[]{(mRadius - shadowDy) / mShadowRadius, 1.0f},
-                    Shader.TileMode.MIRROR));
+                    new int[]{SHADOW_START_COLOR, SHADOW_FIRST_STEP_COLOR, SHADOW_SECOND_STEP_COLOR, SHADOW_END_COLOR},
+                    new float[]{0f, firstStep, secondStep, 1f},
+                    Shader.TileMode.CLAMP));
         }
 
         public void drawShadow(Canvas canvas) {

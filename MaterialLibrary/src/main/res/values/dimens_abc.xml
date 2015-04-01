@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Overrides outdated dimensions of appcompat lib.
+    https://code.google.com/p/android/issues/detail?id=80749
+-->
+<resources>
+    <dimen name="abc_text_size_body_1_material">14sp</dimen>
+    <dimen name="abc_text_size_body_2_material">14sp</dimen>
+</resources>

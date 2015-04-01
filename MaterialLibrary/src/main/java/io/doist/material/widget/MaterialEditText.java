@@ -7,7 +7,8 @@ import android.widget.EditText;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialEditText extends EditText {
-    private static final int[] sHiddenAttrs = {android.R.attr.background, android.R.attr.textCursorDrawable};
+    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
+                                                       MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialEditText(Context context) {
         super(context);
@@ -18,9 +19,8 @@ public class MaterialEditText extends EditText {
     }
 
     public MaterialEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(MaterialWidgetHandler.themifyContext(context, attrs),
-              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenAttrs), defStyle);
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenAttrs);
-        MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenAttrs);
+        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
+        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
+        MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenStyleables);
     }
 }
