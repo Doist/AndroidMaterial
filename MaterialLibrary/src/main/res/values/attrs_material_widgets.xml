@@ -15,5 +15,6 @@
         <attr name="android:drawableBottom" />
         <attr name="android:drawableStart" />
         <attr name="android:drawableEnd" />
+        <attr name="android:textCursorDrawable" />
     </declare-styleable>
 </resources>

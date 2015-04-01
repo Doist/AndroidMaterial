@@ -8,6 +8,7 @@
         <item name="android:buttonStyle">@style/Widget.Material.Button</item>
 
         <!-- EditText styles -->
+        <item name="android:textCursorDrawable">@drawable/text_cursor_material</item>
         <item name="editTextBackground">@drawable/edit_text_material</item>
 
         <!-- ButtonBar styles -->

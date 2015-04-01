@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+
 import io.doist.material.R;
 import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
@@ -84,7 +86,8 @@ public class MaterialWidgetHandler {
                                 "TextView_drawableRight",
                                 "TextView_drawableBottom",
                                 "TextView_drawableStart",
-                                "TextView_drawableEnd");
+                                "TextView_drawableEnd",
+                                "TextView_textCursorDrawable");
                     }
 
                     ReflectionUtils.setDeclaredFieldValue(
@@ -206,6 +209,9 @@ public class MaterialWidgetHandler {
         Drawable drawableLeft, drawableTop, drawableRight, drawableBottom, drawableStart, drawableEnd;
         drawableLeft = drawableTop = drawableRight = drawableBottom = drawableStart = drawableEnd = null;
 
+        Drawable drawableTextCursor = null;
+        int drawableTextCursorResId = 0;
+
         TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialTextView, defStyle, 0);
         try {
             int N = ta.getIndexCount();
@@ -223,6 +229,9 @@ public class MaterialWidgetHandler {
                     drawableStart = resources.getDrawable(ta.getResourceId(attr, 0));
                 } else if (attr == R.styleable.MaterialTextView_android_drawableEnd) {
                     drawableEnd = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_textCursorDrawable) {
+                    drawableTextCursorResId = ta.getResourceId(attr, 0);
+                    drawableTextCursor = resources.getDrawable(drawableTextCursorResId);
                 }
             }
         } finally {
@@ -244,6 +253,23 @@ public class MaterialWidgetHandler {
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawablesRelative[1],
                                                                          drawableEnd, drawablesRelative[2]);
             }
+        }
+
+        if (drawableTextCursor != null) {
+            // Replace cursor drawables in TextView's Editor.
+            Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
+                    ReflectionUtils.getClass("android.widget.Editor"),
+                    "mCursorDrawable",
+                    ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", textView));
+            Array.set(cursorDrawables, 0, drawableTextCursor);
+            Array.set(cursorDrawables, 1, drawableTextCursor.getConstantState().newDrawable());
+
+            // Also set TextView#mCursorDrawableRes; Editor skips drawing the cursor if it's 0.
+            ReflectionUtils.setDeclaredFieldValue(
+                    TextView.class,
+                    "mCursorDrawableRes",
+                    textView,
+                    drawableTextCursorResId);
         }
     }
 
