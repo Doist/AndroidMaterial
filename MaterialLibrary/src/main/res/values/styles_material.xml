@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="Widget">
+        <item name="android:textAppearance">?android:textAppearance</item>
+    </style>
+
+    <style name="Material" />
+
+    <style name="Material.Light" />
+
+    <style name="Widget.Material" parent="Widget" />
+
+    <style name="TextAppearance.Material.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="android:fontFamily">@string/font_family_title_material</item>
+    </style>
+
     <style name="TextAppearance.Material.Button" parent="TextAppearance.AppCompat.Button">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@string/font_family_button_material</item>
     </style>
 
+    <style name="TextAppearance.Material.DialogWindowTitle" parent="TextAppearance.Material.Title" />
+
     <!-- Bordered ink button -->
-    <style name="Widget.Material.Button" parent="">
+    <style name="Widget.Material.Button">
         <item name="android:background">@drawable/btn_default_material</item>
         <item name="android:textAppearance">?android:attr/textAppearanceButton</item>
         <item name="android:minHeight">48dip</item>
@@ -17,4 +34,97 @@
         <!-- TODO: Turn this back on when we support inset drawable outlines. -->
         <!-- <item name="stateListAnimator">@anim/button_state_list_anim_material</item> -->
     </style>
+
+    <!-- Borderless ink button -->
+    <style name="Widget.Material.Button.Borderless">
+        <item name="android:background">@drawable/btn_borderless_material</item>
+        <!--<item name="stateListAnimator">@null</item>-->
+    </style>
+
+    <!-- Colored borderless ink button -->
+    <style name="Widget.Material.Button.Borderless.Colored">
+        <item name="android:textColor">?attr/colorAccent</item>
+        <!--<item name="stateListAnimator">@anim/disabled_anim_material</item>-->
+    </style>
+
+    <!-- Alert dialog button bar button -->
+    <style name="Widget.Material.Button.ButtonBar.AlertDialog" parent="Widget.Material.Button.Borderless.Colored">
+        <item name="android:minWidth">64dp</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:minHeight">@dimen/alert_dialog_button_bar_height</item>
+    </style>
+
+    <style name="Widget.Material.ButtonBar">
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="Widget.Material.ButtonBar.AlertDialog">
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="Widget.Material.Light.Button.Borderless" parent="Widget.Material.Button.Borderless" />
+
+    <style name="Widget.Material.Light.Button.ButtonBar.AlertDialog" parent="Widget.Material.Button.ButtonBar.AlertDialog" />
+
+    <style name="Widget.Material.Light.ButtonBar.AlertDialog" parent="Widget.Material.ButtonBar.AlertDialog" />
+
+    <!-- Spinner -->
+    <style name="Widget.Material.Spinner" parent="android:Widget.Spinner.DropDown">
+        <item name="android:background">@drawable/spinner_background_material</item>
+        <item name="android:dropDownSelector">?attr/listChoiceBackgroundIndicator</item>
+        <item name="android:popupBackground">@drawable/popup_background_material</item>
+        <item name="android:popupElevation">@dimen/floating_window_z</item>
+        <item name="android:dropDownVerticalOffset">0dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:overlapAnchor">true</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">start|center_vertical</item>
+    </style>
+
+    <style name="Widget.Material.Spinner.Underlined">
+        <item name="android:background">@drawable/spinner_textfield_background_material</item>
+    </style>
+
+    <!-- Animation Styles -->
+
+    <style name="Animation.Material" parent="android:Animation" />
+
+    <style name="Animation.Material.Dialog">
+        <item name="android:windowEnterAnimation">@anim/popup_enter_material</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit_material</item>
+    </style>
+
+    <!-- Dialog styles -->
+
+    <style name="AlertDialog.Material" parent=""> <!-- parent="android:AlertDialog" -->
+        <item name="android:fullDark">@android:color/transparent</item>
+        <item name="android:topDark">@android:color/transparent</item>
+        <item name="android:centerDark">@android:color/transparent</item>
+        <item name="android:bottomDark">@android:color/transparent</item>
+        <item name="android:fullBright">@android:color/transparent</item>
+        <item name="android:topBright">@android:color/transparent</item>
+        <item name="android:centerBright">@android:color/transparent</item>
+        <item name="android:bottomBright">@android:color/transparent</item>
+        <item name="android:bottomMedium">@android:color/transparent</item>
+        <item name="android:centerMedium">@android:color/transparent</item>
+        <item name="android:layout">@layout/alert_dialog_material</item>
+        <!--<item name="android:listLayout">@layout/select_dialog_material</item>-->
+        <!--<item name="android:progressLayout">@layout/progress_dialog_material</item>-->
+        <!--<item name="android:horizontalProgressLayout">@layout/alert_dialog_progress_material</item>-->
+        <!--<item name="android:listItemLayout">@layout/select_dialog_item_material</item>-->
+        <!--<item name="android:multiChoiceItemLayout">@layout/select_dialog_multichoice_material</item>-->
+        <!--<item name="android:singleChoiceItemLayout">@layout/select_dialog_singlechoice_material</item>-->
+    </style>
+
+    <style name="AlertDialog.Material.Light" />
+
+    <!-- Window title -->
+
+    <style name="DialogWindowTitle.Material" parent=""> <!--parent="android:DialogWindowTitle"-->
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material.DialogWindowTitle</item>
+    </style>
+
+    <style name="DialogWindowTitle.Material.Light" />
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextAppearance.Material.Button" parent="android:TextAppearance.Material.Button" />
+
+    <style name="Widget.Material.Button" parent="android:Widget.Material.Button" />
+
+    <style name="Widget.Material.ButtonBar" parent="android:Widget.Material.ButtonBar" />
+
+    <style name="Widget.Material.ButtonBar.AlertDialog" parent="android:Widget.Material.ButtonBar.AlertDialog" />
+
+    <style name="Widget.Material.Light.ButtonBar.AlertDialog" parent="android:Widget.Material.Light.ButtonBar.AlertDialog" />
+</resources>

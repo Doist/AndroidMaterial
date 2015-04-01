@@ -1,154 +1,259 @@
 package io.doist.material.widget.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import io.doist.material.R;
 import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
     private static final boolean sSkip = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
-    final private static Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
+    private static final Class<?> StyleableClass = ReflectionUtils.getClass("com.android.internal.R$styleable");
+
+    public static final String STYLEABLE_VIEW = "View";
+    public static final String STYLEABLE_IMAGE_VIEW = "ImageView";
+    public static final String STYLEABLE_TEXT_VIEW = "TextView";
 
     private static int[] sOriginalViewStyleable;
+    private static int[] sHiddenViewStyleable;
     private static int[] sOriginalImageViewStyleable;
+    private static int[] sHiddenImageViewStyleable;
+    private static int[] sOriginalTextViewStyleable;
+    private static int[] sHiddenTextViewStyleable;
 
-    public static AttributeSet hideStyleableAttributes(AttributeSet set, int... attrs) {
-        if (sSkip) return set;
+    public static AttributeSet hideStyleableAttributes(AttributeSet set, String... styleables) {
+        if (sSkip) {
+            return set;
+        }
 
-        for (int attr : attrs) {
-            switch (attr) {
-                case android.R.attr.background:
+        for (String styleable : styleables) {
+            switch (styleable) {
+                case STYLEABLE_VIEW:
                     if (sOriginalViewStyleable == null) {
                         // Keep original view styleable values.
                         sOriginalViewStyleable =
-                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "View", null);
+                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, STYLEABLE_VIEW, null);
+
+                        sHiddenViewStyleable = createHiddenStyleable(sOriginalViewStyleable, "View_background");
+
                     }
 
-                    int viewBackgroundIndex =
-                            (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "View_background", null);
-
-                    ReflectionUtils.setDeclaredFieldValue(
-                            StyleableClass,
-                            "View",
-                            null,
-                            hideValue(sOriginalViewStyleable, viewBackgroundIndex));
+                        ReflectionUtils.setDeclaredFieldValue(
+                                StyleableClass,
+                                STYLEABLE_VIEW,
+                                null,
+                                sHiddenViewStyleable);
                     break;
 
-                case android.R.attr.src:
+                case STYLEABLE_IMAGE_VIEW:
                     if (sOriginalImageViewStyleable == null) {
                         // Keep original image view styleable values.
                         sOriginalImageViewStyleable =
-                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "ImageView", null);
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_IMAGE_VIEW, null);
+
+                        sHiddenImageViewStyleable = createHiddenStyleable(sOriginalImageViewStyleable, "ImageView_src");
                     }
 
-                    int imageViewSrcIndex =
-                            (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, "ImageView_src", null);
+                        ReflectionUtils.setDeclaredFieldValue(
+                                StyleableClass,
+                                STYLEABLE_IMAGE_VIEW,
+                                null,
+                                sHiddenImageViewStyleable);
+                    break;
 
-                    ReflectionUtils.setDeclaredFieldValue(
-                            StyleableClass,
-                            "ImageView",
-                            null,
-                            hideValue(sOriginalImageViewStyleable, imageViewSrcIndex));
+                case STYLEABLE_TEXT_VIEW:
+                    if (sOriginalTextViewStyleable == null) {
+                        // Keep original image view styleable values.
+                        sOriginalTextViewStyleable =
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_TEXT_VIEW, null);
+
+                        sHiddenTextViewStyleable = createHiddenStyleable(
+                                sOriginalTextViewStyleable,
+                                "TextView_drawableLeft",
+                                "TextView_drawableTop",
+                                "TextView_drawableRight",
+                                "TextView_drawableBottom",
+                                "TextView_drawableStart",
+                                "TextView_drawableEnd");
+                    }
+
+                        ReflectionUtils.setDeclaredFieldValue(
+                                StyleableClass,
+                                STYLEABLE_TEXT_VIEW,
+                                null,
+                                sHiddenTextViewStyleable);
                     break;
             }
         }
         return set;
     }
 
-    public static void restoreStyleableAttributes(int... attrs) {
-        if (sSkip) return;
+    public static void restoreStyleableAttributes(String... styleables) {
+        if (sSkip) {
+            return;
+        }
 
-        for (int attr : attrs) {
-            switch (attr) {
-                case android.R.attr.background:
+        for (String styleable : styleables) {
+            switch (styleable) {
+                case STYLEABLE_VIEW:
                     ReflectionUtils.setDeclaredFieldValue(
-                            StyleableClass, "View", null, sOriginalViewStyleable);
+                            StyleableClass, STYLEABLE_VIEW, null, sOriginalViewStyleable);
                     break;
 
-                case android.R.attr.src:
+                case STYLEABLE_IMAGE_VIEW:
                     ReflectionUtils.setDeclaredFieldValue(
-                            StyleableClass, "ImageView", null, sOriginalImageViewStyleable);
+                            StyleableClass, STYLEABLE_IMAGE_VIEW, null, sOriginalImageViewStyleable);
+                    break;
+
+                case STYLEABLE_TEXT_VIEW:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_TEXT_VIEW, null, sOriginalTextViewStyleable);
                     break;
             }
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public static void init(View view, AttributeSet set, int defStyle, int[] attrs) {
-        if (sSkip) return;
+    @SuppressWarnings("ConstantConditions")
+    public static void init(View view, AttributeSet set, int defStyle, String[] styleables) {
+        if (sSkip) {
+            return;
+        }
 
-        final Context context = view.getContext();
-        final Resources resources = view.getResources();
+        Context context = view.getContext();
+        MaterialResources resources = MaterialResources.getInstance(context, context.getResources());
+        for (String styleable : styleables) {
+            switch (styleable) {
+                case STYLEABLE_VIEW:
+                    initViewAttributes(context, resources, view, set, defStyle);
+                    break;
 
-        final TypedArray ta = context.obtainStyledAttributes(set, attrs, defStyle, 0);
+                case STYLEABLE_IMAGE_VIEW:
+                    initImageViewAttributes(context, resources, (ImageView) view, set, defStyle);
+                    break;
+
+                case STYLEABLE_TEXT_VIEW:
+                    initTextViewAttributes(context, resources, (TextView) view, set, defStyle);
+                    break;
+            }
+        }
+    }
+
+    private static void initViewAttributes(Context context, MaterialResources resources, View view,
+                                           AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialView, defStyle, 0);
         try {
-            for (int i = 0; i < attrs.length; i++) {
-                final int resId = ta.getResourceId(i, 0);
-                if (resId != 0) {
-                    final MaterialResources r = MaterialResources.getInstance(context, resources);
-                    final Drawable d = r.getDrawable(resId);
+            if (ta.hasValue(R.styleable.MaterialImageView_android_src)) {
+                Drawable drawable =
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialImageView_android_src, 0));
 
-                    if (d != null) {
-                        final int attr = attrs[i];
-                        switch (attr) {
-                            case android.R.attr.background:
-                                final int paddingLeft = view.getPaddingLeft();
-                                final int paddingTop = view.getPaddingTop();
-                                final int paddingRight = view.getPaddingRight();
-                                final int paddingBottom = view.getPaddingBottom();
+                final int paddingLeft = view.getPaddingLeft();
+                final int paddingTop = view.getPaddingTop();
+                final int paddingRight = view.getPaddingRight();
+                final int paddingBottom = view.getPaddingBottom();
 
-                                // Init background.
-                                view.setBackground(d);
+                // Init background.
+                view.setBackground(drawable);
 
-                                // Maintain horizontal and vertical padding.
-                                if (paddingLeft > 0 && paddingRight > 0) {
-                                    view.setPadding(
-                                            paddingLeft,
-                                            view.getPaddingTop(),
-                                            paddingRight,
-                                            view.getPaddingBottom());
-                                }
+                // Maintain horizontal and vertical padding.
+                if (paddingLeft > 0 && paddingRight > 0) {
+                    view.setPadding(
+                            paddingLeft,
+                            view.getPaddingTop(),
+                            paddingRight,
+                            view.getPaddingBottom());
+                }
 
-                                if (paddingTop > 0 && paddingBottom > 0) {
-                                    view.setPadding(
-                                            view.getPaddingLeft(),
-                                            paddingTop,
-                                            view.getPaddingRight(),
-                                            paddingBottom);
-                                }
-
-                                break;
-
-                            case android.R.attr.src:
-                                // Init image drawable.
-                                if (view instanceof ImageView) {
-                                    ((ImageView) view).setImageDrawable(d);
-                                }
-                                break;
-                        }
-                    }
+                if (paddingTop > 0 && paddingBottom > 0) {
+                    view.setPadding(
+                            view.getPaddingLeft(),
+                            paddingTop,
+                            view.getPaddingRight(),
+                            paddingBottom);
                 }
             }
-
-        }
-        finally {
+        } finally {
             ta.recycle();
         }
     }
 
-    private static int[] hideValue(int[] array, int index) {
-        final int[] newArray = new int[array.length];
-        for (int i = 0; i < array.length; i++) {
-            newArray[i] = i == index ? 0 : array[i];
+    private static void initImageViewAttributes(Context context, MaterialResources resources, ImageView imageView,
+                                                AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialImageView, defStyle, 0);
+        try {
+            if (ta.hasValue(R.styleable.MaterialImageView_android_src)) {
+                Drawable drawable =
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialImageView_android_src, 0));
+                // Init image drawable.
+                imageView.setImageDrawable(drawable);
+            }
+        } finally {
+            ta.recycle();
         }
-        return newArray;
+    }
+
+    private static void initTextViewAttributes(Context context, MaterialResources resources, TextView textView,
+                                               AttributeSet set, int defStyle) {
+        Drawable drawableLeft, drawableTop, drawableRight, drawableBottom, drawableStart, drawableEnd;
+        drawableLeft = drawableTop = drawableRight = drawableBottom = drawableStart = drawableEnd = null;
+
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialTextView, defStyle, 0);
+        try {
+            int N = ta.getIndexCount();
+            for (int i = 0; i < N; i++) {
+                int attr = ta.getIndex(i);
+                if (attr == R.styleable.MaterialTextView_android_drawableLeft) {
+                    drawableLeft = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_drawableTop) {
+                    drawableTop = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_drawableRight) {
+                    drawableRight = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_drawableBottom) {
+                    drawableBottom = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_drawableStart) {
+                    drawableStart = resources.getDrawable(ta.getResourceId(attr, 0));
+                } else if (attr == R.styleable.MaterialTextView_android_drawableEnd) {
+                    drawableEnd = resources.getDrawable(ta.getResourceId(attr, 0));
+                }
+            }
+        } finally {
+            ta.recycle();
+        }
+
+        if (drawableLeft != null || drawableTop != null || drawableRight != null || drawableBottom != null) {
+            textView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, drawableTop, drawableRight, drawableBottom);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (drawableStart != null || drawableEnd != null) {
+                Drawable[] drawablesRelative = textView.getCompoundDrawablesRelative();
+                if (drawableStart == null) {
+                    drawableStart = drawablesRelative[0];
+                }
+                if (drawableEnd == null) {
+                    drawableEnd = drawablesRelative[2];
+                }
+                textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawablesRelative[1],
+                                                                         drawableEnd, drawablesRelative[2]);
+            }
+        }
+    }
+
+    private static int[] createHiddenStyleable(int[] styleable, String... hiddenValues) {
+        int[] newStyleable = new int[styleable.length];
+        System.arraycopy(styleable, 0, newStyleable, 0, styleable.length);
+        for (String hiddenValue : hiddenValues) {
+            int hiddenIndex = (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, hiddenValue, null);
+            newStyleable[hiddenIndex] = 0;
+        }
+        return newStyleable;
     }
 }

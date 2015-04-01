@@ -29,7 +29,7 @@ import android.widget.ImageButton;
 
 import io.doist.material.R;
 import io.doist.material.color.ColorPalette;
-import io.doist.material.drawable.RippleDrawableSimpleCompat;
+import io.doist.material.drawable.RippleMaterialDrawable;
 import io.doist.material.drawable.TintDrawable;
 
 public class FloatingActionButton extends ImageButton {
@@ -155,10 +155,11 @@ public class FloatingActionButton extends ImageButton {
         if (inCompat) {
             // Pre-L androids or force compat mode.
             mTintDrawable = new TintDrawable(getContext(), circleDrawable);
-            RippleDrawableSimpleCompat rippleDrawable = new RippleDrawableSimpleCompat(
+            RippleMaterialDrawable rippleDrawable = new RippleMaterialDrawable(
                     context,
                     rippleColor,
-                    mTintDrawable);
+                    mTintDrawable,
+                    null);
             rippleDrawable.setLayerInset(0, paddingLeft, paddingTop, paddingRight, paddingBottom);
             rippleDrawable.setLayerInset(1, paddingLeft, paddingTop, paddingRight, paddingBottom);
             background = rippleDrawable;
@@ -301,10 +302,10 @@ public class FloatingActionButton extends ImageButton {
         private static final float SHADOW_MULTIPLIER = 1.5f;
 
         // Manually tested to better replicate the elevation result.
-        private static final int mShadowStartColor = Color.argb(125, 0, 0, 0);
-        private static final int mShadowFirstStepColor = Color.argb(25, 0, 0, 0);
-        private static final int mShadowSecondStepColor = Color.argb(10, 0, 0, 0);
-        private static final int mShadowEndColor = Color.argb(0, 0, 0, 0);
+        private static final int SHADOW_START_COLOR = Color.argb(125, 0, 0, 0);
+        private static final int SHADOW_FIRST_STEP_COLOR = Color.argb(25, 0, 0, 0);
+        private static final int SHADOW_SECOND_STEP_COLOR = Color.argb(10, 0, 0, 0);
+        private static final int SHADOW_END_COLOR = Color.TRANSPARENT;
 
         private static final float MAX_LOCATION_SCALE = 0.3f;
         private static final float SHADOW_TOP_SCALE = 0.25f;
@@ -326,11 +327,8 @@ public class FloatingActionButton extends ImageButton {
         private float mShadowCy;
         private float mShadowRadius;
 
-
-
         public ElevationManager(View view) {
             mView = view;
-            mShadowPaint = new Paint();
             mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
             WindowManager wm = (WindowManager) mView.getContext().getSystemService(Context.WINDOW_SERVICE);
@@ -415,7 +413,7 @@ public class FloatingActionButton extends ImageButton {
                     mShadowCx,
                     mShadowCy,
                     mShadowRadius,
-                    new int[]{mShadowStartColor, mShadowFirstStepColor, mShadowSecondStepColor, mShadowEndColor},
+                    new int[]{SHADOW_START_COLOR, SHADOW_FIRST_STEP_COLOR, SHADOW_SECOND_STEP_COLOR, SHADOW_END_COLOR},
                     new float[]{0f, firstStep, secondStep, 1f},
                     Shader.TileMode.CLAMP));
         }

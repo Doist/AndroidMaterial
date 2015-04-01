@@ -11,6 +11,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ReflectionUtils {
     private static final String LOG_TAG = ReflectionUtils.class.getSimpleName();
 
+    public static final Class<?>[] EMPTY_TYPES = new Class<?>[0];
+    public static final Object[] EMPTY_PARAMETERS = new Object[0];
+
     private static final Map<String, Class<?>> sClassCache = new ConcurrentHashMap<>(8);
     private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new ConcurrentHashMap<>(8);
     private static final Map<Class<?>, Map<String, Field>> sClassFieldCache = new ConcurrentHashMap<>(8);
