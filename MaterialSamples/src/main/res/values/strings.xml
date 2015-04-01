@@ -27,7 +27,7 @@
     <string name="roboto_condensed_light_italic">This is a phrase (Roboto condensed light (italic))</string>
     <string name="roboto_condensed_light_bold_italic">This is a phrase (Roboto condensed light (fake bold / italic))</string>
 
-    <string name="edit_text_hint_one">Tinted EditText #1</string>
-    <string name="edit_text_hint_two">Tinted EditText #2</string>
+    <string name="material_edit_text_1">MaterialEditText #1</string>
+    <string name="material_edit_text_2">MaterialEditText #2</string>
 
 </resources>
