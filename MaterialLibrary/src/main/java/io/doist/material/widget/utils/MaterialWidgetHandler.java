@@ -275,20 +275,23 @@ public class MaterialWidgetHandler {
         }
 
         if (drawableTextCursor != null) {
-            // Replace cursor drawables in TextView's Editor.
-            Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
-                    ReflectionUtils.getClass("android.widget.Editor"),
-                    "mCursorDrawable",
-                    ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", textView));
-            Array.set(cursorDrawables, 0, drawableTextCursor);
-            Array.set(cursorDrawables, 1, drawableTextCursor.getConstantState().newDrawable());
+            Object editor = ReflectionUtils.getDeclaredFieldValue(TextView.class, "mEditor", textView);
+            if (editor != null) {
+                // Replace cursor drawables in TextView's Editor.
+                Object cursorDrawables = ReflectionUtils.getDeclaredFieldValue(
+                        ReflectionUtils.getClass("android.widget.Editor"),
+                        "mCursorDrawable",
+                        editor);
+                Array.set(cursorDrawables, 0, drawableTextCursor);
+                Array.set(cursorDrawables, 1, drawableTextCursor.getConstantState().newDrawable());
 
-            // Also set TextView#mCursorDrawableRes; Editor skips drawing the cursor if it's 0.
-            ReflectionUtils.setDeclaredFieldValue(
-                    TextView.class,
-                    "mCursorDrawableRes",
-                    textView,
-                    drawableTextCursorResId);
+                // Also set TextView#mCursorDrawableRes; Editor skips drawing the cursor if it's 0.
+                ReflectionUtils.setDeclaredFieldValue(
+                        TextView.class,
+                        "mCursorDrawableRes",
+                        textView,
+                        drawableTextCursorResId);
+            }
         }
     }
 

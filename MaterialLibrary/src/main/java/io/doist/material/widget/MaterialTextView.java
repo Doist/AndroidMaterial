@@ -14,13 +14,15 @@ public class MaterialTextView extends RobotoTextView {
     }
 
     public MaterialTextView(Context context, AttributeSet attrs) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
+        super(MaterialWidgetHandler.themifyContext(context, attrs),
+              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
         MaterialWidgetHandler.init(this, attrs, android.R.attr.textViewStyle, sHiddenStyleables);
     }
 
     public MaterialTextView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
+        super(MaterialWidgetHandler.themifyContext(context, attrs),
+              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
         MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenStyleables);
     }
