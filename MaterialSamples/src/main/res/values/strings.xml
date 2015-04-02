@@ -30,4 +30,6 @@
     <string name="material_edit_text_1">MaterialEditText #1</string>
     <string name="material_edit_text_2">MaterialEditText #2</string>
 
+    <string name="material_check_box">MaterialCheckBox</string>
+
 </resources>

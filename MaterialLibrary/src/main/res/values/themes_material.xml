@@ -17,6 +17,9 @@
         <item name="buttonBarNegativeButtonStyle">?attr/buttonBarButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">?attr/buttonBarButtonStyle</item>
 
+        <!-- CheckBox styles -->
+        <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_material</item>
+
         <!-- AlertDialog attributes -->
         <item name="android:alertDialogTheme">@style/Theme.Material.Light.Dialog.Alert</item>
         <item name="android:alertDialogStyle">@style/AlertDialog.Material.Light</item>

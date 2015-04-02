@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class MaterialWidgetHandler {
     public static final String STYLEABLE_VIEW = "View";
     public static final String STYLEABLE_IMAGE_VIEW = "ImageView";
     public static final String STYLEABLE_TEXT_VIEW = "TextView";
+    public static final String STYLEABLE_COMPOUND_BUTTON = "CompoundButton";
 
     private static int[] sOriginalViewStyleable;
     private static int[] sHiddenViewStyleable;
@@ -31,6 +33,8 @@ public class MaterialWidgetHandler {
     private static int[] sHiddenImageViewStyleable;
     private static int[] sOriginalTextViewStyleable;
     private static int[] sHiddenTextViewStyleable;
+    private static int[] sOriginalCompoundButtonStyleable;
+    private static int[] sHiddenCompoundButtonStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, String... styleables) {
         if (sSkip) {
@@ -97,6 +101,24 @@ public class MaterialWidgetHandler {
                             null,
                             sHiddenTextViewStyleable);
                     break;
+
+                case STYLEABLE_COMPOUND_BUTTON:
+                    if (sOriginalCompoundButtonStyleable == null) {
+                        // Keep original button styleable values.
+                        sOriginalCompoundButtonStyleable =
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_COMPOUND_BUTTON, null);
+
+                        sHiddenCompoundButtonStyleable =
+                                createHiddenStyleable(sOriginalCompoundButtonStyleable, "CompoundButton_button");
+                    }
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            STYLEABLE_COMPOUND_BUTTON,
+                            null,
+                            sHiddenCompoundButtonStyleable);
+                    break;
             }
         }
         return set;
@@ -123,6 +145,11 @@ public class MaterialWidgetHandler {
                     ReflectionUtils.setDeclaredFieldValue(
                             StyleableClass, STYLEABLE_TEXT_VIEW, null, sOriginalTextViewStyleable);
                     break;
+
+                case STYLEABLE_COMPOUND_BUTTON:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_COMPOUND_BUTTON, null, sOriginalCompoundButtonStyleable);
+                    break;
             }
         }
     }
@@ -147,6 +174,10 @@ public class MaterialWidgetHandler {
 
                 case STYLEABLE_TEXT_VIEW:
                     initTextViewAttributes(context, resources, (TextView) view, set, defStyle);
+                    break;
+
+                case STYLEABLE_COMPOUND_BUTTON:
+                    initCompoundButtonAttributes(context, resources, (CompoundButton) view, set, defStyle);
                     break;
             }
         }
@@ -292,6 +323,21 @@ public class MaterialWidgetHandler {
                         textView,
                         drawableTextCursorResId);
             }
+        }
+    }
+
+    private static void initCompoundButtonAttributes(Context context, MaterialResources resources,
+                                                     CompoundButton compoundButton, AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialCompoundButton, defStyle, 0);
+        try {
+            if (ta.hasValue(R.styleable.MaterialCompoundButton_android_button)) {
+                Drawable drawable =
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialCompoundButton_android_button, 0));
+                // Init button drawable.
+                compoundButton.setButtonDrawable(drawable);
+            }
+        } finally {
+            ta.recycle();
         }
     }
 
