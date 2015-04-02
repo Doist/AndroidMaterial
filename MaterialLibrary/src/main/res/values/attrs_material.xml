@@ -215,4 +215,10 @@
         <attr name="android:bottom" />
     </declare-styleable>
 
+    <!-- Drawable used to show animated touch feedback. -->
+    <declare-styleable name="RippleDrawable">
+        <!-- The color to use for ripple effects. This attribute is required. -->
+        <attr name="android:color" />
+    </declare-styleable>
+
 </resources>
