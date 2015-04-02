@@ -18,7 +18,8 @@ public class MaterialEditText extends RobotoEditText {
     }
 
     public MaterialEditText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
+        super(MaterialWidgetHandler.themifyContext(context, attrs),
+              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
         MaterialWidgetHandler.init(this, attrs, defStyle, sHiddenStyleables);
     }

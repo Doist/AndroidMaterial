@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -132,7 +133,7 @@ public class MaterialWidgetHandler {
             return;
         }
 
-        Context context = view.getContext();
+        Context context = themifyContext(view.getContext(), set);
         MaterialResources resources = MaterialResources.getInstance(context, context.getResources());
         for (String styleable : styleables) {
             switch (styleable) {
@@ -149,6 +150,24 @@ public class MaterialWidgetHandler {
                     break;
             }
         }
+    }
+
+    /**
+     * Applies {@code android:theme} to {@code context} by wrapping it in a {@link ContextThemeWrapper}.
+     */
+    public static Context themifyContext(Context context, AttributeSet attrs) {
+        if (sSkip) {
+            return context;
+        }
+
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.View, 0, 0);
+        int themeResId = a.getResourceId(R.styleable.View_android_theme, 0);
+        a.recycle();
+
+        if (themeResId != 0 && themeResId != getThemeResId(context)) {
+            context = new ContextThemeWrapper(context, themeResId);
+        }
+        return context;
     }
 
     private static void initViewAttributes(Context context, MaterialResources resources, View view,
@@ -281,5 +300,22 @@ public class MaterialWidgetHandler {
             newStyleable[hiddenIndex] = 0;
         }
         return newStyleable;
+    }
+
+    private static int getThemeResId(Context context) {
+        if (context instanceof ContextThemeWrapper) {
+            try {
+                return (int) ReflectionUtils.invokeDeclaredMethod(
+                        ContextThemeWrapper.class,
+                        "getThemeResId",
+                        ReflectionUtils.EMPTY_TYPES,
+                        context,
+                        ReflectionUtils.EMPTY_PARAMETERS);
+            } catch (Exception e) {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
     }
 }

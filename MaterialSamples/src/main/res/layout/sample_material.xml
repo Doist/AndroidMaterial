@@ -19,6 +19,7 @@
     <io.doist.material.widget.MaterialEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/material_edit_text_2" />
+        android:hint="@string/material_edit_text_2"
+        android:theme="@style/OverlayTheme" />
 
 </merge>
