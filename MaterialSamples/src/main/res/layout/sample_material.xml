@@ -27,4 +27,9 @@
         android:layout_height="wrap_content"
         android:text="@string/material_check_box" />
 
+    <io.doist.material.widget.MaterialRadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/material_radio_button" />
+
 </merge>

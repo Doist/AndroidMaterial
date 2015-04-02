@@ -31,5 +31,6 @@
     <string name="material_edit_text_2">MaterialEditText #2</string>
 
     <string name="material_check_box">MaterialCheckBox</string>
+    <string name="material_radio_button">MaterialRadioButton</string>
 
 </resources>

@@ -17,7 +17,8 @@
         <item name="buttonBarNegativeButtonStyle">?attr/buttonBarButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">?attr/buttonBarButtonStyle</item>
 
-        <!-- CheckBox styles -->
+        <!-- RadioButton and CheckBox styles -->
+        <item name="android:listChoiceIndicatorSingle">@drawable/btn_radio_material</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_material</item>
 
         <!-- AlertDialog attributes -->
