@@ -17,6 +17,9 @@
 
         <!-- Color palette -->
         <item name="colorButtonNormal">@color/btn_default_material_light</item>
+
+        <!-- Preferences -->
+        <item name="android:preferenceStyle">@style/Preference.Material</item>
     </style>
 
     <style name="Theme.Material.Light.NoActionBar" parent="Theme.Material.Light">

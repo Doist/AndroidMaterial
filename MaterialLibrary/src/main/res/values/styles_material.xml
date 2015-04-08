@@ -59,4 +59,13 @@
     <style name="Widget.Material.Spinner.Underlined">
         <item name="android:background">@drawable/spinner_textfield_background_material</item>
     </style>
+
+    <!-- Preferences -->
+
+    <style name="Preference" />
+
+    <style name="Preference.Material">
+        <item name="android:layout">@layout/preference</item>
+    </style>
+
 </resources>
