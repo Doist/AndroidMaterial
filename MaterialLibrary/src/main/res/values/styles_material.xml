@@ -68,4 +68,8 @@
         <item name="android:layout">@layout/preference</item>
     </style>
 
+    <style name="Preference.Material.CheckBoxPreference">
+        <item name="android:widgetLayout">@layout/preference_widget_checkbox</item>
+    </style>
+
 </resources>
