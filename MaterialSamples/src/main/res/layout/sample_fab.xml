@@ -46,7 +46,6 @@
         android:layout_marginBottom="@dimen/fab_default_margin"
         android:layout_marginEnd="@dimen/fab_default_margin"
         android:layout_marginRight="@dimen/fab_default_margin"
-        android:theme="@style/OverlayTheme"
-        android:onClick="onFabClick" />
+        android:theme="@style/OverlayTheme" />
 
 </merge>
