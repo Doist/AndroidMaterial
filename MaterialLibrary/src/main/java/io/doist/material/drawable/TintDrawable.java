@@ -10,8 +10,10 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.util.AttributeSet;
@@ -70,6 +72,9 @@ public class TintDrawable extends WrapperDrawable {
                 }
                 mTintState.mTintUpdate = true;
             }
+
+            // Initialize base alpha.
+            mTintState.mBaseAlpha = a.getFloat(R.styleable.TintDrawable_android_alpha, mTintState.mBaseAlpha);
         }
         finally {
             a.recycle();
@@ -150,7 +155,22 @@ public class TintDrawable extends WrapperDrawable {
     @Override
     public void draw(Canvas canvas) {
         updateTintFilter();
+
+        TintState state = mTintState;
+        final int restoreAlpha;
+        if (state.mBaseAlpha != 1.0f && state.mDrawable instanceof BitmapDrawable) {
+            final Paint p = ((BitmapDrawable) state.mDrawable).getPaint();
+            restoreAlpha = p.getAlpha();
+            p.setAlpha((int) (restoreAlpha * state.mBaseAlpha + 0.5f));
+        } else {
+            restoreAlpha = -1;
+        }
+
         super.draw(canvas);
+
+        if (restoreAlpha >= 0) {
+            ((BitmapDrawable) state.mDrawable).getPaint().setAlpha(restoreAlpha);
+        }
     }
 
     @Override
@@ -172,6 +192,8 @@ public class TintDrawable extends WrapperDrawable {
 
             tintState.mTintUpdate = tintState.mTint != null;
 
+            tintState.mBaseAlpha = mTintState.mBaseAlpha;
+
             mTintState = tintState;
             mMutated = true;
         }
@@ -187,6 +209,7 @@ public class TintDrawable extends WrapperDrawable {
         ColorStateList mTint;
         PorterDuff.Mode mTintMode;
         boolean mTintUpdate;
+        float mBaseAlpha = 1.0f;
 
         public TintState(WrapperState state) {
             super(state);
@@ -195,6 +218,7 @@ public class TintDrawable extends WrapperDrawable {
                 mTint = ((TintState) state).mTint;
                 mTintMode = ((TintState) state).mTintMode;
                 mTintUpdate = ((TintState) state).mTintUpdate;
+                mBaseAlpha = ((TintState) state).mBaseAlpha;
             }
         }
 

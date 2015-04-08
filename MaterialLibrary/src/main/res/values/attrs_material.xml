@@ -95,6 +95,8 @@
         <!-- When a tint color is set, specifies its Porter-Duff blending mode. The
              default value is src_in, which treats the drawable as an alpha mask. -->
         <!--<attr name="android:tintMode" />-->
+        <!-- Specifies the alpha multiplier to apply to the base drawable. Only works with a BitmapDrawable. -->
+        <attr name="android:alpha" />
     </declare-styleable>
 
     <declare-styleable name="InsetDrawable">
