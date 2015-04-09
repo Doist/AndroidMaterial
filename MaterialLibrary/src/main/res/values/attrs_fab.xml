@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="FloatingActionButton">
-        <attr name="android:src" />
+        <attr name="android:background" />
         <attr name="android:elevation" />
-        <attr name="android:padding" />
-        <attr name="android:paddingLeft" />
-        <attr name="android:paddingTop" />
-        <attr name="android:paddingRight" />
-        <attr name="android:paddingBottom" />
         <attr name="android:color" />
         <attr name="elevation" />
         <attr name="isMini" format="boolean" />

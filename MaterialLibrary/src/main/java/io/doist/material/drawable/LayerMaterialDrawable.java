@@ -283,7 +283,8 @@ public class LayerMaterialDrawable extends LayerDrawable {
             return super.getIntrinsicWidth();
         }
     }
-     public int getIntrinsicWidthCompat() {
+
+    public int getIntrinsicWidthCompat() {
         int width = -1;
 
         final int N = getNumberOfLayers();

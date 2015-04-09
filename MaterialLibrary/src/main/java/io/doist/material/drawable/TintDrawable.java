@@ -83,6 +83,11 @@ public class TintDrawable extends WrapperDrawable {
     }
 
     @Override
+    public boolean setState(int[] stateSet) {
+        return super.setState(stateSet) | super.superSetState(getState());
+    }
+
+    @Override
     protected boolean onStateChange(int[] state) {
         if (mTintState.mTint != null) {
             mTintState.mTintUpdate = true;

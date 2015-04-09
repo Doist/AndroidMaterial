@@ -4,6 +4,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.TargetApi;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -22,7 +23,15 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
     public WrapperDrawable(Drawable drawable) {
         mWrapperState = createConstantState(null);
+        setWrappedDrawable(drawable);
+    }
+
+    public void setWrappedDrawable(Drawable drawable) {
         mWrapperState.setDrawable(drawable, this);
+    }
+
+    public Drawable getWrappedDrawable() {
+        return mWrapperState.mDrawable;
     }
 
     @Override
@@ -89,13 +98,31 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
     @Override
     public boolean setState(int[] stateSet) {
-        return mWrapperState.mDrawable.setState(stateSet) |
-                super.setState(mWrapperState.mDrawable.getState());
+        return mWrapperState.mDrawable.setState(stateSet);
+    }
+
+    public boolean superSetState(int[] stateSet) {
+        return super.setState(stateSet);
+    }
+
+    @Override
+    public int[] getState() {
+        return mWrapperState.mDrawable.getState();
     }
 
     @Override
     protected boolean onStateChange(int[] state) {
         return false;
+    }
+
+    @Override
+    public void jumpToCurrentState() {
+        mWrapperState.mDrawable.jumpToCurrentState();
+    }
+
+    @Override
+    public Drawable getCurrent() {
+        return mWrapperState.mDrawable.getCurrent();
     }
 
     @Override
@@ -161,6 +188,40 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         return mWrapperState.mDrawable.getPadding(padding);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setTint(int tint) {
+        mWrapperState.mDrawable.setTint(tint);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setTintList(ColorStateList tint) {
+        mWrapperState.mDrawable.setTintList(tint);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setTintMode(PorterDuff.Mode tintMode) {
+        mWrapperState.mDrawable.setTintMode(tintMode);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setHotspot(float x, float y) {
+        mWrapperState.mDrawable.setHotspot(x, y);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void setHotspotBounds(int left, int top, int right, int bottom) {
+        mWrapperState.mDrawable.setHotspotBounds(left, top, right, bottom);
+    }
+
+    /*
+     * Wrapper drawable state.
+     */
+
     @Override
     public Drawable mutate() {
         if (!mMutated && super.mutate() == this) {
@@ -198,6 +259,9 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         }
 
         public void setDrawable(Drawable drawable, WrapperDrawable owner) {
+            if (mDrawable != null) {
+                mDrawable.setCallback(null);
+            }
             mDrawable = drawable;
             mDrawable.setCallback(owner);
             mChildChangingConfigurations = mDrawable.getChangingConfigurations();
@@ -241,25 +305,16 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
     @Override
     public void invalidateDrawable(Drawable who) {
-        final Callback callback = getCallback();
-        if (callback != null) {
-            callback.invalidateDrawable(this);
-        }
+        invalidateSelf();
     }
 
     @Override
     public void scheduleDrawable(Drawable who, Runnable what, long when) {
-        final Callback callback = getCallback();
-        if (callback != null) {
-            callback.scheduleDrawable(this, what, when);
-        }
+        scheduleSelf(what, when);
     }
 
     @Override
     public void unscheduleDrawable(Drawable who, Runnable what) {
-        final Callback callback = getCallback();
-        if (callback != null) {
-            callback.unscheduleDrawable(this, what);
-        }
+        unscheduleSelf(what);
     }
 }

@@ -7,18 +7,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
+        android:layout_marginTop="@dimen/fab_default_margin"
+        android:layout_marginEnd="100dip"
+        android:layout_marginRight="100dip"
         android:color="@color/btn_sample"
         android:onClick="onFabClick"
+        app:inCompat="true"
         app:isMini="true" />
 
     <io.doist.material.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
-        android:layout_marginRight="100dip"
+        android:layout_marginTop="@dimen/fab_default_margin"
+        android:layout_marginEnd="@dimen/fab_default_margin"
+        android:layout_marginRight="@dimen/fab_default_margin"
         android:color="@color/btn_sample"
         android:onClick="onFabClick"
-        app:inCompat="true"
         app:isMini="true" />
 
     <!-- Bottom FABs -->
@@ -26,17 +31,22 @@
     <io.doist.material.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:onClick="onFabClick" />
+        android:layout_gravity="start|bottom"
+        android:layout_marginBottom="@dimen/fab_default_margin"
+        android:layout_marginStart="@dimen/fab_default_margin"
+        android:layout_marginLeft="@dimen/fab_default_margin"
+        android:onClick="onFabClick"
+        app:inCompat="true" />
 
     <io.doist.material.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginRight="140dip"
-        android:paddingRight="140dip"
+        android:layout_marginBottom="@dimen/fab_default_margin"
+        android:layout_marginEnd="@dimen/fab_default_margin"
+        android:layout_marginRight="@dimen/fab_default_margin"
         android:theme="@style/OverlayTheme"
-        app:inCompat="true" />
+        android:onClick="onFabClick" />
 
 </merge>

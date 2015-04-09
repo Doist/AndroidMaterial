@@ -20,6 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="600dip"
             android:orientation="vertical">
 
             <include layout="@layout/sample_material" />
@@ -29,6 +30,8 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <include layout="@layout/sample_elevation" />
 
     <include layout="@layout/sample_fab" />
 
