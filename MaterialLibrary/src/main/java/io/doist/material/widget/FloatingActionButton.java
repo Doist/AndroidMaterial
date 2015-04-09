@@ -34,7 +34,7 @@ import io.doist.material.drawable.TintDrawable;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class FloatingActionButton extends ImageButton {
-    private static final int DEFAULT_ELEVATION_DP = 6;
+    private static final int DEFAULT_ELEVATION_DP = 8;
 
     // Used to create a shadow to fake elevation in pre-L androids.
     private ElevationManager mElevationManager;
