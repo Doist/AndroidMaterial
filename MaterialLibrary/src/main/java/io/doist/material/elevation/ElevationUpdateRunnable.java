@@ -20,9 +20,6 @@ import java.lang.ref.WeakReference;
  *
  */
 class ElevationUpdateRunnable implements Runnable {
-    private static final Bitmap.Config BITMAP_CONFIG =
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT ? Bitmap.Config.ARGB_8888 : Bitmap.Config.ALPHA_8;
-
     private int mLeft;
     private int mTop;
     private int mRight;
@@ -127,7 +124,7 @@ class ElevationUpdateRunnable implements Runnable {
         if (mDirtyLeft || mDirtyTop) {
             cornerBitmapTopLeft = Bitmap.createBitmap(Math.round(mShadowLengthLeft + mCornerRadius),
                                                       Math.round(mShadowLengthTop + mCornerRadius),
-                                                      BITMAP_CONFIG);
+                                                      Bitmap.Config.ALPHA_8);
             canvas.setBitmap(cornerBitmapTopLeft);
             drawCorner(canvas, mCornerRadius + mShadowLengthLeft, mCornerRadius + mShadowLengthTop,
                        mShadowLengthLeft, mShadowLengthTop, mShadowAlphaLeft, mShadowAlphaTop, 180f);
@@ -135,7 +132,7 @@ class ElevationUpdateRunnable implements Runnable {
         if (mDirtyTop || mDirtyRight) {
             cornerBitmapTopRight = Bitmap.createBitmap(Math.round(mShadowLengthRight + mCornerRadius),
                                                        Math.round(mShadowLengthTop + mCornerRadius),
-                                                       BITMAP_CONFIG);
+                                                       Bitmap.Config.ALPHA_8);
             canvas.setBitmap(cornerBitmapTopRight);
             drawCorner(canvas, 0,  mShadowLengthTop + mCornerRadius,
                        mShadowLengthTop, mShadowLengthRight, mShadowAlphaTop, mShadowAlphaRight, -90f);
@@ -143,7 +140,7 @@ class ElevationUpdateRunnable implements Runnable {
         if (mDirtyRight || mDirtyBottom) {
             cornerBitmapBottomRight = Bitmap.createBitmap(Math.round(mShadowLengthRight + mCornerRadius),
                                                           Math.round(mShadowLengthBottom + mCornerRadius),
-                                                          BITMAP_CONFIG);
+                                                          Bitmap.Config.ALPHA_8);
             canvas.setBitmap(cornerBitmapBottomRight);
             drawCorner(canvas, 0, 0,
                        mShadowLengthRight, mShadowLengthBottom, mShadowAlphaRight, mShadowAlphaBottom, 0f);
@@ -151,7 +148,7 @@ class ElevationUpdateRunnable implements Runnable {
         if (mDirtyBottom || mDirtyLeft) {
             cornerBitmapBottomLeft = Bitmap.createBitmap(Math.round(mShadowLengthLeft + mCornerRadius),
                                                          Math.round(mShadowLengthBottom + mCornerRadius),
-                                                         BITMAP_CONFIG);
+                                                         Bitmap.Config.ALPHA_8);
             canvas.setBitmap(cornerBitmapBottomLeft);
             drawCorner(canvas, mCornerRadius + mShadowLengthLeft, 0,
                        mShadowLengthBottom, mShadowLengthLeft, mShadowAlphaBottom, mShadowAlphaLeft, 90f);

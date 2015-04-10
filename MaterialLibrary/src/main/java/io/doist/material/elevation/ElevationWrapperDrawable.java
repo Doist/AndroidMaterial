@@ -2,6 +2,7 @@ package io.doist.material.elevation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -30,8 +31,8 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
     // For calculating each shadows alpha.
     private static final float AMBIENT_ALPHA = 0.09f;
     private static final float SIDE_ALPHA = 0.14f;
-    private static final float MIN_BOTTOM_ALPHA = 0.16f; // Bottom shadow when at top.
-    private static final float INC_BOTTOM_ALPHA = 0.07f; // Bottom shadow increment when at the bottom.
+    private static final float MIN_BOTTOM_ALPHA = 0.18f; // Bottom shadow when at top.
+    private static final float INC_BOTTOM_ALPHA = 0.05f; // Bottom shadow increment when at the bottom.
 
     // Executor service for calculating the shadow in the background.
     private static BlockingQueue<Runnable> sShadowExecutorQueue = new LinkedBlockingQueue<>();
@@ -129,6 +130,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         mShadowPaintRight = new Paint(mShadowPaintLeft);
         mShadowPaintBottom = new Paint(mShadowPaintLeft);
         mCornerPaint = new Paint(mShadowPaintLeft);
+        mCornerPaint.setColor(Color.BLACK);
 
         calculatePadding();
     }
