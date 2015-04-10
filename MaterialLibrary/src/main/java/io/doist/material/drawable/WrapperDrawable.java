@@ -27,6 +27,9 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     }
 
     public void setWrappedDrawable(Drawable drawable) {
+        if (mWrapperState.mDrawable != null) {
+            mWrapperState.mDrawable.setCallback(null);
+        }
         mWrapperState.setDrawable(drawable, this);
     }
 
@@ -259,9 +262,6 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         }
 
         public void setDrawable(Drawable drawable, WrapperDrawable owner) {
-            if (mDrawable != null) {
-                mDrawable.setCallback(null);
-            }
             mDrawable = drawable;
             mDrawable.setCallback(owner);
             mChildChangingConfigurations = mDrawable.getChangingConfigurations();
