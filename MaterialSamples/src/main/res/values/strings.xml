@@ -32,6 +32,7 @@
 
     <string name="material_check_box">MaterialCheckBox</string>
     <string name="material_radio_button">MaterialRadioButton</string>
+    <string name="material_switch">MaterialSwitch</string>
 
     <string name="pref_screen_title">Screen</string>
     <string name="pref_preference_title">Preference</string>
