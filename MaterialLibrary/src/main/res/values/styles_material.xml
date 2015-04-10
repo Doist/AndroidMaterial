@@ -16,6 +16,8 @@
         <item name="android:fontFamily">@string/font_family_button_material</item>
     </style>
 
+    <style name="TextAppearance.Material.Switch" parent="TextAppearance.AppCompat.Medium" />
+
     <!-- Bordered ink button -->
     <style name="Widget.Material.Button">
         <item name="android:background">@drawable/btn_default_material</item>
@@ -58,6 +60,13 @@
 
     <style name="Widget.Material.Spinner.Underlined">
         <item name="android:background">@drawable/spinner_textfield_background_material</item>
+    </style>
+
+    <!-- SwitchBar -->
+
+    <style name="Widget.Material.SwitchBar">
+        <item name="switchBarMarginStart">@dimen/switchbar_margin_start</item>
+        <item name="switchBarMarginEnd">@dimen/switchbar_margin_end</item>
     </style>
 
     <!-- Preferences -->
