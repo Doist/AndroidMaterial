@@ -195,7 +195,7 @@ public class MaterialWidgetHandler {
         int themeResId = a.getResourceId(R.styleable.View_android_theme, 0);
         a.recycle();
 
-        if (themeResId != 0 && themeResId != getThemeResId(context)) {
+        if (themeResId != 0 && themeResId != MaterialResources.getThemeResId(context)) {
             context = new ContextThemeWrapper(context, themeResId);
         }
         return context;
@@ -349,22 +349,5 @@ public class MaterialWidgetHandler {
             newStyleable[hiddenIndex] = 0;
         }
         return newStyleable;
-    }
-
-    private static int getThemeResId(Context context) {
-        if (context instanceof ContextThemeWrapper) {
-            try {
-                return (int) ReflectionUtils.invokeDeclaredMethod(
-                        ContextThemeWrapper.class,
-                        "getThemeResId",
-                        ReflectionUtils.EMPTY_TYPES,
-                        context,
-                        ReflectionUtils.EMPTY_PARAMETERS);
-            } catch (Exception e) {
-                return 0;
-            }
-        } else {
-            return 0;
-        }
     }
 }
