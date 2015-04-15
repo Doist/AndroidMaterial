@@ -21,6 +21,7 @@
         <!-- Preferences -->
         <item name="android:preferenceStyle">@style/Preference.Material</item>
         <item name="android:checkBoxPreferenceStyle">@style/Preference.Material.CheckBoxPreference</item>
+        <item name="android:preferenceLayoutChild">@layout/preference_child_material</item>
     </style>
 
     <style name="Theme.Material.Light.NoActionBar" parent="Theme.Material.Light">

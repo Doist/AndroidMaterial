@@ -15,6 +15,7 @@
     <RingtonePreference
         android:dependency="pref_checkbox"
         android:key="pref_ringtone"
+        android:layout="?android:attr/preferenceLayoutChild"
         android:summary="@string/pref_ringtone_summary"
         android:title="@string/pref_ringtone_title" />
 
