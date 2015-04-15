@@ -26,6 +26,10 @@
         <attr name="android:button" />
     </declare-styleable>
 
+    <declare-styleable name="MaterialCheckedTextView">
+        <attr name="android:checkMark" />
+    </declare-styleable>
+
     <declare-styleable name="SwitchBar">
         <attr name="switchBarMarginStart" format="dimension" />
         <attr name="switchBarMarginEnd" format="dimension" />
