@@ -31,6 +31,7 @@ import io.doist.material.R;
 import io.doist.material.color.ColorPalette;
 import io.doist.material.drawable.RippleMaterialDrawable;
 import io.doist.material.drawable.TintDrawable;
+import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class FloatingActionButton extends ImageButton {
     private static final int DEFAULT_ELEVATION_DP = 6;
@@ -55,13 +56,13 @@ public class FloatingActionButton extends ImageButton {
     }
 
     public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs, defStyleAttr);
+        super(MaterialWidgetHandler.themifyContext(context, attrs), attrs, defStyleAttr);
+        init(MaterialWidgetHandler.themifyContext(context, attrs), attrs, defStyleAttr);
     }
 
     @SuppressWarnings("ConstantConditions")
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
 
         // Parse attributes.
         // Default attr values.
@@ -93,7 +94,8 @@ public class FloatingActionButton extends ImageButton {
                 paddingLeft = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingLeft, padding);
                 paddingTop = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingTop, padding);
                 paddingRight = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingRight, padding);
-                paddingBottom = ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingBottom, padding);
+                paddingBottom =
+                        ta.getDimensionPixelSize(R.styleable.FloatingActionButton_android_paddingBottom, padding);
 
                 // Resolve color or colorStateList.
                 TypedValue v = new TypedValue();
@@ -152,7 +154,7 @@ public class FloatingActionButton extends ImageButton {
         Drawable background;
         if (inCompat) {
             // Pre-L androids or force compat mode.
-            mTintDrawable = new TintDrawable(getContext(), circleDrawable);
+            mTintDrawable = new TintDrawable(context, circleDrawable);
             RippleMaterialDrawable rippleDrawable = new RippleMaterialDrawable(
                     context,
                     rippleColor,

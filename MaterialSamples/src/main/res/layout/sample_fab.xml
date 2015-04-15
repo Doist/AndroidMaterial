@@ -30,12 +30,13 @@
         android:onClick="onFabClick" />
 
     <io.doist.material.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginRight="140dip"
-        android:onClick="onFabClick"
         android:paddingRight="140dip"
+        android:theme="@style/OverlayTheme"
         app:inCompat="true" />
 
 </merge>
