@@ -10,14 +10,11 @@ public class MaterialTextView extends RobotoTextView {
                                                        MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialTextView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialTextView(Context context, AttributeSet attrs) {
-        super(MaterialWidgetHandler.themifyContext(context, attrs),
-              MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
-        MaterialWidgetHandler.init(this, attrs, android.R.attr.textViewStyle, sHiddenStyleables);
+        this(MaterialWidgetHandler.themifyContext(context, attrs), attrs, android.R.attr.textViewStyle);
     }
 
     public MaterialTextView(Context context, AttributeSet attrs, int defStyle) {

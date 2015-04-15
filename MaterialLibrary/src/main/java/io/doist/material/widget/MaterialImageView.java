@@ -11,13 +11,11 @@ public class MaterialImageView extends ImageView {
                                                        MaterialWidgetHandler.STYLEABLE_IMAGE_VIEW};
 
     public MaterialImageView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialImageView(Context context, AttributeSet attrs) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
-        MaterialWidgetHandler.init(this, attrs, 0, sHiddenStyleables);
+        this(context, attrs, 0);
     }
 
     public MaterialImageView(Context context, AttributeSet attrs, int defStyle) {

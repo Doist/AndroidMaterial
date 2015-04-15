@@ -47,13 +47,11 @@ public class FloatingActionButton extends ImageButton {
     private TintDrawable mTintDrawable; // To change the color of the circle in compat mode.
 
     public FloatingActionButton(Context context) {
-        super(context);
-        init(context, null, 0);
+        this(context, null);
     }
 
     public FloatingActionButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs, 0);
+        this(context, attrs, android.R.attr.imageButtonStyle);
     }
 
     public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {

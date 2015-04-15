@@ -10,7 +10,7 @@ public class MaterialEditText extends RobotoEditText {
                                                        MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialEditText(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialEditText(Context context, AttributeSet attrs) {

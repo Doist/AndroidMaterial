@@ -12,7 +12,7 @@ public class MaterialRadioButton extends RadioButton {
                                                        MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialRadioButton(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialRadioButton(Context context, AttributeSet attrs) {

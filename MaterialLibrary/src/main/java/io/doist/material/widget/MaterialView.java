@@ -10,13 +10,11 @@ public class MaterialView extends View {
     private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialView(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialView(Context context, AttributeSet attrs) {
-        super(context, MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables));
-        MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);
-        MaterialWidgetHandler.init(this, attrs, 0, sHiddenStyleables);
+        this(context, attrs, 0);
     }
 
     public MaterialView(Context context, AttributeSet attrs, int defStyle) {

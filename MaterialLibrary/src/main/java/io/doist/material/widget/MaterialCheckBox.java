@@ -12,7 +12,7 @@ public class MaterialCheckBox extends CheckBox {
                                                        MaterialWidgetHandler.STYLEABLE_VIEW};
 
     public MaterialCheckBox(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public MaterialCheckBox(Context context, AttributeSet attrs) {
