@@ -13,13 +13,11 @@ public class RobotoTextView extends TextView {
     private boolean mAllowSetTypeface;
 
     public RobotoTextView(Context context) {
-        super(context);
-        applyRoboto(context, null, 0);
+        this(context, null);
     }
 
     public RobotoTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        applyRoboto(context, attrs, 0);
+        this(context, attrs, android.R.attr.textViewStyle);
     }
 
     public RobotoTextView(Context context, AttributeSet attrs, int defStyle) {
