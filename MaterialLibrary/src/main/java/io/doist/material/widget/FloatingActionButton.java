@@ -9,6 +9,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
@@ -19,7 +20,9 @@ import io.doist.material.drawable.TintDrawable;
 import io.doist.material.elevation.ElevationDelegate;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class FloatingActionButton extends ImageButton implements ElevationDelegate.Host {
+public class FloatingActionButton extends ImageButton {
+    public static final String LOG_TAG = FloatingActionButton.class.getSimpleName();
+
     private static final int DEFAULT_ELEVATION_DP = 8;
 
     private ColorStateList mColor;
@@ -30,7 +33,7 @@ public class FloatingActionButton extends ImageButton implements ElevationDelega
     private GradientDrawable mCircleDrawable; // To change the color of the circle.
     private TintDrawable mTintDrawable; // To change the color of the circle in compat mode.
 
-    private ElevationDelegate<FloatingActionButton> mElevationDelegate;
+    private ElevationDelegate mElevationDelegate;
 
     public FloatingActionButton(Context context) {
         this(context, null);
@@ -55,6 +58,15 @@ public class FloatingActionButton extends ImageButton implements ElevationDelega
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FloatingActionButton, defStyleAttr, 0);
             try {
+                if (ta.getInt(R.styleable.FloatingActionButton_android_layout_width, 0)
+                        != ViewGroup.LayoutParams.WRAP_CONTENT
+                        || ta.getInt(R.styleable.FloatingActionButton_android_layout_height, 0)
+                        != ViewGroup.LayoutParams.WRAP_CONTENT) {
+                    throw new IllegalStateException(
+                            "FloatingActionButton 'android:width' and 'android:height' values must be 'wrap_content'. "
+                                    + "Use the 'isMini' attribute to manipulate size.");
+                }
+
                 if (ta.getDrawable(R.styleable.FloatingActionButton_android_background) != null) {
                     throw new IllegalStateException(
                             "FloatingActionButton does not support 'android:background' attribute.");
@@ -96,7 +108,7 @@ public class FloatingActionButton extends ImageButton implements ElevationDelega
 
     private void initElevation(boolean inCompat, float elevation) {
         if (inCompat) {
-            mElevationDelegate = new ElevationDelegate<>(this);
+            mElevationDelegate = new ElevationDelegate(this);
         }
         setElevation(elevation);
     }
@@ -189,7 +201,18 @@ public class FloatingActionButton extends ImageButton implements ElevationDelega
         // Re-set layout params so that width and height are adjusted accordingly.
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params != null) {
-            internalSetLayoutParams(params);
+            boolean isAttached = getWindowVisibility() == View.VISIBLE;
+            if (mElevationDelegate != null && isAttached) {
+                mElevationDelegate.onDetachedFromWindow();
+            }
+
+            params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            setLayoutParams(params);
+
+            if (mElevationDelegate != null && isAttached) {
+                mElevationDelegate.onAttachedToWindow();
+            }
         }
     }
 
@@ -198,57 +221,32 @@ public class FloatingActionButton extends ImageButton implements ElevationDelega
     }
 
     @Override
-    public void setBackground(Drawable background) {
-        if (mElevationDelegate != null) {
-            mElevationDelegate.setBackground(background);
-        } else {
-            super.setBackground(background);
-        }
-    }
-
-    @Override
-    public void setPadding(int left, int top, int right, int bottom) {
-        if (mElevationDelegate != null) {
-            mElevationDelegate.setPadding(left, top, right, bottom);
-        } else {
-            super.setPadding(left, top, right, bottom);
-        }
-    }
-
-    @Override
     public void setLayoutParams(ViewGroup.LayoutParams params) {
-        if ((params.width != mSize && params.width != ViewGroup.LayoutParams.WRAP_CONTENT)
-                || (params.height != mSize && params.height != ViewGroup.LayoutParams.WRAP_CONTENT)) {
-            throw new IllegalStateException("FloatingActionButton 'android:width' and 'android:height' values must be "
-                                                    + "'wrap_content'. Check 'isMini' attribute to manipulate size.");
+        if (params.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            params.width = mSize;
         }
-        internalSetLayoutParams(params);
+        if (params.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            params.height = mSize;
+        }
+
+        super.setLayoutParams(params);
     }
 
-
-    private void internalSetLayoutParams(ViewGroup.LayoutParams params) {
-        params.width = mSize;
-        params.height = mSize;
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
 
         if (mElevationDelegate != null) {
-            mElevationDelegate.setLayoutParams(params);
-        } else {
-            super.setLayoutParams(params);
+            mElevationDelegate.onAttachedToWindow();
         }
     }
 
     @Override
-    public void superSetBackground(Drawable background) {
-        super.setBackground(background);
-    }
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
 
-    @Override
-    public void superSetPadding(int left, int top, int right, int bottom) {
-        super.setPadding(left, top, right, bottom);
-    }
-
-    @Override
-    public void superSetLayoutParams(ViewGroup.LayoutParams params) {
-        super.setLayoutParams(params);
+        if (mElevationDelegate != null) {
+            mElevationDelegate.onDetachedFromWindow();
+        }
     }
 }

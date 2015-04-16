@@ -5,10 +5,10 @@
         <attr name="cornerRadius" format="dimension" />
         <attr name="showShadows">
             <flag name="none" value="0x00" />
-            <flag name="top" value="0x01" />
-            <flag name="bottom" value="0x02" />
-            <flag name="left" value="0x04" />
-            <flag name="right" value="0x08" />
+            <flag name="left" value="0x01" />
+            <flag name="top" value="0x02" />
+            <flag name="right" value="0x04" />
+            <flag name="bottom" value="0x08" />
             <flag name="all" value="0xff" />
         </attr>
     </declare-styleable>

@@ -14,32 +14,35 @@ import io.doist.material.R;
  * Handles elevation drop shadows for a given view, similar to {@link View#setElevation(float)} on
  * {@link Build.VERSION_CODES#LOLLIPOP} and above.
  *
- * Setup via {@link AttributeSet} or {@link #setElevation(float)}, {@link #setCornerRadius(float)} and
+ * Create via {@link AttributeSet} or {@link #setElevation(float)}, {@link #setCornerRadius(float)} and
  * {@link #setShownShadows(boolean, boolean, boolean, boolean)}.
  *
- * Your {@link View} must implement {@link Host} and proxy calls to {@link View#setBackground(Drawable)} to
- * {@link #setBackground(Drawable)} and calls to {@link View#setPadding(int, int, int, int)} to
- * {@link #setPadding(int, int, int, int)}. Ideally, calls to {@link View#setLayoutParams(ViewGroup.LayoutParams)} are
- * also proxied to {@link #setLayoutParams(ViewGroup.LayoutParams)}. Optionally, calls to {@link View#getPaddingLeft()}
- * (and others) are proxied to {@link #getUnshadowedPaddingLeft()}. Note that some of these methods are called by the
- * {@link View}'s super constructor, so its {@link ElevationDelegate} will be null at that stage, so check for it.
- * It does the necessary setup upon creation.
+ * The elevated {@link View} must proxy {@link View#onAttachedToWindow()} and {@link View#onDetachedFromWindow()} calls
+ * to {@link #onAttachedToWindow()} and {@link #onDetachedFromWindow()}, respectively, so that its background is wrapped
+ * and its padding / size / margin adjusted accordingly.
  *
- * Caveats:
- * - {@link View#getPaddingLeft()} and others include the shadow padding, so if it used for calculations and re-set
- * on the view via the proxied {@link #setPadding(int, int, int, int)} there will be double margin. To avoid this, add
- * methods in your View and proxy them to {@link #getUnshadowedPaddingLeft()} and others.
- * - Shadowed {@link ViewGroup.LayoutParams#MATCH_PARENT} views will be clipped by their parent. Use
- * {@link android.R.attr#clipChildren} explicitly or, if it won't be visible, hide the side.
+ * Note that after {@link #onAttachedToWindow()}, the {@link View} will have modified background, padding, size
+ * (if absolute dimensions are used) and margins. This is fine for most scenarios (most adjustments at runtime are
+ * relative, ie. {@code getPaddingLeft() + N}), but if the need arises to access the originals there are methods to do
+ * so. See:
+ * - {@link #getOriginalBackground()}
+ * - {@link #getOriginalPaddingLeft()} (plus all others variants)
+ * - {@link #getOriginalLayoutParams()}
+ * Worst case scenario, {@link #onDetachedFromWindow()} can be called to make modifications based on the original state,
+ * followed by {@link #onAttachedToWindow()}.
+ *
+ * Caveat:
+ * - Elevated {@link ViewGroup.LayoutParams#MATCH_PARENT} views will be clipped by their parent. Use
+ * {@link android.R.attr#clipChildren} explicitly or, if it won't be visible, hide the side (preferred).
  */
-public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
+public class ElevationDelegate {
     private static final int SHOW_SHADOW_LEFT = 0x01;
     private static final int SHOW_SHADOW_TOP = 0x02;
     private static final int SHOW_SHADOW_RIGHT = 0x04;
     private static final int SHOW_SHADOW_BOTTOM = 0x08;
     private static final int SHOW_ALL_SHADOWS = 0xff;
 
-    private T mView;
+    private View mView;
     private float mElevation = 0f;
     private float mCornerRadius = 0f;
     private boolean mShowShadowLeft = true;
@@ -47,7 +50,7 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
     private boolean mShowShadowRight = true;
     private boolean mShowShadowBottom = true;
 
-    public ElevationDelegate(T view) {
+    public ElevationDelegate(View view) {
         this(view, null, 0);
     }
 
@@ -55,7 +58,7 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
      * Creates and returns a configured {@link ElevationDelegate}. Initial setup of the {@link View}, such as wrapping
      * its background inside a {@link ElevationWrapperDrawable}, is done automatically.
      */
-    public ElevationDelegate(T view, AttributeSet attrs, int defStyleAttr) {
+    public ElevationDelegate(View view, AttributeSet attrs, int defStyleAttr) {
         mView = view;
 
         // Parse the attrs, if any.
@@ -71,13 +74,6 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
             mShowShadowBottom = (showShadows & SHOW_SHADOW_BOTTOM) == SHOW_SHADOW_BOTTOM;
             a.recycle();
         }
-
-        // Ensure the background set on the view is a ShadowDrawableWrapper.
-        Drawable background = mView.getBackground();
-        if (background != null && !(background instanceof ElevationWrapperDrawable)) {
-            mView.setBackground(null); // Removes the callback.
-            setBackground(background);
-        }
     }
 
     /**
@@ -91,18 +87,18 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
      * @see {@link View#setElevation(float)}.
      */
     public void setElevation(float elevation) {
+        boolean needsWrap = elevation > mElevation;
         mElevation = elevation;
 
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            int unshadowedPaddingLeft = getUnshadowedPaddingLeft();
-            int unshadowedPaddingTop = getUnshadowedPaddingTop();
-            int unshadowedPaddingRight = getUnshadowedPaddingRight();
-            int unshadowedPaddingBottom = getUnshadowedPaddingBottom();
-
-            elevationWrapperDrawable.setElevation(elevation);
-
-            setPadding(unshadowedPaddingLeft, unshadowedPaddingTop, unshadowedPaddingRight, unshadowedPaddingBottom);
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            if (needsWrap) {
+                unwrap();
+            }
+            elevationDrawable.setElevation(elevation);
+            if (needsWrap) {
+                wrap();
+            }
         }
     }
 
@@ -113,125 +109,68 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
     public void setCornerRadius(float cornerRadius) {
         mCornerRadius = cornerRadius;
 
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            elevationWrapperDrawable.setCornerRadius(cornerRadius);
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            elevationDrawable.setCornerRadius(cornerRadius);
         }
     }
 
     /**
-     * Sets the edges where the shadow will be drawn. The edges will be padded.
+     * Sets the edges where the shadow will be drawn.
      */
     public void setShownShadows(boolean left, boolean top, boolean right, boolean bottom) {
+        boolean needsWrap = left && !mShowShadowLeft || top && !mShowShadowTop
+                || right && !mShowShadowRight || bottom && !mShowShadowBottom;
         mShowShadowLeft = left;
         mShowShadowTop = top;
         mShowShadowRight = right;
         mShowShadowBottom = bottom;
 
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            int unshadowedPaddingLeft = getUnshadowedPaddingLeft();
-            int unshadowedPaddingTop = getUnshadowedPaddingTop();
-            int unshadowedPaddingRight = getUnshadowedPaddingRight();
-            int unshadowedPaddingBottom = getUnshadowedPaddingBottom();
-
-            elevationWrapperDrawable.setShownShadows(mShowShadowLeft, mShowShadowTop,
-                                                  mShowShadowRight, mShowShadowBottom);
-
-            setPadding(unshadowedPaddingLeft, unshadowedPaddingTop, unshadowedPaddingRight, unshadowedPaddingBottom);
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            if (needsWrap) {
+                unwrap();
+            }
+            elevationDrawable.setShownShadows(left, top, right, bottom);
+            if (needsWrap) {
+                wrap();
+            }
         }
     }
 
     /**
-     * Wraps {@code background} inside a {@link ElevationWrapperDrawable} so that a shadow is drawn around it.
-     * The3 needed padding is added automatically.
-     *
-     * Proxy {@link View#setBackground(Drawable)} calls here.
+     * Wraps {@link View}'s background in an {@link ElevationWrapperDrawable} and adjusts its padding, size and margins.
      */
-    public void setBackground(Drawable background) {
-        int unshadowedPaddingLeft = getUnshadowedPaddingLeft();
-        int unshadowedPaddingTop = getUnshadowedPaddingTop();
-        int unshadowedPaddingRight = getUnshadowedPaddingRight();
-        int unshadowedPaddingBottom = getUnshadowedPaddingBottom();
-
-        mView.superSetBackground(new ElevationWrapperDrawable(background, mView, mElevation, mCornerRadius,
-                                                              mShowShadowLeft, mShowShadowTop,
-                                                              mShowShadowRight, mShowShadowBottom));
-
-        setPadding(unshadowedPaddingLeft, unshadowedPaddingTop, unshadowedPaddingRight, unshadowedPaddingBottom);
+    public void onAttachedToWindow() {
+        wrap();
     }
 
     /**
-     * Adjusts the padding to account for the extra padding needed for the shadow and sets it in the {@link View}.
-     *
-     * Proxy {@link View#setPadding(int, int, int, int)} calls here.
-     *
-     * @see #getUnshadowedPaddingLeft()
-     * @see #getUnshadowedPaddingTop()
-     * @see #getUnshadowedPaddingRight()
-     * @see #getUnshadowedPaddingBottom()
+     * Unwraps the {@link View}'s background, resetting the original padding, size and margins.
      */
-    public void setPadding(int left, int top, int right, int bottom) {
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            left += elevationWrapperDrawable.getPaddingLeft();
-            top += elevationWrapperDrawable.getPaddingTop();
-            right += elevationWrapperDrawable.getPaddingRight();
-            bottom += elevationWrapperDrawable.getPaddingBottom();
-        }
-        mView.superSetPadding(left, top, right, bottom);
+    public void onDetachedFromWindow() {
+        unwrap();
     }
 
     /**
-     * Adjusts the padding to account for the extra padding needed for the shadow and sets it in the {@link View}.
-     *
-     * Proxy {@link View#setPaddingRelative(int, int, int, int)} calls here.
-     *
-     * @see #getUnshadowedPaddingStart()
-     * @see #getUnshadowedPaddingTop()
-     * @see #getUnshadowedPaddingEnd()
-     * @see #getUnshadowedPaddingBottom()
+     * Returns the {@link View}'s background excluding the wrapper elevation background.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void setPaddingRelative(int start, int top, int end, int bottom) {
-        boolean rtl = mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
-        setPadding(rtl ? end : start, top, rtl ? start : end, bottom);
-    }
-
-    public void setLayoutParams(ViewGroup.LayoutParams layoutParams) {
-        ElevationWrapperDrawable elevationWrapperDrawable;
-        if (layoutParams != null && (elevationWrapperDrawable = getShadowDrawableWrapper()) != null) {
-            int paddingLeft = elevationWrapperDrawable.getPaddingLeft();
-            int paddingTop = elevationWrapperDrawable.getPaddingTop();
-            int paddingRight = elevationWrapperDrawable.getPaddingRight();
-            int paddingBottom = elevationWrapperDrawable.getPaddingBottom();
-
-            if (layoutParams.width > 0) {
-                layoutParams.width += paddingLeft + paddingRight;
-            }
-            if (layoutParams.height > 0) {
-                layoutParams.height += paddingTop + paddingBottom;
-            }
-
-            if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
-                marginLayoutParams.leftMargin -= paddingLeft;
-                marginLayoutParams.topMargin -= paddingTop;
-                marginLayoutParams.rightMargin -= paddingRight;
-                marginLayoutParams.bottomMargin -= paddingBottom;
-            }
+    public Drawable getOriginalBackground() {
+        Drawable background = mView.getBackground();
+        if (background instanceof ElevationWrapperDrawable) {
+            background = ((ElevationWrapperDrawable) background).getWrappedDrawable();
         }
-        mView.superSetLayoutParams(layoutParams);
+        return background;
     }
 
     /**
      * Returns the {@link View}'s left padding excluding the extra added for the shadow.
      */
-    public int getUnshadowedPaddingLeft() {
+    public int getOriginalPaddingLeft() {
         int paddingLeft = mView.getPaddingLeft();
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            paddingLeft -= elevationWrapperDrawable.getPaddingLeft();
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            paddingLeft -= elevationDrawable.getPaddingLeft();
         }
         return paddingLeft;
     }
@@ -239,11 +178,11 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
     /**
      * Returns the {@link View}'s top padding excluding the extra added for the shadow.
      */
-    public int getUnshadowedPaddingTop() {
+    public int getOriginalPaddingTop() {
         int paddingTop = mView.getPaddingTop();
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            paddingTop -= elevationWrapperDrawable.getPaddingTop();
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            paddingTop -= elevationDrawable.getPaddingTop();
         }
         return paddingTop;
     }
@@ -251,11 +190,11 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
     /**
      * Returns the {@link View}'s right padding excluding the extra added for the shadow.
      */
-    public int getUnshadowedPaddingRight() {
+    public int getOriginalPaddingRight() {
         int paddingRight = mView.getPaddingRight();
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            paddingRight -= elevationWrapperDrawable.getPaddingRight();
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            paddingRight -= elevationDrawable.getPaddingRight();
         }
         return paddingRight;
     }
@@ -263,11 +202,11 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
     /**
      * Returns the {@link View}'s bottom padding excluding the extra added for the shadow.
      */
-    public int getUnshadowedPaddingBottom() {
+    public int getOriginalPaddingBottom() {
         int paddingBottom = mView.getPaddingBottom();
-        ElevationWrapperDrawable elevationWrapperDrawable = getShadowDrawableWrapper();
-        if (elevationWrapperDrawable != null) {
-            paddingBottom -= elevationWrapperDrawable.getPaddingBottom();
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            paddingBottom -= elevationDrawable.getPaddingBottom();
         }
         return paddingBottom;
     }
@@ -276,43 +215,146 @@ public class ElevationDelegate<T extends View & ElevationDelegate.Host> {
      * Returns the {@link View}'s start padding excluding the extra added for the shadow.
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public int getUnshadowedPaddingStart() {
-        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getUnshadowedPaddingRight()
-                                                                       : getUnshadowedPaddingLeft();
+    public int getOriginalPaddingStart() {
+        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getOriginalPaddingRight()
+                                                                       : getOriginalPaddingLeft();
     }
 
     /**
      * Returns the {@link View}'s end padding excluding the extra added for the shadow.
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public int getUnshadowedPaddingEnd() {
-        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getUnshadowedPaddingLeft()
-                                                                       : getUnshadowedPaddingRight();
+    public int getOriginalPaddingEnd() {
+        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getOriginalPaddingLeft()
+                                                                       : getOriginalPaddingRight();
     }
 
-    private ElevationWrapperDrawable getShadowDrawableWrapper() {
+    /**
+     * Returns a copy of the {@link View}'s {@link ViewGroup.LayoutParams} excluding the size / margin modifications.
+     */
+    public ViewGroup.LayoutParams getOriginalLayoutParams() {
+        ViewGroup.LayoutParams params = mView.getLayoutParams();
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (params != null && elevationDrawable != null) {
+            int paddingLeft = elevationDrawable.getPaddingLeft();
+            int paddingTop = elevationDrawable.getPaddingTop();
+            int paddingRight = elevationDrawable.getPaddingRight();
+            int paddingBottom = elevationDrawable.getPaddingBottom();
+
+            ViewGroup.LayoutParams originalParams;
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams originMarginParams =
+                        new ViewGroup.MarginLayoutParams((ViewGroup.MarginLayoutParams) params);
+
+                originMarginParams.leftMargin -= paddingLeft;
+                originMarginParams.topMargin -= paddingTop;
+                originMarginParams.rightMargin -= paddingRight;
+                originMarginParams.bottomMargin -= paddingBottom;
+
+                originalParams = originMarginParams;
+            } else {
+                originalParams = new ViewGroup.LayoutParams(params);
+            }
+
+            if (params.width > 0) {
+                originalParams.width -= paddingLeft + paddingRight;
+            }
+            if (params.height > 0) {
+                originalParams.height -= paddingTop + paddingBottom;
+            }
+
+            return originalParams;
+        } else {
+            return params;
+        }
+    }
+
+    private void wrap() {
+        Drawable background = mView.getBackground();
+        ViewGroup.LayoutParams params = mView.getLayoutParams();
+        if (background != null && !(background instanceof ElevationWrapperDrawable) && params != null) {
+            ElevationWrapperDrawable elevationDrawable =
+                    new ElevationWrapperDrawable(background, mView, mElevation, mCornerRadius,
+                                                 mShowShadowLeft, mShowShadowTop,
+                                                 mShowShadowRight, mShowShadowBottom);
+            // Set elevation wrapper drawable around the background.
+            mView.setBackground(null); // Removes the callback.
+            mView.setBackground(elevationDrawable);
+
+            int paddingLeft = elevationDrawable.getPaddingLeft();
+            int paddingTop = elevationDrawable.getPaddingTop();
+            int paddingRight = elevationDrawable.getPaddingRight();
+            int paddingBottom = elevationDrawable.getPaddingBottom();
+
+            // Increment the padding to accommodate the elevation.
+            mView.setPadding(mView.getPaddingLeft() + paddingLeft,
+                             mView.getPaddingTop() + paddingTop,
+                             mView.getPaddingRight() + paddingRight,
+                             mView.getPaddingBottom() + paddingBottom);
+
+            // Increase layout size (if using explicit dimensions) and decrease the margins proportionally to padding.
+            if (params.width > 0) {
+                params.width += paddingLeft + paddingRight;
+            }
+            if (params.height > 0) {
+                params.height += paddingTop + paddingBottom;
+            }
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) params;
+                marginLayoutParams.leftMargin -= paddingLeft;
+                marginLayoutParams.topMargin -= paddingTop;
+                marginLayoutParams.rightMargin -= paddingRight;
+                marginLayoutParams.bottomMargin -= paddingBottom;
+            }
+            mView.setLayoutParams(params);
+        }
+    }
+
+    private void unwrap() {
+        Drawable background = mView.getBackground();
+        ViewGroup.LayoutParams params = mView.getLayoutParams();
+        if (background != null && background instanceof ElevationWrapperDrawable && params != null) {
+            ElevationWrapperDrawable elevationDrawable = (ElevationWrapperDrawable) background;
+
+            // Background.
+            mView.setBackground(null); // Removes the callback.
+            mView.setBackground(elevationDrawable.getWrappedDrawable());
+
+            int paddingLeft = elevationDrawable.getPaddingLeft();
+            int paddingTop = elevationDrawable.getPaddingTop();
+            int paddingRight = elevationDrawable.getPaddingRight();
+            int paddingBottom = elevationDrawable.getPaddingBottom();
+
+            // Padding.
+            mView.setPadding(mView.getPaddingLeft() - paddingLeft,
+                             mView.getPaddingTop() - paddingTop,
+                             mView.getPaddingRight() - paddingRight,
+                             mView.getPaddingBottom() - paddingBottom);
+
+            // Layout size and margins.
+            if (params.width > 0) {
+                params.width -= paddingLeft + paddingRight;
+            }
+            if (params.height > 0) {
+                params.height -= paddingTop + paddingBottom;
+            }
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) params;
+                marginLayoutParams.leftMargin += paddingLeft;
+                marginLayoutParams.topMargin += paddingTop;
+                marginLayoutParams.rightMargin += paddingRight;
+                marginLayoutParams.bottomMargin += paddingBottom;
+            }
+            mView.setLayoutParams(params);
+        }
+    }
+
+    private ElevationWrapperDrawable getElevationDrawableWrapper() {
         Drawable background = mView.getBackground();
         if (background instanceof ElevationWrapperDrawable) {
             return (ElevationWrapperDrawable) background;
         } else {
             return null;
         }
-    }
-
-    public interface Host {
-        /**
-         * Set the background using the {@link View}'s superclass. Used to avoid invocation loops.
-         */
-        void superSetBackground(Drawable background);
-
-        /**
-         * Set the padding using the {@link View}'s superclass. Used to avoid invocation loops.
-         */
-        void superSetPadding(int left, int top, int right, int bottom);
-
-        /**
-         * Set the layout params using the {@link View}'s superclass. Used to avoid invocation loops.
-         */
-        void superSetLayoutParams(ViewGroup.LayoutParams params);
     }
 }
