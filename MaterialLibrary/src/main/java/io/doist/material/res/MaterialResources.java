@@ -63,7 +63,7 @@ public class MaterialResources {
         return instance;
     }
 
-    private static int getThemeResId(Context context) {
+    public static int getThemeResId(Context context) {
         if (context instanceof ContextThemeWrapper) {
             try {
                 return (int) ReflectionUtils.invokeDeclaredMethod(

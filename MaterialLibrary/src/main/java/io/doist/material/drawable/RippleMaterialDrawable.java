@@ -1,5 +1,8 @@
 package io.doist.material.drawable;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -8,8 +11,11 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
+
+import java.io.IOException;
 
 import io.doist.material.R;
 
@@ -104,6 +110,31 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
     @Override
     public boolean isStateful() {
         return true;
+    }
+
+    public void setColor(ColorStateList color) {
+        mColor = color;
+        invalidateSelf();
+    }
+
+    @Override
+    public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs)
+            throws XmlPullParserException, IOException {
+        // Get attribute values from context instead of resources, so that we can use theme attributes.
+        TypedArray a = mContext.get().obtainStyledAttributes(attrs, R.styleable.RippleDrawable);
+
+        // Initialize color.
+        final ColorStateList color = a.getColorStateList(R.styleable.RippleDrawable_android_color);
+        if (color != null) {
+            mColor = color;
+        }
+
+        a.recycle();
+
+        // Force padding default to STACK before inflating.
+        setPaddingMode(PADDING_MODE_STACK);
+
+        super.inflate(r, parser, attrs);
     }
 
     @Override

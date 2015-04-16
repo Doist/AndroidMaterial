@@ -5,4 +5,10 @@
         <item name="colorButtonNormal">@color/btn_sample</item>
     </style>
 
+    <!-- Sample overlay theme. -->
+    <style name="OverlayTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@android:color/holo_blue_light</item>
+        <item name="editTextColor">?attr/colorAccent</item>
+    </style>
+
 </resources>

@@ -11,13 +11,11 @@ public class RobotoEditText extends EditText {
     private boolean mAllowSetTypeface;
 
     public RobotoEditText(Context context) {
-        super(context);
-        applyRoboto(context, null, 0);
+        this(context, null);
     }
 
     public RobotoEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        applyRoboto(context, attrs, 0);
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
     public RobotoEditText(Context context, AttributeSet attrs, int defStyle) {

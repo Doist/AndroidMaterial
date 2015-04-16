@@ -11,13 +11,11 @@ public class RobotoButton extends Button {
     private boolean mAllowSetTypeface;
 
     public RobotoButton(Context context) {
-        super(context);
-        applyRoboto(context, null, 0);
+        this(context, null);
     }
 
     public RobotoButton(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        applyRoboto(context, attrs, 0);
+        this(context, attrs, android.R.attr.buttonStyle);
     }
 
     public RobotoButton(Context context, AttributeSet attrs, int defStyle) {

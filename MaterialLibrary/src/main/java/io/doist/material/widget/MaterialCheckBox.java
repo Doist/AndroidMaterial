@@ -2,22 +2,24 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialTextView extends RobotoTextView {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
+public class MaterialCheckBox extends CheckBox {
+    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_COMPOUND_BUTTON,
+                                                       MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
                                                        MaterialWidgetHandler.STYLEABLE_VIEW};
 
-    public MaterialTextView(Context context) {
+    public MaterialCheckBox(Context context) {
         this(context, null);
     }
 
-    public MaterialTextView(Context context, AttributeSet attrs) {
-        this(MaterialWidgetHandler.themifyContext(context, attrs), attrs, android.R.attr.textViewStyle);
+    public MaterialCheckBox(Context context, AttributeSet attrs) {
+        this(context, attrs, android.R.attr.checkboxStyle);
     }
 
-    public MaterialTextView(Context context, AttributeSet attrs, int defStyle) {
+    public MaterialCheckBox(Context context, AttributeSet attrs, int defStyle) {
         super(MaterialWidgetHandler.themifyContext(context, attrs),
               MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);

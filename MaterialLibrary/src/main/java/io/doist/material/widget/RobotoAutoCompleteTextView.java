@@ -11,13 +11,11 @@ public class RobotoAutoCompleteTextView extends AutoCompleteTextView {
     private boolean mAllowSetTypeface;
 
     public RobotoAutoCompleteTextView(Context context) {
-        super(context);
-        applyRoboto(context, null, 0);
+        this(context, null);
     }
 
     public RobotoAutoCompleteTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        applyRoboto(context, attrs, 0);
+        this(context, attrs, android.R.attr.autoCompleteTextViewStyle);
     }
 
     public RobotoAutoCompleteTextView(Context context, AttributeSet attrs, int defStyle) {

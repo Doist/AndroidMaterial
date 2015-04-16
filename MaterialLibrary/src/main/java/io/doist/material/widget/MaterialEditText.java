@@ -2,23 +2,22 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialImageView extends ImageView {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_IMAGE_VIEW};
+public class MaterialEditText extends RobotoEditText {
+    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
+                                                       MaterialWidgetHandler.STYLEABLE_VIEW};
 
-    public MaterialImageView(Context context) {
+    public MaterialEditText(Context context) {
         this(context, null);
     }
 
-    public MaterialImageView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public MaterialEditText(Context context, AttributeSet attrs) {
+        this(context, attrs, android.R.attr.editTextStyle);
     }
 
-    public MaterialImageView(Context context, AttributeSet attrs, int defStyle) {
+    public MaterialEditText(Context context, AttributeSet attrs, int defStyle) {
         super(MaterialWidgetHandler.themifyContext(context, attrs),
               MaterialWidgetHandler.hideStyleableAttributes(attrs, sHiddenStyleables), defStyle);
         MaterialWidgetHandler.restoreStyleableAttributes(sHiddenStyleables);

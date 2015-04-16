@@ -11,4 +11,25 @@
         android:layout_height="100dip"
         android:src="@drawable/btn_default_material" />
 
+    <io.doist.material.widget.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/material_edit_text_1" />
+
+    <io.doist.material.widget.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/material_edit_text_2"
+        android:theme="@style/OverlayTheme" />
+
+    <io.doist.material.widget.MaterialCheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/material_check_box" />
+
+    <io.doist.material.widget.MaterialRadioButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/material_radio_button" />
+
 </merge>
