@@ -9,7 +9,6 @@ import android.graphics.Path;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.os.Build;
 
 import java.lang.ref.WeakReference;
 
@@ -17,7 +16,6 @@ import java.lang.ref.WeakReference;
  * Creates {@link Shader} for drawing the edges of the shadow and {@link Bitmap} for drawing the corners.
  *
  * A {@link ShadowUpdateListener} is needed to obtain the result data.
- *
  */
 class ElevationUpdateRunnable implements Runnable {
     private int mLeft;
@@ -79,8 +77,9 @@ class ElevationUpdateRunnable implements Runnable {
 
         mTmpCornerSlicePath = new Path();
         mTmpCornerSlicePath.setFillType(Path.FillType.EVEN_ODD);
-        mTmpCornerSlicePaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
+        mTmpCornerSlicePaint = new Paint();
         mTmpCornerSlicePaint.setStyle(Paint.Style.FILL);
+        mTmpCornerSlicePaint.setColor(Color.BLACK);
         mTmpCornerSliceRectF = new RectF();
     }
 
@@ -186,13 +185,15 @@ class ElevationUpdateRunnable implements Runnable {
                             float startAngle) {
         int shadowDiff = (int) (endShadowLength - startShadowLength);
         int steps = Math.abs(shadowDiff) + 1;
+
         float sweepAngle = 90f / steps;
+        float sweepShadowAlpha = (endShadowAlpha - startShadowAlpha) / (steps + 1);
         for (int i = 0; i < steps; i++) {
             buildCornerSlicePathPaint(
                     centerX, centerY,
                     startShadowLength + (shadowDiff > 0 ? i : -i), mCornerRadius,
                     startAngle + sweepAngle * i, sweepAngle,
-                    startShadowAlpha + ((i + 1) * (endShadowAlpha - startShadowAlpha) / (steps + 1)));
+                    startShadowAlpha + (i + 1) * sweepShadowAlpha);
 
             canvas.drawPath(mTmpCornerSlicePath, mTmpCornerSlicePaint);
         }

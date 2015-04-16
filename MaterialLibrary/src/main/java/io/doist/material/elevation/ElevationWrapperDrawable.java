@@ -2,7 +2,6 @@ package io.doist.material.elevation;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -22,6 +21,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.doist.material.drawable.WrapperDrawable;
 
+/**
+ * Wraps a {@link Drawable} and draws an elevation drop shadow around it.
+ */
 class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdateRunnable.ShadowUpdateListener {
     // For calculating each shadow length.
     private static final int LIGHT_HEIGHT_DIP = 800;
@@ -129,8 +131,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         mShadowPaintTop = new Paint(mShadowPaintLeft);
         mShadowPaintRight = new Paint(mShadowPaintLeft);
         mShadowPaintBottom = new Paint(mShadowPaintLeft);
-        mCornerPaint = new Paint(mShadowPaintLeft);
-        mCornerPaint.setColor(Color.BLACK);
+        mCornerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
         calculatePadding();
     }
@@ -280,11 +281,9 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
                             mShadowPaintTop);
         }
         if (mShowShadowRight) {
-            int left = mShadowLengthLeft + width;
-            int right = mShadowLengthLeft + width + mShadowLengthRight;
-            canvas.drawRect(left,
+            canvas.drawRect(mShadowLengthLeft + width,
                             mShadowLengthTop + mCornerRadius,
-                            right,
+                            mShadowLengthLeft + width + mShadowLengthRight,
                             mShadowLengthTop + height - mCornerRadius,
                             mShadowPaintRight);
         }
