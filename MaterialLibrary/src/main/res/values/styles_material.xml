@@ -77,6 +77,8 @@
         <item name="android:layout">@layout/preference_material</item>
     </style>
 
+    <style name="Preference.Material.PreferenceScreen" />
+
     <style name="Preference.Material.Category">
         <item name="android:layout">@layout/preference_category_material</item>
         <!-- The title should not dim if the category is disabled, instead only the preference children should dim. -->
