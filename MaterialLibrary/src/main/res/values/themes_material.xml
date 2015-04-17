@@ -23,6 +23,7 @@
         <item name="android:preferenceScreenStyle">@style/Preference.Material.PreferenceScreen</item>
         <item name="android:preferenceCategoryStyle">@style/Preference.Material.Category</item>
         <item name="android:checkBoxPreferenceStyle">@style/Preference.Material.CheckBoxPreference</item>
+        <item name="android:ringtonePreferenceStyle">@style/Preference.Material.RingtonePreference</item>
         <item name="android:preferenceLayoutChild">@layout/preference_child_material</item>
     </style>
 

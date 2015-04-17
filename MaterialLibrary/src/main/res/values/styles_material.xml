@@ -90,4 +90,10 @@
         <item name="android:widgetLayout">@layout/preference_widget_checkbox</item>
     </style>
 
+    <style name="Preference.Material.RingtonePreference">
+        <item name="android:ringtoneType">ringtone</item>
+        <item name="android:showSilent">true</item>
+        <item name="android:showDefault">true</item>
+    </style>
+
 </resources>
