@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
+    <io.doist.material.widget.RobotoTextView
         android:id="@+id/switch_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
