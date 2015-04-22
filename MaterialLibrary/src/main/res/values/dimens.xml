@@ -2,7 +2,7 @@
 <resources>
 
     <!-- SwitchBar margin start / end -->
-    <dimen name="switchbar_margin_start">32dp</dimen>
+    <dimen name="switchbar_margin_start">60dp</dimen>
     <dimen name="switchbar_margin_end">16dp</dimen>
 
 </resources>
