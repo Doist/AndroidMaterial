@@ -20,11 +20,11 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp">
+    android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+    android:paddingRight="?attr/listPreferredItemPaddingRight">
 
     <Space
-        android:layout_width="8dp"
+        android:layout_width="?attr/listPreferredItemPaddingLeft"
         android:layout_height="match_parent" />
 
     <ImageView
