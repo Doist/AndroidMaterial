@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Theme">
-        <attr name="switchBarStyle" format="reference" />
-    </declare-styleable>
 
     <declare-styleable name="MaterialView">
         <attr name="android:background" />
@@ -30,8 +27,4 @@
         <attr name="android:checkMark" />
     </declare-styleable>
 
-    <declare-styleable name="SwitchBar">
-        <attr name="switchBarMarginStart" format="dimension" />
-        <attr name="switchBarMarginEnd" format="dimension" />
-    </declare-styleable>
 </resources>
