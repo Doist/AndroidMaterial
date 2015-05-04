@@ -3,12 +3,4 @@
     <style name="Theme.Material.Light" parent="Theme.AppCompat.Light" />
 
     <style name="Theme.Material.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
-
-    <style name="Theme.Material.Light.BaseDialog" parent="android:Theme.Material.Light.Dialog" />
-
-    <style name="Theme.Material.Light.Dialog" parent="android:Theme.Material.Light.Dialog" />
-
-    <style name="Theme.Material.Light.Dialog.BaseAlert" parent="android:Theme.Material.Light.Dialog.Alert" />
-
-    <style name="Theme.Material.Light.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert" />
 </resources>

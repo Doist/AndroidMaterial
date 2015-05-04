@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-
-import io.doist.material.dialog.MaterialAlertDialog;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
@@ -46,14 +43,6 @@ public class MainActivity extends Activity {
     }
 
     public void onFabClick(View view) {
-        FrameLayout layout = new FrameLayout(this);
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
-
-        new MaterialAlertDialog.Builder(this/*, R.style.Theme_Material_Light_Dialog_Alert*/)
-                .setTitle("Custom title")
-                .setView(layout)
-                .setPositiveButton("OK", null)
-                .setNegativeButton("Cancel", null)
-                .show();
+        Toast.makeText(this, "Click!", Toast.LENGTH_SHORT).show();
     }
 }
