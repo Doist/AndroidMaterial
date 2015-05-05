@@ -35,6 +35,13 @@
         <attr name="android:autoMirrored" />
     </declare-styleable>
 
+    <!-- Represents a single state inside a StateListDrawable. -->
+    <declare-styleable name="StateListDrawableItem">
+        <!-- Reference to a drawable resource to use for the state. If not
+             given, the drawable must be defined by the first child tag. -->
+        <attr name="android:drawable" />
+    </declare-styleable>
+
     <!-- Drawable used to render several animated frames. -->
     <declare-styleable name="AnimationDrawable">
         <attr name="android:visible" />

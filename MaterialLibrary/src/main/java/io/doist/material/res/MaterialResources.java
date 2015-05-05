@@ -83,12 +83,6 @@ public class MaterialResources {
     public Drawable getDrawable(int id) throws Resources.NotFoundException {
         final Context context = mContext.get() != null ? mContext.get() : sApplicationContext.get();
         final Resources resources = mResources.get();
-        final MaterialConfiguration configuration = mConfiguration.get(resources);
-        final int configChanges = configuration.updateConfiguration(resources);
-        if (configChanges != 0) {
-            clearDrawableCacheLocked(mDrawableCache, configChanges);
-            clearDrawableCacheLocked(mColorDrawableCache, configChanges);
-        }
 
         TypedValue value;
         synchronized (mAccessLock) {
@@ -100,7 +94,7 @@ public class MaterialResources {
             }
             resources.getValue(id, value, true);
         }
-        Drawable res = loadDrawable(context, resources, configuration, value, id);
+        Drawable res = loadDrawable(context, resources, value, id);
         synchronized (mAccessLock) {
             if (mTmpValue == null) {
                 mTmpValue = value;
@@ -109,9 +103,15 @@ public class MaterialResources {
         return res;
     }
 
-    Drawable loadDrawable(Context context, Resources resources, MaterialConfiguration configuration, TypedValue value,
-                          int id)
+    Drawable loadDrawable(Context context, Resources resources, TypedValue value, int id)
             throws Resources.NotFoundException {
+        final MaterialConfiguration configuration = mConfiguration.get(resources);
+        final int configChanges = configuration.updateConfiguration(resources);
+        if (configChanges != 0) {
+            clearDrawableCacheLocked(mDrawableCache, configChanges);
+            clearDrawableCacheLocked(mColorDrawableCache, configChanges);
+        }
+
         final boolean isColorDrawable;
         final LongSparseArray<WeakReference<Drawable.ConstantState>> cache;
         final long key;

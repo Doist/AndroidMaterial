@@ -18,7 +18,7 @@ import java.lang.ref.WeakReference;
 
 import io.doist.material.R;
 import io.doist.material.reflection.ReflectionUtils;
-import io.doist.material.res.MaterialResources;
+import io.doist.material.res.MaterialTypedArray;
 
 public class StateListMaterialDrawable extends StateListDrawable {
     private static final boolean DEFAULT_DITHER = true;
@@ -70,32 +70,22 @@ public class StateListMaterialDrawable extends StateListDrawable {
                 continue;
             }
 
-            int drawableRes = 0;
-
-            int i;
-            int j = 0;
-            final int numAttrs = attrs.getAttributeCount();
-            int[] states = new int[numAttrs];
-            for (i = 0; i < numAttrs; i++) {
-                final int stateResId = attrs.getAttributeNameResource(i);
-                if (stateResId == 0) {
-                    break;
-                }
-                if (stateResId == android.R.attr.drawable) {
-                    drawableRes = attrs.getAttributeResourceValue(i, 0);
-                } else {
-                    states[j++] = attrs.getAttributeBooleanValue(i, false)
-                                  ? stateResId
-                                  : -stateResId;
-                }
-            }
-            states = StateSet.trimStateSet(states, j);
-
+            // This allows state list drawable item elements to be themed at
+            // inflation time but does NOT make them work for Zygote preload.
             Context c = mContext.get();
-            Drawable dr;
-            if (drawableRes != 0) {
-                dr = MaterialResources.getInstance(c, r).getDrawable(drawableRes);
-            } else {
+            if (c == null) {
+                break;
+            }
+            a = obtainAttributes(c, r, attrs, R.styleable.StateListDrawableItem);
+            Drawable dr = MaterialTypedArray.getDrawable(c, r, a, R.styleable.StateListDrawableItem_android_drawable);
+            a.recycle();
+
+            final int[] states = extractStateSet(attrs);
+
+            // Loading child elements modifies the state of the AttributeSet's
+            // underlying parser, so it needs to happen after obtaining
+            // attributes and extracting states.
+            if (dr == null) {
                 while ((type = parser.next()) == XmlPullParser.TEXT) {
                 }
                 if (type != XmlPullParser.START_TAG) {
@@ -113,6 +103,12 @@ public class StateListMaterialDrawable extends StateListDrawable {
         onStateChange(getState());
     }
 
+    private TypedArray obtainAttributes(Context context, Resources r, AttributeSet set, int[] attrs) {
+        return context != null ?
+               context.obtainStyledAttributes(set, attrs) :
+               r.obtainAttributes(set, attrs);
+    }
+
     private void inflateWithAttributes(Resources r, XmlPullParser parser, TypedArray attrs, int visibleAttr) {
         ReflectionUtils.invokeDeclaredMethod(
                 Drawable.class,
@@ -120,6 +116,34 @@ public class StateListMaterialDrawable extends StateListDrawable {
                 new Class<?>[]{Resources.class, XmlPullParser.class, TypedArray.class, int.class},
                 this,
                 new Object[]{r, parser, attrs, visibleAttr});
+    }
+
+    /**
+     * Extracts state_ attributes from an attribute set.
+     *
+     * @param attrs The attribute set.
+     * @return An array of state_ attributes.
+     */
+    int[] extractStateSet(AttributeSet attrs) {
+        int j = 0;
+        final int numAttrs = attrs.getAttributeCount();
+        int[] states = new int[numAttrs];
+        for (int i = 0; i < numAttrs; i++) {
+            final int stateResId = attrs.getAttributeNameResource(i);
+            switch (stateResId) {
+                case 0:
+                    break;
+                case android.R.attr.drawable:
+                case android.R.attr.id:
+                    // Ignore attributes from StateListDrawableItem.
+                    continue;
+                default:
+                    states[j++] = attrs.getAttributeBooleanValue(i, false)
+                                  ? stateResId : -stateResId;
+            }
+        }
+        states = StateSet.trimStateSet(states, j);
+        return states;
     }
 
     /**
