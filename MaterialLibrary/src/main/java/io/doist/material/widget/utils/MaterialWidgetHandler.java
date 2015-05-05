@@ -235,9 +235,9 @@ public class MaterialWidgetHandler {
                                            AttributeSet set, int defStyle) {
         TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialView, defStyle, 0);
         try {
-            if (ta.hasValue(R.styleable.MaterialImageView_android_src)) {
+            if (ta.hasValue(R.styleable.MaterialView_android_background)) {
                 Drawable drawable =
-                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialImageView_android_src, 0));
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialView_android_background, 0));
 
                 final int paddingLeft = view.getPaddingLeft();
                 final int paddingTop = view.getPaddingTop();
