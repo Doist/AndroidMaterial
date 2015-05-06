@@ -21,9 +21,7 @@ import io.doist.material.elevation.ElevationDelegate;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class FloatingActionButton extends ImageButton {
-    public static final String LOG_TAG = FloatingActionButton.class.getSimpleName();
-
-    private static final int DEFAULT_ELEVATION_DP = 8;
+    private static final int DEFAULT_ELEVATION_DP = 6;
 
     private ColorStateList mColor;
 
