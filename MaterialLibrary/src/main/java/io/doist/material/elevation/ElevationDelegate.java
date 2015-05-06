@@ -234,38 +234,46 @@ public class ElevationDelegate {
      */
     public ViewGroup.LayoutParams getOriginalLayoutParams() {
         ViewGroup.LayoutParams params = mView.getLayoutParams();
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
-        if (params != null && elevationDrawable != null) {
-            int paddingLeft = elevationDrawable.getPaddingLeft();
-            int paddingTop = elevationDrawable.getPaddingTop();
-            int paddingRight = elevationDrawable.getPaddingRight();
-            int paddingBottom = elevationDrawable.getPaddingBottom();
+        if (params != null) {
+            ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+            if (elevationDrawable != null) {
+                int paddingLeft = elevationDrawable.getPaddingLeft();
+                int paddingTop = elevationDrawable.getPaddingTop();
+                int paddingRight = elevationDrawable.getPaddingRight();
+                int paddingBottom = elevationDrawable.getPaddingBottom();
 
-            ViewGroup.LayoutParams originalParams;
-            if (params instanceof ViewGroup.MarginLayoutParams) {
-                ViewGroup.MarginLayoutParams originMarginParams =
-                        new ViewGroup.MarginLayoutParams((ViewGroup.MarginLayoutParams) params);
+                ViewGroup.LayoutParams originalParams;
+                if (params instanceof ViewGroup.MarginLayoutParams) {
+                    ViewGroup.MarginLayoutParams originMarginParams =
+                            new ViewGroup.MarginLayoutParams((ViewGroup.MarginLayoutParams) params);
 
-                originMarginParams.leftMargin -= paddingLeft;
-                originMarginParams.topMargin -= paddingTop;
-                originMarginParams.rightMargin -= paddingRight;
-                originMarginParams.bottomMargin -= paddingBottom;
+                    originMarginParams.leftMargin -= paddingLeft;
+                    originMarginParams.topMargin -= paddingTop;
+                    originMarginParams.rightMargin -= paddingRight;
+                    originMarginParams.bottomMargin -= paddingBottom;
 
-                originalParams = originMarginParams;
+                    originalParams = originMarginParams;
+                } else {
+                    originalParams = new ViewGroup.LayoutParams(params);
+                }
+
+                if (params.width > 0) {
+                    originalParams.width -= paddingLeft + paddingRight;
+                }
+                if (params.height > 0) {
+                    originalParams.height -= paddingTop + paddingBottom;
+                }
+
+                return originalParams;
             } else {
-                originalParams = new ViewGroup.LayoutParams(params);
+                if (params instanceof ViewGroup.MarginLayoutParams) {
+                    return new ViewGroup.MarginLayoutParams(params);
+                } else {
+                    return new ViewGroup.LayoutParams(params);
+                }
             }
-
-            if (params.width > 0) {
-                originalParams.width -= paddingLeft + paddingRight;
-            }
-            if (params.height > 0) {
-                originalParams.height -= paddingTop + paddingBottom;
-            }
-
-            return originalParams;
         } else {
-            return params;
+            return null;
         }
     }
 
