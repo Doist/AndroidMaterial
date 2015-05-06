@@ -38,7 +38,7 @@ public class FloatingActionButton extends ImageButton {
     }
 
     public FloatingActionButton(Context context, AttributeSet attrs) {
-        this(context, attrs, android.R.attr.imageButtonStyle);
+        this(context, attrs, 0);
     }
 
     public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
