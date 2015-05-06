@@ -383,7 +383,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
      * Returns the ambient shadow for the current elevation.
      */
     private int getShadowLengthAmbient() {
-        return (int) Math.max(1, mElevation * 3 / 8);
+        return (int) Math.ceil(mElevation * 3 / 8);
     }
 
     /**
