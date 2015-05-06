@@ -67,11 +67,11 @@ public class ElevationDelegate {
                     view.getContext().obtainStyledAttributes(attrs, R.styleable.ElevationDelegate, defStyleAttr, 0);
             mElevation = a.getDimensionPixelOffset(R.styleable.ElevationDelegate_elevation, 0);
             mCornerRadius = a.getDimensionPixelOffset(R.styleable.ElevationDelegate_cornerRadius, 0);
-            int showShadows = a.getInt(R.styleable.ElevationDelegate_showShadows, SHOW_ALL_SHADOWS);
-            mShowShadowLeft = (showShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT;
-            mShowShadowTop = (showShadows & SHOW_SHADOW_TOP) == SHOW_SHADOW_TOP;
-            mShowShadowRight = (showShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT;
-            mShowShadowBottom = (showShadows & SHOW_SHADOW_BOTTOM) == SHOW_SHADOW_BOTTOM;
+            int shownShadows = a.getInt(R.styleable.ElevationDelegate_shownShadows, SHOW_ALL_SHADOWS);
+            mShowShadowLeft = (shownShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT;
+            mShowShadowTop = (shownShadows & SHOW_SHADOW_TOP) == SHOW_SHADOW_TOP;
+            mShowShadowRight = (shownShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT;
+            mShowShadowBottom = (shownShadows & SHOW_SHADOW_BOTTOM) == SHOW_SHADOW_BOTTOM;
             a.recycle();
         }
     }

@@ -3,7 +3,7 @@
     <declare-styleable name="ElevationDelegate">
         <attr name="elevation" />
         <attr name="cornerRadius" format="dimension" />
-        <attr name="showShadows">
+        <attr name="shownShadows">
             <flag name="none" value="0x00" />
             <flag name="left" value="0x01" />
             <flag name="top" value="0x02" />
