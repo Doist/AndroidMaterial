@@ -229,7 +229,7 @@ class ElevationUpdateRunnable implements Runnable {
      * Listen for shadow updates following {@link ElevationUpdateRunnable} runs.
      */
     public interface ShadowUpdateListener {
-        void onShadowUpdate(int shadowLeftLength, int shadowTopLength, int shadowRightLenght, int shadowBottomLength,
+        void onShadowUpdate(int shadowLeftLength, int shadowTopLength, int shadowRightLength, int shadowBottomLength,
                             boolean leftDirty, boolean topDirty, boolean rightDirty, boolean bottomDirty,
                             Shader leftEdgeShader, Shader topEdgeShader,
                             Shader rightEdgeShader, Shader bottomEdgeShader,

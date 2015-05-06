@@ -430,7 +430,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
      * invalidate so that they are drawn on the next cycle.
      */
     @Override
-    public void onShadowUpdate(int shadowLeftLength, int shadowTopLength, int shadowRightLenght, int shadowBottomLength,
+    public void onShadowUpdate(int shadowLeftLength, int shadowTopLength, int shadowRightLength, int shadowBottomLength,
                                boolean leftDirty, boolean topDirty, boolean rightDirty, boolean bottomDirty,
                                Shader leftEdgeShader, Shader topEdgeShader,
                                Shader rightEdgeShader, Shader bottomEdgeShader,
@@ -438,7 +438,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
                                Bitmap bottomRightCornerBitmap, Bitmap bottomLeftCornerBitmap) {
         mShadowLengthLeft = shadowLeftLength;
         mShadowLengthTop = shadowTopLength;
-        mShadowLengthRight = shadowRightLenght;
+        mShadowLengthRight = shadowRightLength;
         mShadowLengthBottom = shadowBottomLength;
 
         if (leftDirty) {
