@@ -257,7 +257,7 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
             if (state != null) {
                 mDrawable = state.mDrawable;
                 mChangingConfigurations = state.mChangingConfigurations;
-                mChildChangingConfigurations = state.mChildChangingConfigurations;;
+                mChildChangingConfigurations = state.mChildChangingConfigurations;
             }
         }
 
