@@ -100,6 +100,7 @@ public class FloatingActionButton extends ImageButton {
 
         internalSetIsMini(isMini);
 
+        setScaleType(ScaleType.CENTER);
         setFocusable(true);
         setClickable(true);
     }
