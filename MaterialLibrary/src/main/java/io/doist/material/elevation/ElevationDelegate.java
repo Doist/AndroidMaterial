@@ -281,12 +281,14 @@ public class ElevationDelegate {
         Drawable background = mView.getBackground();
         ViewGroup.LayoutParams params = mView.getLayoutParams();
         if (background != null && !(background instanceof ElevationWrapperDrawable) && params != null) {
+            // Remove the drawable to avoid the wrapper drawable callback being removed when it's set on the view below.
+            mView.setBackground(null);
+
             ElevationWrapperDrawable elevationDrawable =
                     new ElevationWrapperDrawable(background, mView, mElevation, mCornerRadius,
                                                  mShowShadowLeft, mShowShadowTop,
                                                  mShowShadowRight, mShowShadowBottom);
             // Set elevation wrapper drawable around the background.
-            mView.setBackground(null); // Removes the callback.
             mView.setBackground(elevationDrawable);
 
             int paddingLeft = elevationDrawable.getPaddingLeft();
