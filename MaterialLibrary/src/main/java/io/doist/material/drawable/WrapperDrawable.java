@@ -16,6 +16,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class WrapperDrawable extends Drawable implements Drawable.Callback {
     private WrapperState mWrapperState;
@@ -101,11 +102,11 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
 
     @Override
     public boolean setState(int[] stateSet) {
-        return mWrapperState.mDrawable.setState(stateSet);
-    }
-
-    public boolean superSetState(int[] stateSet) {
-        return super.setState(stateSet);
+        if (!Arrays.equals(getState(), stateSet)) {
+            boolean stateChanged = mWrapperState.mDrawable.setState(stateSet);
+            return onStateChange(stateSet) | stateChanged;
+        }
+        return false;
     }
 
     @Override
