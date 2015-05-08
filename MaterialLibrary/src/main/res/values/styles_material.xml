@@ -42,4 +42,14 @@
     </style>
 
     <style name="Widget.Material.Light.Button.Borderless" parent="Widget.Material.Button.Borderless" />
+
+    <!-- Spinner -->
+    <style name="Widget.Material.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/spinner_background_material</item>
+        <item name="android:popupBackground">@drawable/popup_background_material</item>
+    </style>
+
+    <style name="Widget.Material.Spinner.Underlined">
+        <item name="android:background">@drawable/spinner_textfield_background_material</item>
+    </style>
 </resources>
