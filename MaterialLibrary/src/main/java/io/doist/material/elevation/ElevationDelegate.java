@@ -230,6 +230,72 @@ public class ElevationDelegate {
     }
 
     /**
+     * Returns the left padding added by {@link ElevationDelegate} to display the shadow.
+     */
+    public int getElevationPaddingLeft() {
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            return elevationDrawable.getPaddingLeft();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the top padding added by {@link ElevationDelegate} to display the shadow.
+     */
+    public int getElevationPaddingTop() {
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            return elevationDrawable.getPaddingTop();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the right padding added by {@link ElevationDelegate} to display the shadow.
+     */
+    public int getElevationPaddingRight() {
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            return elevationDrawable.getPaddingRight();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the bottom padding added by {@link ElevationDelegate} to display the shadow.
+     */
+    public int getElevationPaddingBottom() {
+        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        if (elevationDrawable != null) {
+            return elevationDrawable.getPaddingBottom();
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the {@link View}'s start padding excluding the extra added for the shadow.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public int getElevationPaddingStart() {
+        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getElevationPaddingRight()
+                                                                       : getElevationPaddingLeft();
+    }
+
+    /**
+     * Returns the {@link View}'s end padding excluding the extra added for the shadow.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public int getElevationPaddingEnd() {
+        return mView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL ? getElevationPaddingLeft()
+                                                                       : getElevationPaddingRight();
+    }
+
+    /**
      * Returns a copy of the {@link View}'s {@link ViewGroup.LayoutParams} excluding the size / margin modifications.
      */
     public ViewGroup.LayoutParams getOriginalLayoutParams() {
