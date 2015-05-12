@@ -54,7 +54,8 @@ public class MaterialDrawableUtils {
         //} else if (name.equals("transition")) {
         } else if (name.equals("ripple")) {
             drawable = new RippleMaterialDrawable(c);
-        //} else if (name.equals("color")) {
+        } else if (name.equals("color")) {
+            drawable = new ColorMaterialDrawable(c);
         } else if (name.equals("shape")) {
             drawable = new GradientMaterialDrawable(c);
         //} else if (name.equals("vector")) {
