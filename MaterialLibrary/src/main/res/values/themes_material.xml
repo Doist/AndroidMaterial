@@ -11,12 +11,24 @@
         <item name="android:textCursorDrawable">@drawable/text_cursor_material</item>
         <item name="editTextBackground">@drawable/edit_text_material</item>
 
+        <!-- TODO: Regression in AppCompat 22.1.0: using custom attrs instead of android ones for these two. Once they switch back, remove. -->
+        <item name="android:editTextStyle">?attr/editTextStyle</item>
+        <item name="android:autoCompleteTextViewStyle">?attr/autoCompleteTextViewStyle</item>
+
         <!-- RadioButton and CheckBox styles -->
         <item name="android:listChoiceIndicatorSingle">@drawable/btn_radio_material</item>
         <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_material</item>
 
         <!-- Color palette -->
         <item name="colorButtonNormal">@color/btn_default_material_light</item>
+
+        <!-- Preferences -->
+        <item name="android:preferenceStyle">@style/Preference.Material</item>
+        <item name="android:preferenceScreenStyle">@style/Preference.Material.PreferenceScreen</item>
+        <item name="android:preferenceCategoryStyle">@style/Preference.Material.Category</item>
+        <item name="android:checkBoxPreferenceStyle">@style/Preference.Material.CheckBoxPreference</item>
+        <item name="android:ringtonePreferenceStyle">@style/Preference.Material.RingtonePreference</item>
+        <item name="android:preferenceLayoutChild">@layout/preference_child_material</item>
     </style>
 
     <style name="Theme.Material.Light.NoActionBar" parent="Theme.Material.Light">

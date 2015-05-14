@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/pref_screen_title">
+
+    <Preference
+        android:key="pref_preference"
+        android:summary="@string/pref_preference_summary"
+        android:title="@string/pref_preference_title" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_checkbox"
+        android:title="@string/pref_checkbox_title" />
+
+    <RingtonePreference
+        android:dependency="pref_checkbox"
+        android:key="pref_ringtone"
+        android:layout="?android:attr/preferenceLayoutChild"
+        android:summary="@string/pref_ringtone_summary"
+        android:title="@string/pref_ringtone_title" />
+
+    <PreferenceCategory android:title="@string/pref_category_title">
+
+        <EditTextPreference
+            android:key="pref_edittext"
+            android:title="@string/pref_edittext_title" />
+
+        <SwitchPreference
+            android:key="pref_switch"
+            android:title="@string/pref_switch_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

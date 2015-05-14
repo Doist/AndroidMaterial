@@ -7,6 +7,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class MaterialWidgetHandler {
     public static final String STYLEABLE_IMAGE_VIEW = "ImageView";
     public static final String STYLEABLE_TEXT_VIEW = "TextView";
     public static final String STYLEABLE_COMPOUND_BUTTON = "CompoundButton";
+    public static final String STYLEABLE_CHECKED_TEXT_VIEW = "CheckedTextView";
 
     private static int[] sOriginalViewStyleable;
     private static int[] sHiddenViewStyleable;
@@ -35,6 +37,8 @@ public class MaterialWidgetHandler {
     private static int[] sHiddenTextViewStyleable;
     private static int[] sOriginalCompoundButtonStyleable;
     private static int[] sHiddenCompoundButtonStyleable;
+    private static int[] sOriginalCheckedTextViewStyleable;
+    private static int[] sHiddenCheckedTextViewStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, String... styleables) {
         if (sSkip) {
@@ -119,6 +123,24 @@ public class MaterialWidgetHandler {
                             null,
                             sHiddenCompoundButtonStyleable);
                     break;
+
+                case STYLEABLE_CHECKED_TEXT_VIEW:
+                    if (sOriginalCheckedTextViewStyleable == null) {
+                        // Keep original styleable values.
+                        sOriginalCheckedTextViewStyleable =
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_CHECKED_TEXT_VIEW, null);
+
+                        sHiddenCheckedTextViewStyleable =
+                                createHiddenStyleable(sOriginalCheckedTextViewStyleable, "CheckedTextView_checkMark");
+                    }
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            STYLEABLE_CHECKED_TEXT_VIEW,
+                            null,
+                            sHiddenCheckedTextViewStyleable);
+                    break;
             }
         }
         return set;
@@ -150,6 +172,11 @@ public class MaterialWidgetHandler {
                     ReflectionUtils.setDeclaredFieldValue(
                             StyleableClass, STYLEABLE_COMPOUND_BUTTON, null, sOriginalCompoundButtonStyleable);
                     break;
+
+                case STYLEABLE_CHECKED_TEXT_VIEW:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_CHECKED_TEXT_VIEW, null, sOriginalCheckedTextViewStyleable);
+                    break;
             }
         }
     }
@@ -179,6 +206,9 @@ public class MaterialWidgetHandler {
                 case STYLEABLE_COMPOUND_BUTTON:
                     initCompoundButtonAttributes(context, resources, (CompoundButton) view, set, defStyle);
                     break;
+
+                case STYLEABLE_CHECKED_TEXT_VIEW:
+                    initCheckedTextViewAttributes(context, resources, (CheckedTextView) view, set, defStyle);
             }
         }
     }
@@ -205,9 +235,9 @@ public class MaterialWidgetHandler {
                                            AttributeSet set, int defStyle) {
         TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialView, defStyle, 0);
         try {
-            if (ta.hasValue(R.styleable.MaterialImageView_android_src)) {
+            if (ta.hasValue(R.styleable.MaterialView_android_background)) {
                 Drawable drawable =
-                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialImageView_android_src, 0));
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialView_android_background, 0));
 
                 final int paddingLeft = view.getPaddingLeft();
                 final int paddingTop = view.getPaddingTop();
@@ -335,6 +365,21 @@ public class MaterialWidgetHandler {
                         resources.getDrawable(ta.getResourceId(R.styleable.MaterialCompoundButton_android_button, 0));
                 // Init button drawable.
                 compoundButton.setButtonDrawable(drawable);
+            }
+        } finally {
+            ta.recycle();
+        }
+    }
+
+    private static void initCheckedTextViewAttributes(Context context, MaterialResources resources,
+                                                      CheckedTextView checkedTextView, AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialCheckedTextView, defStyle, 0);
+        try {
+            if (ta.hasValue(R.styleable.MaterialCheckedTextView_android_checkMark)) {
+                Drawable drawable = resources.getDrawable(
+                        ta.getResourceId(R.styleable.MaterialCheckedTextView_android_checkMark, 0));
+                // Init checkmark.
+                checkedTextView.setCheckMarkDrawable(drawable);
             }
         } finally {
             ta.recycle();

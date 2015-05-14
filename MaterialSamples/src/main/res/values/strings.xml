@@ -27,10 +27,23 @@
     <string name="roboto_condensed_light_italic">This is a phrase (Roboto condensed light (italic))</string>
     <string name="roboto_condensed_light_bold_italic">This is a phrase (Roboto condensed light (fake bold / italic))</string>
 
+    <string name="material_auto_complete_text_view">AutoCompleteTextView</string>
+
     <string name="material_edit_text_1">MaterialEditText #1</string>
     <string name="material_edit_text_2">MaterialEditText #2</string>
 
     <string name="material_check_box">MaterialCheckBox</string>
     <string name="material_radio_button">MaterialRadioButton</string>
+    <string name="material_switch">MaterialSwitch</string>
+
+    <string name="pref_screen_title">Screen</string>
+    <string name="pref_preference_title">Preference</string>
+    <string name="pref_preference_summary">Summary</string>
+    <string name="pref_checkbox_title">CheckBox</string>
+    <string name="pref_ringtone_title">Ringtone</string>
+    <string name="pref_ringtone_summary">Dependent on CheckBox</string>
+    <string name="pref_category_title">Category</string>
+    <string name="pref_edittext_title">EditText</string>
+    <string name="pref_switch_title">Switch</string>
 
 </resources>

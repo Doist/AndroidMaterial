@@ -35,6 +35,13 @@
         <attr name="android:autoMirrored" />
     </declare-styleable>
 
+    <!-- Represents a single state inside a StateListDrawable. -->
+    <declare-styleable name="StateListDrawableItem">
+        <!-- Reference to a drawable resource to use for the state. If not
+             given, the drawable must be defined by the first child tag. -->
+        <attr name="android:drawable" />
+    </declare-styleable>
+
     <!-- Drawable used to render several animated frames. -->
     <declare-styleable name="AnimationDrawable">
         <attr name="android:visible" />
@@ -95,6 +102,8 @@
         <!-- When a tint color is set, specifies its Porter-Duff blending mode. The
              default value is src_in, which treats the drawable as an alpha mask. -->
         <!--<attr name="android:tintMode" />-->
+        <!-- Specifies the alpha multiplier to apply to the base drawable. Only works with a BitmapDrawable. -->
+        <attr name="android:alpha" />
     </declare-styleable>
 
     <declare-styleable name="InsetDrawable">
@@ -204,6 +213,12 @@
         <attr name="android:right" />
         <!-- Amount of bottom padding inside the gradient shape. -->
         <attr name="android:bottom" />
+    </declare-styleable>
+
+    <!-- Drawable used to draw a single color. -->
+    <declare-styleable name="ColorDrawable">
+        <!-- The color to use. -->
+        <attr name="android:color" />
     </declare-styleable>
 
     <!-- Drawable used to show animated touch feedback. -->

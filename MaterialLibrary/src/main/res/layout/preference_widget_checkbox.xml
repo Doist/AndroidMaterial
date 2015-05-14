@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Based on android:layout/preference_widget_checkbox -->
+<io.doist.material.widget.MaterialCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/checkbox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:focusable="false"
+    android:clickable="false" />

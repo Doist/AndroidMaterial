@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="MaterialView">
         <attr name="android:background" />
     </declare-styleable>
@@ -21,4 +22,9 @@
     <declare-styleable name="MaterialCompoundButton">
         <attr name="android:button" />
     </declare-styleable>
+
+    <declare-styleable name="MaterialCheckedTextView">
+        <attr name="android:checkMark" />
+    </declare-styleable>
+
 </resources>
