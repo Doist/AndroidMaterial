@@ -26,8 +26,6 @@ public class ColorMaterialDrawable extends ColorDrawable {
     @Override
     public void inflate(Resources r, XmlPullParser parser, AttributeSet attrs)
             throws XmlPullParserException, IOException {
-        // Don't call super, because it would crash on a theme attribute in android:color.
-
         Context c = mContext.get();
         if (c == null) {
             return;
