@@ -14,7 +14,7 @@ public class MaterialRelativeLayout extends RelativeLayout {
     }
 
     public MaterialRelativeLayout(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
+        this(context, attrs, 0);
     }
 
     public MaterialRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
