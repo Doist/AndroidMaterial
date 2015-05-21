@@ -7,7 +7,8 @@ import android.widget.FrameLayout;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialFrameLayout extends FrameLayout {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW,
+                                                       MaterialWidgetHandler.STYLEABLE_FRAME_LAYOUT};
 
     public MaterialFrameLayout(Context context) {
         this(context, null);

@@ -27,4 +27,8 @@
         <attr name="android:checkMark" />
     </declare-styleable>
 
+    <declare-styleable name="MaterialFrameLayout">
+        <attr name="android:foreground" />
+    </declare-styleable>
+
 </resources>

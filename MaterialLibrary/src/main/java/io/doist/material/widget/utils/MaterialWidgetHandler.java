@@ -9,6 +9,7 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class MaterialWidgetHandler {
     public static final String STYLEABLE_TEXT_VIEW = "TextView";
     public static final String STYLEABLE_COMPOUND_BUTTON = "CompoundButton";
     public static final String STYLEABLE_CHECKED_TEXT_VIEW = "CheckedTextView";
+    public static final String STYLEABLE_FRAME_LAYOUT = "FrameLayout";
 
     private static int[] sOriginalViewStyleable;
     private static int[] sHiddenViewStyleable;
@@ -39,6 +41,8 @@ public class MaterialWidgetHandler {
     private static int[] sHiddenCompoundButtonStyleable;
     private static int[] sOriginalCheckedTextViewStyleable;
     private static int[] sHiddenCheckedTextViewStyleable;
+    private static int[] sOriginalFrameLayoutStyleable;
+    private static int[] sHiddenFrameLayoutStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, String... styleables) {
         if (sSkip) {
@@ -141,6 +145,25 @@ public class MaterialWidgetHandler {
                             null,
                             sHiddenCheckedTextViewStyleable);
                     break;
+
+                case STYLEABLE_FRAME_LAYOUT:
+                    if (sOriginalFrameLayoutStyleable == null) {
+                        // Keep original styleable values.
+                        sOriginalFrameLayoutStyleable =
+                                (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, STYLEABLE_FRAME_LAYOUT,
+                                                                              null);
+
+                        sHiddenFrameLayoutStyleable =
+                                createHiddenStyleable(sOriginalFrameLayoutStyleable, "FrameLayout_foreground");
+
+                    }
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            STYLEABLE_FRAME_LAYOUT,
+                            null,
+                            sHiddenFrameLayoutStyleable);
+                    break;
             }
         }
         return set;
@@ -177,6 +200,11 @@ public class MaterialWidgetHandler {
                     ReflectionUtils.setDeclaredFieldValue(
                             StyleableClass, STYLEABLE_CHECKED_TEXT_VIEW, null, sOriginalCheckedTextViewStyleable);
                     break;
+
+                case STYLEABLE_FRAME_LAYOUT:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_FRAME_LAYOUT, null, sOriginalFrameLayoutStyleable);
+                    break;
             }
         }
     }
@@ -209,6 +237,10 @@ public class MaterialWidgetHandler {
 
                 case STYLEABLE_CHECKED_TEXT_VIEW:
                     initCheckedTextViewAttributes(context, resources, (CheckedTextView) view, set, defStyle);
+                    break;
+
+                case STYLEABLE_FRAME_LAYOUT:
+                    initFrameLayoutAttributes(context, resources, (FrameLayout) view, set, defStyle);
                     break;
             }
         }
@@ -381,6 +413,21 @@ public class MaterialWidgetHandler {
                         ta.getResourceId(R.styleable.MaterialCheckedTextView_android_checkMark, 0));
                 // Init checkmark.
                 checkedTextView.setCheckMarkDrawable(drawable);
+            }
+        } finally {
+            ta.recycle();
+        }
+    }
+
+    private static void initFrameLayoutAttributes(Context context, MaterialResources resources, FrameLayout frameLayout,
+                                                  AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialFrameLayout, defStyle, 0);
+        try {
+            if (ta.hasValue(R.styleable.MaterialFrameLayout_android_foreground)) {
+                Drawable drawable =
+                        resources.getDrawable(ta.getResourceId(R.styleable.MaterialFrameLayout_android_foreground, 0));
+                // Init foreground drawable.
+                frameLayout.setForeground(drawable);
             }
         } finally {
             ta.recycle();
