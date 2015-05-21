@@ -174,9 +174,7 @@ public class MaterialResources {
 
         try {
             if (file.endsWith(".xml")) {
-                configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION_CODES.LOLLIPOP);
-                final XmlResourceParser rp = resources.getXml(id);
-                configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION.SDK_INT);
+                final XmlResourceParser rp = loadXmlResourceParser(resources, configuration, id);
                 dr = MaterialDrawableUtils.createFromXml(context, resources, rp);
                 rp.close();
             } else {
@@ -190,6 +188,15 @@ public class MaterialResources {
         }
 
         return dr;
+    }
+
+    private XmlResourceParser loadXmlResourceParser(Resources resources, MaterialConfiguration configuration, int id) {
+        try {
+            configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION_CODES.LOLLIPOP);
+            return resources.getXml(id);
+        } finally {
+            configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION.SDK_INT);
+        }
     }
 
     private Drawable getCachedDrawable(Resources resources,
