@@ -209,6 +209,7 @@ public class MaterialWidgetHandler {
 
                 case STYLEABLE_CHECKED_TEXT_VIEW:
                     initCheckedTextViewAttributes(context, resources, (CheckedTextView) view, set, defStyle);
+                    break;
             }
         }
     }
