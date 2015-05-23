@@ -7,9 +7,11 @@ import android.widget.CheckBox;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialCheckBox extends CheckBox {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_COMPOUND_BUTTON,
-                                                       MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.COMPOUND_BUTTON,
+            MaterialWidgetHandler.Styleable.TEXT_VIEW,
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialCheckBox(Context context) {
         this(context, null);

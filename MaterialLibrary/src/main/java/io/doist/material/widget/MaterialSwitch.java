@@ -8,7 +8,9 @@ import io.doist.material.R;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialSwitch extends SwitchCompat {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialSwitch(Context context) {
         super(context);

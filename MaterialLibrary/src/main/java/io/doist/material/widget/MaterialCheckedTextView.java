@@ -7,9 +7,11 @@ import android.util.AttributeSet;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialCheckedTextView extends RobotoCheckedTextView {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_CHECKED_TEXT_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.CHECKED_TEXT_VIEW,
+            MaterialWidgetHandler.Styleable.TEXT_VIEW,
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialCheckedTextView(Context context) {
         this(context, null);

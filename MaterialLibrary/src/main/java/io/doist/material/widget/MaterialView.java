@@ -7,7 +7,9 @@ import android.view.View;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialView extends View {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialView(Context context) {
         this(context, null);

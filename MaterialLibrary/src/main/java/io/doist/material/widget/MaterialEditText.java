@@ -6,8 +6,10 @@ import android.util.AttributeSet;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialEditText extends RobotoEditText {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_TEXT_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.TEXT_VIEW,
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialEditText(Context context) {
         this(context, null);

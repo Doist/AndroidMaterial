@@ -7,9 +7,11 @@ import android.widget.Spinner;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialSpinner extends Spinner {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_POPUP_WINDOW,
-                                                       MaterialWidgetHandler.STYLEABLE_SPINNER};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW,
+            MaterialWidgetHandler.Styleable.POPUP_WINDOW,
+            MaterialWidgetHandler.Styleable.SPINNER
+    };
 
     public MaterialSpinner(Context context) {
         this(context, null);
