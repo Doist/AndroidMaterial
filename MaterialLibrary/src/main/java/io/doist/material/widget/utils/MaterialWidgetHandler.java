@@ -11,6 +11,7 @@ import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.lang.reflect.Array;
@@ -30,6 +31,8 @@ public class MaterialWidgetHandler {
     public static final String STYLEABLE_COMPOUND_BUTTON = "CompoundButton";
     public static final String STYLEABLE_CHECKED_TEXT_VIEW = "CheckedTextView";
     public static final String STYLEABLE_FRAME_LAYOUT = "FrameLayout";
+    public static final String STYLEABLE_POPUP_WINDOW = "PopupWindow";
+    public static final String STYLEABLE_SPINNER = "Spinner";
 
     private static int[] sOriginalViewStyleable;
     private static int[] sHiddenViewStyleable;
@@ -43,6 +46,10 @@ public class MaterialWidgetHandler {
     private static int[] sHiddenCheckedTextViewStyleable;
     private static int[] sOriginalFrameLayoutStyleable;
     private static int[] sHiddenFrameLayoutStyleable;
+    private static int[] sOriginalPopupWindowStyleable;
+    private static int[] sHiddenPopupWindowStyleable;
+    private static int[] sOriginalSpinnerStyleable;
+    private static int[] sHiddenSpinnerStyleable;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, String... styleables) {
         if (sSkip) {
@@ -164,6 +171,42 @@ public class MaterialWidgetHandler {
                             null,
                             sHiddenFrameLayoutStyleable);
                     break;
+
+                case STYLEABLE_POPUP_WINDOW:
+                    if (sOriginalPopupWindowStyleable == null) {
+                        // Keep original image view styleable values.
+                        sOriginalPopupWindowStyleable =
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_POPUP_WINDOW, null);
+
+                        sHiddenPopupWindowStyleable =
+                                createHiddenStyleable(sOriginalPopupWindowStyleable, "PopupWindow_popupBackground");
+                    }
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            STYLEABLE_POPUP_WINDOW,
+                            null,
+                            sHiddenPopupWindowStyleable);
+                    break;
+
+                case STYLEABLE_SPINNER:
+                    if (sOriginalSpinnerStyleable == null) {
+                        // Keep original image view styleable values.
+                        sOriginalSpinnerStyleable =
+                                (int[]) ReflectionUtils
+                                        .getDeclaredFieldValue(StyleableClass, STYLEABLE_SPINNER, null);
+
+                        sHiddenSpinnerStyleable =
+                                createHiddenStyleable(sOriginalSpinnerStyleable, "Spinner_popupBackground");
+                    }
+
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass,
+                            STYLEABLE_SPINNER,
+                            null,
+                            sHiddenSpinnerStyleable);
+                    break;
             }
         }
         return set;
@@ -205,6 +248,16 @@ public class MaterialWidgetHandler {
                     ReflectionUtils.setDeclaredFieldValue(
                             StyleableClass, STYLEABLE_FRAME_LAYOUT, null, sOriginalFrameLayoutStyleable);
                     break;
+
+                case STYLEABLE_POPUP_WINDOW:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_POPUP_WINDOW, null, sOriginalPopupWindowStyleable);
+                    break;
+
+                case STYLEABLE_SPINNER:
+                    ReflectionUtils.setDeclaredFieldValue(
+                            StyleableClass, STYLEABLE_SPINNER, null, sOriginalSpinnerStyleable);
+                    break;
             }
         }
     }
@@ -241,6 +294,14 @@ public class MaterialWidgetHandler {
 
                 case STYLEABLE_FRAME_LAYOUT:
                     initFrameLayoutAttributes(context, resources, (FrameLayout) view, set, defStyle);
+                    break;
+
+                case STYLEABLE_POPUP_WINDOW:
+                    // No support needed.
+                    break;
+
+                case STYLEABLE_SPINNER:
+                    initSpinnerAttributes(context, resources, (Spinner) view, set, defStyle);
                     break;
             }
         }
@@ -428,6 +489,21 @@ public class MaterialWidgetHandler {
                         resources.getDrawable(ta.getResourceId(R.styleable.MaterialFrameLayout_android_foreground, 0));
                 // Init foreground drawable.
                 frameLayout.setForeground(drawable);
+            }
+        } finally {
+            ta.recycle();
+        }
+    }
+
+    private static void initSpinnerAttributes(Context context, MaterialResources resources, Spinner spinner,
+                                              AttributeSet set, int defStyle) {
+        TypedArray ta = context.obtainStyledAttributes(set, R.styleable.Spinner, defStyle, 0);
+        try {
+            if (ta.hasValue(R.styleable.Spinner_android_popupBackground)) {
+                Drawable drawable = resources.getDrawable(
+                        ta.getResourceId(R.styleable.Spinner_android_popupBackground, 0));
+                // Init popupBackground.
+                spinner.setPopupBackgroundDrawable(drawable);
             }
         } finally {
             ta.recycle();

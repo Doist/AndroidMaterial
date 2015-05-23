@@ -31,4 +31,8 @@
         <attr name="android:foreground" />
     </declare-styleable>
 
+    <declare-styleable name="Spinner">
+        <attr name="android:popupBackground" />
+    </declare-styleable>
+
 </resources>
