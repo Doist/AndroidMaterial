@@ -7,7 +7,9 @@ import android.widget.RelativeLayout;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialRelativeLayout extends RelativeLayout {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialRelativeLayout(Context context) {
         this(context, null);

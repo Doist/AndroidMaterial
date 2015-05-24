@@ -7,7 +7,9 @@ import android.widget.LinearLayout;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialLinearLayout extends LinearLayout {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW
+    };
 
     public MaterialLinearLayout(Context context) {
         this(context, null);

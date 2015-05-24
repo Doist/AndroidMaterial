@@ -7,8 +7,10 @@ import android.widget.ImageView;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialImageView extends ImageView {
-    private static final String[] sHiddenStyleables = {MaterialWidgetHandler.STYLEABLE_VIEW,
-                                                       MaterialWidgetHandler.STYLEABLE_IMAGE_VIEW};
+    private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
+            MaterialWidgetHandler.Styleable.VIEW,
+            MaterialWidgetHandler.Styleable.IMAGE_VIEW
+    };
 
     public MaterialImageView(Context context) {
         this(context, null);
