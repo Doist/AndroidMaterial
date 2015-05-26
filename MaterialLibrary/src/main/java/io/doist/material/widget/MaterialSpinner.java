@@ -18,7 +18,7 @@ public class MaterialSpinner extends Spinner {
     }
 
     public MaterialSpinner(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this(context, attrs, android.R.attr.spinnerStyle);
     }
 
     public MaterialSpinner(Context context, AttributeSet attrs, int defStyle) {
@@ -26,7 +26,7 @@ public class MaterialSpinner extends Spinner {
     }
 
     public MaterialSpinner(Context context, int mode) {
-        this(context, null, 0, mode);
+        this(context, null, android.R.attr.spinnerStyle, mode);
     }
 
     public MaterialSpinner(Context context, AttributeSet attrs, int defStyle, int mode) {
