@@ -368,7 +368,11 @@ public class ElevationDelegate {
                              mView.getPaddingRight() + paddingRight,
                              mView.getPaddingBottom() + paddingBottom);
 
-            // Minimum height.
+            // Increases minimum width and minimum height.
+            int minWidth = mView.getMinimumWidth();
+            if (minWidth > 0) {
+                mView.setMinimumWidth(minWidth + (paddingLeft + paddingRight));
+            }
             int minHeight = mView.getMinimumHeight();
             if (minHeight > 0) {
                 mView.setMinimumHeight(minHeight + (paddingTop + paddingBottom));
@@ -413,7 +417,11 @@ public class ElevationDelegate {
                              mView.getPaddingRight() - paddingRight,
                              mView.getPaddingBottom() - paddingBottom);
 
-            // Minimum height.
+            // Minimum width and minimum height.
+            int minWidth = mView.getMinimumWidth();
+            if (minWidth > 0) {
+                mView.setMinimumWidth(minWidth - (paddingLeft + paddingRight));
+            }
             int minHeight = mView.getMinimumHeight();
             if (minHeight > 0) {
                 mView.setMinimumHeight(minHeight - (paddingTop + paddingBottom));
