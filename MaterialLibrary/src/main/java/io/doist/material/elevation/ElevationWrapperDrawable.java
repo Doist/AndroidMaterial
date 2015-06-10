@@ -300,25 +300,25 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         }
 
         // Draw corners.
-        if (mShowShadowLeft || mShowShadowTop) {
+        if (mShowShadowLeft && mShowShadowTop) {
             canvas.drawBitmap(mShadowBitmapTopLeft,
                               0,
                               0,
                               mCornerPaint);
         }
-        if (mShowShadowTop || mShowShadowRight) {
+        if (mShowShadowTop && mShowShadowRight) {
             canvas.drawBitmap(mShadowBitmapTopRight,
                               mShadowLengthLeft + width - mCornerRadius,
                               0,
                               mCornerPaint);
         }
-        if (mShowShadowRight || mShowShadowBottom) {
+        if (mShowShadowRight && mShowShadowBottom) {
             canvas.drawBitmap(mShadowBitmapBottomRight,
                               mShadowLengthLeft + width - mCornerRadius,
                               mShadowLengthTop + height - mCornerRadius,
                               mCornerPaint);
         }
-        if (mShowShadowBottom || mShowShadowLeft) {
+        if (mShowShadowBottom && mShowShadowLeft) {
             canvas.drawBitmap(mShadowBitmapBottomLeft,
                               0,
                               mShadowLengthTop + height - mCornerRadius,
