@@ -84,6 +84,9 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
     private int mShadowPaddingRight;
     private int mShadowPaddingBottom;
 
+    // Wrapped drawable padding.
+    private Rect mWrappedPadding = new Rect();
+
     // Avoid allocations.
     private int[] mScreenLocation = new int[2];
     private Rect mBounds = new Rect();
@@ -134,6 +137,8 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         mCornerPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
 
         calculatePadding();
+
+        drawable.getPadding(mWrappedPadding);
     }
 
     @Override
@@ -197,17 +202,10 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
     }
 
     // Padding is managed by ElevationDelegate, as this would clear the original padding when the background is set.
-    //@Override
-    //public boolean getPadding(Rect padding) {
-    //    super.getPadding(padding);
-    //
-    //    padding.left += getPaddingLeft() + mViewPaddingLeft;
-    //    padding.top += getPaddingTop();
-    //    padding.right += getPaddingRight();
-    //    padding.bottom += getPaddingBottom();
-    //
-    //    return true;
-    //}
+    @Override
+    public boolean getPadding(Rect padding) {
+        return false;
+    }
 
     private void calculatePadding() {
         mShadowPaddingLeft = getShadowLengthLeft(0);
@@ -234,12 +232,17 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
 
     @Override
     protected void onBoundsChange(Rect bounds) {
-        mBounds.set(bounds.left + getPaddingLeft(),
-                    bounds.top + getPaddingTop(),
-                    bounds.right - getPaddingRight(),
-                    bounds.bottom - getPaddingBottom());
+        bounds.left += getPaddingLeft();
+        bounds.top += getPaddingTop();
+        bounds.right -= getPaddingRight();
+        bounds.bottom -= getPaddingBottom();
 
-        getWrappedDrawable().setBounds(mBounds);
+        getWrappedDrawable().setBounds(bounds);
+
+        mBounds.set(bounds.left + mWrappedPadding.left,
+                    bounds.top + mWrappedPadding.top,
+                    bounds.right - mWrappedPadding.right,
+                    bounds.bottom - mWrappedPadding.bottom);
     }
 
     @Override
@@ -262,8 +265,9 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         int height = mBounds.height();
 
         // Translate the canvas to the area that will be drawn.
-        int count = canvas.save();
-        canvas.translate(getPaddingLeft() - mShadowLengthLeft, getPaddingTop() - mShadowLengthTop);
+        int count = canvas.save(Canvas.MATRIX_SAVE_FLAG);
+        canvas.translate(getPaddingLeft() + mWrappedPadding.left - mShadowLengthLeft,
+                         getPaddingTop() + mWrappedPadding.top - mShadowLengthTop);
 
         // Draw edges.
         if (mShowShadowLeft) {
