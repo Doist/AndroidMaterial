@@ -4,9 +4,11 @@
     <dimen name="fab_radius">28dip</dimen>
     <dimen name="fab_mini_radius">20dip</dimen>
 
-    <dimen name="fab_default_margin">16dip</dimen>
+    <!-- Utility dimensions. FloatingActionButton uses radius to calculate its size. -->
+    <dimen name="fab_size">56dip</dimen> <!-- 2 * fab_radius -->
+    <dimen name="fab_mini_size">40dip</dimen> <!-- 2 * fab_mini_radius -->
 
-    <dimen name="fab_size">56dip</dimen>
-    <dimen name="fab_mini_size">40dip</dimen>
+    <!-- Corresponds to the recommended gutter. Also defined in values-w960dp (24dip). -->
+    <dimen name="fab_default_margin">16dip</dimen>
 
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Up until w960dp the recommended gutter is either 16dip or 24dip.
+        From w960dp the recommended gutter is 24dip.
+        Also defined in default values (16dip). -->
+    <dimen name="fab_default_margin">24dip</dimen>
+
+</resources>
