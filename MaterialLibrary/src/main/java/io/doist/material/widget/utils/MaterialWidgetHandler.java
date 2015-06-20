@@ -328,9 +328,7 @@ public class MaterialWidgetHandler {
         private void ensureStyleables() {
             if (mOriginalStyleable == null) {
                 // Keep original styleable values.
-                mOriginalStyleable =
-                        (int[]) ReflectionUtils
-                                .getDeclaredFieldValue(StyleableClass, mName, null);
+                mOriginalStyleable = (int[]) ReflectionUtils.getDeclaredFieldValue(StyleableClass, mName, null);
 
                 mHiddenStyleable = createHiddenStyleable(mOriginalStyleable, mHiddenValues);
             }
