@@ -16,7 +16,7 @@ public class MaterialTextView extends RobotoTextView {
     }
 
     public MaterialTextView(Context context, AttributeSet attrs) {
-        this(MaterialWidgetHandler.themifyContext(context, attrs), attrs, android.R.attr.textViewStyle);
+        this(context, attrs, android.R.attr.textViewStyle);
     }
 
     public MaterialTextView(Context context, AttributeSet attrs, int defStyle) {
