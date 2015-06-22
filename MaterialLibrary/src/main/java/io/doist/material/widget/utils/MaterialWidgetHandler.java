@@ -339,7 +339,12 @@ public class MaterialWidgetHandler {
             System.arraycopy(styleable, 0, newStyleable, 0, styleable.length);
             for (String hiddenValue : hiddenValues) {
                 int hiddenIndex = (int) ReflectionUtils.getDeclaredFieldValue(StyleableClass, hiddenValue, null);
-                newStyleable[hiddenIndex] = 0;
+                // Replace the styleable's attribute references for hidden attributes.
+                // Previously, the value used to replace those references was 0.
+                // However, 0 is the attr reference for the 'style' attribute.
+                // Through trial and error, android.R.attr.value was picked,
+                // as it is ignored by Theme#obtainStyledAttributes.
+                newStyleable[hiddenIndex] = android.R.attr.value;
             }
             return newStyleable;
         }
