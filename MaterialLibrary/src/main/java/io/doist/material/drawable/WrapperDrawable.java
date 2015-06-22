@@ -86,16 +86,6 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     }
 
     @Override
-    public void setColorFilter(int color, PorterDuff.Mode mode) {
-        mWrapperState.mDrawable.setColorFilter(color, mode);
-    }
-
-    @Override
-    public void clearColorFilter() {
-        mWrapperState.mDrawable.clearColorFilter();
-    }
-
-    @Override
     public boolean isStateful() {
         return mWrapperState.mDrawable.isStateful();
     }
