@@ -2,10 +2,11 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialTextView extends RobotoTextView {
+public class MaterialTextView extends TextView {
     private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
             MaterialWidgetHandler.Styleable.TEXT_VIEW,
             MaterialWidgetHandler.Styleable.VIEW

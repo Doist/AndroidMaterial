@@ -3,10 +3,11 @@ package io.doist.material.widget;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.widget.CheckedTextView;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialCheckedTextView extends RobotoCheckedTextView {
+public class MaterialCheckedTextView extends CheckedTextView {
     private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
             MaterialWidgetHandler.Styleable.CHECKED_TEXT_VIEW,
             MaterialWidgetHandler.Styleable.TEXT_VIEW,
