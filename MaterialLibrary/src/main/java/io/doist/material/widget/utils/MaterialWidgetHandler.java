@@ -51,7 +51,7 @@ public class MaterialWidgetHandler {
             return;
         }
 
-        Context context = themifyContext(view.getContext(), set);
+        Context context = view.getContext();
         MaterialResources resources = MaterialResources.getInstance(context, context.getResources());
         for (Styleable styleable : styleables) {
             styleable.initAttributes(context, resources, view, set, defStyle);
