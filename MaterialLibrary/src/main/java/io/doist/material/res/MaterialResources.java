@@ -193,9 +193,11 @@ public class MaterialResources {
     private XmlResourceParser loadXmlResourceParser(Resources resources, MaterialConfiguration configuration, int id) {
         try {
             configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION_CODES.LOLLIPOP);
+            resources.flushLayoutCache();
             return resources.getXml(id);
         } finally {
             configuration.forceAssetsSdkVersion(resources.getAssets(), Build.VERSION.SDK_INT);
+            resources.flushLayoutCache();
         }
     }
 
