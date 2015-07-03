@@ -16,6 +16,18 @@
         <item name="android:fontFamily">@string/font_family_button_material</item>
     </style>
 
+    <!-- EditText -->
+
+    <style name="Widget.Material.EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textCursorDrawable">?android:attr/textCursorDrawable</item>
+    </style>
+
+    <!-- AutoCompleteTextView -->
+
+    <style name="Widget.Material.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textCursorDrawable">?android:attr/textCursorDrawable</item>
+    </style>
+
     <!-- Bordered ink button -->
     <style name="Widget.Material.Button">
         <item name="android:background">@drawable/btn_default_material</item>
