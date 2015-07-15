@@ -4,6 +4,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -86,6 +87,15 @@ public class MaterialDrawableUtils {
 
         if (drawable != null) {
             drawable.inflate(r, parser, attrs);
+
+            if (drawable instanceof GradientMaterialDrawable) {
+                // Before Lollipop, GradientDrawable does not support a ColorStateList solid color.
+                // In the case of a stateful solid color, enclose the drawable inside a TintDrawable.
+                ColorStateList solidColor = ((GradientMaterialDrawable) drawable).getSolidColor();
+                if (solidColor != null && solidColor.isStateful()) {
+                    drawable = new TintDrawable(c, drawable, solidColor);
+                }
+            }
         } else {
             drawable = Drawable.createFromXmlInner(r, parser, attrs);
         }
