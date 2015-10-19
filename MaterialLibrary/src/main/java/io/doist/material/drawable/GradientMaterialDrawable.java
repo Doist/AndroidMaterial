@@ -4,6 +4,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
@@ -22,6 +23,8 @@ import io.doist.material.reflection.ReflectionUtils;
 
 public class GradientMaterialDrawable extends GradientDrawable {
     private final WeakReference<Context> mContext;
+
+    private ColorStateList mSolidColor;
 
     public GradientMaterialDrawable(Context context) {
         super();
@@ -180,9 +183,9 @@ public class GradientMaterialDrawable extends GradientDrawable {
 
             } else if (name.equals("solid")) {
                 a = obtainAttributes(context, r, attrs, R.styleable.GradientDrawableSolid);
-                int argb = a.getColor(R.styleable.GradientDrawableSolid_android_color, 0);
+                mSolidColor = a.getColorStateList(R.styleable.GradientDrawableSolid_android_color);
                 a.recycle();
-                setColor(argb);
+                setColor(mSolidColor.getDefaultColor());
             } else if (name.equals("stroke")) {
                 a = obtainAttributes(context, r, attrs, R.styleable.GradientDrawableStroke);
                 int width = a.getDimensionPixelSize(R.styleable.GradientDrawableStroke_android_width, 0);
@@ -236,6 +239,10 @@ public class GradientMaterialDrawable extends GradientDrawable {
         }
 
         st.computeOpacity();
+    }
+
+    ColorStateList getSolidColor() {
+        return mSolidColor;
     }
 
     private TypedArray obtainAttributes(Context context, Resources r, AttributeSet set, int[] attrs) {
