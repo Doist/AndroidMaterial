@@ -21,10 +21,10 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
-    private static final boolean sSkip = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
+    private static final boolean SKIP = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, Styleable... styleables) {
-        if (sSkip) {
+        if (SKIP) {
             return set;
         }
 
@@ -36,7 +36,7 @@ public class MaterialWidgetHandler {
     }
 
     public static void restoreStyleableAttributes(Styleable... styleables) {
-        if (sSkip) {
+        if (SKIP) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class MaterialWidgetHandler {
 
     @SuppressWarnings("ConstantConditions")
     public static void init(View view, AttributeSet set, int defStyle, Styleable[] styleables) {
-        if (sSkip) {
+        if (SKIP) {
             return;
         }
 
@@ -62,7 +62,7 @@ public class MaterialWidgetHandler {
      * Applies {@code android:theme} to {@code context} by wrapping it in a {@link ContextThemeWrapper}.
      */
     public static Context themifyContext(Context context, AttributeSet attrs) {
-        if (sSkip) {
+        if (SKIP) {
             return context;
         }
 
