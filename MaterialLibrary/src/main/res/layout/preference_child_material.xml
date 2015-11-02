@@ -21,8 +21,7 @@
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
     android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-    android:paddingRight="?attr/listPreferredItemPaddingRight"
-    android:background="?attr/selectableItemBackground">
+    android:paddingRight="?attr/listPreferredItemPaddingRight">
 
     <Space
         android:layout_width="?attr/listPreferredItemPaddingLeft"

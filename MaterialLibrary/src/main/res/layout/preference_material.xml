@@ -17,14 +17,14 @@
 <!-- Layout for a Preference in a PreferenceActivity. The
      Preference is able to place a specific widget for its particular
      type in the "widget_frame" layout. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<io.doist.material.widget.MaterialLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:gravity="center_vertical"
     android:paddingLeft="?attr/listPreferredItemPaddingLeft"
     android:paddingRight="?attr/listPreferredItemPaddingRight"
-    android:background="?attr/selectableItemBackground"
+    android:background="?android:attr/activatedBackgroundIndicator"
     android:clipToPadding="false">
 
     <ImageView
@@ -72,4 +72,4 @@
         android:paddingLeft="16dp"
         android:orientation="vertical" />
 
-</LinearLayout>
+</io.doist.material.widget.MaterialLinearLayout>
