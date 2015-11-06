@@ -16,6 +16,10 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     android:autoMirrored="true">
+    <item android:state_focused="true">
+        <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
+            android:tint="?attr/colorControlActivated" />
+    </item>
     <item android:state_checked="true">
         <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
             android:tint="?attr/colorControlActivated" />
