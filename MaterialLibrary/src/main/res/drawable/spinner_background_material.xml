@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,22 +13,18 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:autoMirrored="true">
-    <item android:state_focused="true">
-        <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
-            android:tint="?attr/colorControlActivated" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:autoMirrored="true">
+    <item android:state_enabled="false">
+        <nine-patch android:alpha="?android:attr/disabledAlpha"
+            android:src="@drawable/abc_spinner_mtrl_am_alpha"
+            android:tint="?attr/colorControlNormal" />
     </item>
-    <item android:state_checked="true">
+    <item android:state_focused="false" android:state_pressed="false">
         <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
-            android:tint="?attr/colorControlActivated" />
-    </item>
-    <item android:state_pressed="true">
-        <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
-            android:tint="?attr/colorControlActivated" />
+            android:tint="?attr/colorControlNormal" />
     </item>
     <item>
         <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"
-            android:tint="?attr/colorControlNormal" />
+            android:tint="?attr/colorControlActivated" />
     </item>
 </selector>
