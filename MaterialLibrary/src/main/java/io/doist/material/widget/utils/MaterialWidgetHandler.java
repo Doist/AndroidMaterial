@@ -96,7 +96,7 @@ public class MaterialWidgetHandler {
                         view.setBackground(drawable);
 
                         // Maintain horizontal and vertical padding.
-                        if (paddingLeft > 0 && paddingRight > 0) {
+                        if (paddingLeft > 0 || paddingRight > 0) {
                             view.setPadding(
                                     paddingLeft,
                                     view.getPaddingTop(),
@@ -104,7 +104,7 @@ public class MaterialWidgetHandler {
                                     view.getPaddingBottom());
                         }
 
-                        if (paddingTop > 0 && paddingBottom > 0) {
+                        if (paddingTop > 0 || paddingBottom > 0) {
                             view.setPadding(
                                     view.getPaddingLeft(),
                                     paddingTop,
