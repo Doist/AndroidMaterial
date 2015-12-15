@@ -58,7 +58,6 @@
     <!-- Spinner -->
     <style name="Widget.Material.Spinner" parent="Widget.AppCompat.Spinner">
         <item name="android:background">@drawable/spinner_background_material</item>
-        <item name="android:popupBackground">@drawable/popup_background_material</item>
     </style>
 
     <style name="Widget.Material.Spinner.Underlined">
