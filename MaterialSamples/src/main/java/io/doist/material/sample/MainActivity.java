@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
@@ -28,6 +29,9 @@ public class MainActivity extends ActionBarActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, array);
         AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
         autoCompleteTextView.setAdapter(adapter);
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array));
     }
 
     @Override

@@ -28,6 +28,11 @@
         android:layout_height="wrap_content"
         android:hint="@string/material_auto_complete_text_view" />
 
+    <io.doist.material.widget.MaterialSpinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <io.doist.material.widget.MaterialCheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
