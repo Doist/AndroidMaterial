@@ -1,12 +1,12 @@
 package io.doist.material.widget;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
-import android.widget.Spinner;
 
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
-public class MaterialSpinner extends Spinner {
+public class MaterialSpinner extends AppCompatSpinner {
     private static final MaterialWidgetHandler.Styleable[] sHiddenStyleables = {
             MaterialWidgetHandler.Styleable.VIEW,
             MaterialWidgetHandler.Styleable.POPUP_WINDOW,
