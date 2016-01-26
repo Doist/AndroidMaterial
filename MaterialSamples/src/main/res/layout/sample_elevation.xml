@@ -2,7 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="64dip">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +12,7 @@
         android:background="@drawable/roundrect_sample"
         android:layout_margin="16dip"
         android:text="Lorem ipsum"
-        android:layout_gravity="center_vertical|start"
+        android:layout_gravity="bottom|start"
         android:elevation="4dip" />
 
     <io.doist.material.sample.ElevatedTextView
@@ -21,7 +22,7 @@
         android:background="@drawable/roundrect_sample"
         android:layout_margin="16dip"
         android:text="Lorem ipsum"
-        android:layout_gravity="center_vertical|end"
+        android:layout_gravity="bottom|end"
         app:elevation="4dip"
         app:cornerRadius="9dip" />
 
