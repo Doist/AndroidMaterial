@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false" android:state_checked="true">
-        <bitmap android:src="@drawable/abc_btn_radio_to_on_mtrl_015" android:tint="?attr/colorControlActivated" android:alpha="?android:attr/disabledAlpha" />
+        <bitmap android:src="@drawable/btn_radio_to_on_mtrl_015" android:tint="?attr/colorControlActivated" android:alpha="?android:attr/disabledAlpha" />
     </item>
     <item android:state_enabled="false">
-        <bitmap android:src="@drawable/abc_btn_radio_to_on_mtrl_000" android:tint="?attr/colorControlNormal" android:alpha="?android:attr/disabledAlpha" />
+        <bitmap android:src="@drawable/btn_radio_to_on_mtrl_000" android:tint="?attr/colorControlNormal" android:alpha="?android:attr/disabledAlpha" />
     </item>
     <item android:state_checked="true" android:id="@+id/on">
-        <bitmap android:src="@drawable/abc_btn_radio_to_on_mtrl_015" android:tint="?attr/colorControlActivated" />
+        <bitmap android:src="@drawable/btn_radio_to_on_mtrl_015" android:tint="?attr/colorControlActivated" />
     </item>
     <item android:id="@+id/off">
-        <bitmap android:src="@drawable/abc_btn_radio_to_on_mtrl_000" android:tint="?attr/colorControlNormal" />
+        <bitmap android:src="@drawable/btn_radio_to_on_mtrl_000" android:tint="?attr/colorControlNormal" />
     </item>
 </selector>
