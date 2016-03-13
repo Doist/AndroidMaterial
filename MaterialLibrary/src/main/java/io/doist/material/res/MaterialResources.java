@@ -13,7 +13,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.util.LongSparseArray;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.ContextThemeWrapper;
 
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
@@ -64,10 +63,12 @@ public class MaterialResources {
     }
 
     public static int getThemeResId(Context context) {
-        if (context instanceof ContextThemeWrapper) {
+        if (context instanceof android.support.v7.internal.view.ContextThemeWrapper) {
+            return ((android.support.v7.internal.view.ContextThemeWrapper) context).getThemeResId();
+        } else if (context instanceof android.view.ContextThemeWrapper) {
             try {
                 return (int) ReflectionUtils.invokeDeclaredMethod(
-                        ContextThemeWrapper.class,
+                        android.view.ContextThemeWrapper.class,
                         "getThemeResId",
                         ReflectionUtils.EMPTY_TYPES,
                         context,
