@@ -272,7 +272,7 @@ public class MaterialResources {
         }
     }
 
-    public static int[] CONFIG_NATIVE_BITS = new int[]{
+    public static final int[] CONFIG_NATIVE_BITS = new int[]{
             MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
             MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
             MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
