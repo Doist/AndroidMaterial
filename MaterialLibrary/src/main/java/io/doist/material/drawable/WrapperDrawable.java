@@ -27,6 +27,18 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         setWrappedDrawable(drawable);
     }
 
+    protected WrapperDrawable(WrapperState state, Resources res) {
+        mWrapperState = createConstantState(state);
+
+        final Drawable drawable;
+        if (res != null) {
+            drawable = mWrapperState.mDrawable.getConstantState().newDrawable(res);
+        } else {
+            drawable = mWrapperState.mDrawable.getConstantState().newDrawable();
+        }
+        mWrapperState.setDrawable(drawable, this);
+    }
+
     public void setWrappedDrawable(Drawable drawable) {
         if (mWrapperState.mDrawable != null) {
             mWrapperState.mDrawable.setCallback(null);
@@ -276,18 +288,6 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
         protected boolean canConstantState() {
             return mDrawable.getConstantState() != null;
         }
-    }
-
-    protected WrapperDrawable(WrapperState state, Resources res) {
-        mWrapperState = createConstantState(state);
-
-        final Drawable drawable;
-        if (res != null) {
-            drawable = mWrapperState.mDrawable.getConstantState().newDrawable(res);
-        } else {
-            drawable = mWrapperState.mDrawable.getConstantState().newDrawable();
-        }
-        mWrapperState.setDrawable(drawable, this);
     }
 
     /*
