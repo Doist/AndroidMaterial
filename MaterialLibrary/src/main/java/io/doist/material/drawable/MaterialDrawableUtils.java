@@ -15,6 +15,11 @@ import android.util.Xml;
 import java.io.IOException;
 
 public class MaterialDrawableUtils {
+
+    private MaterialDrawableUtils() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     public static Drawable createFromXml(Context c, Resources r, XmlPullParser parser)
             throws XmlPullParserException, IOException, NoSuchMethodException {
         AttributeSet attrs = Xml.asAttributeSet(parser);
