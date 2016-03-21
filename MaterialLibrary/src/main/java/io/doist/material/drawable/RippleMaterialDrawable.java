@@ -31,7 +31,9 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
     Drawable mShowAnimatorTarget;
     ValueAnimator mHideRippleAnimator;
     Drawable mHideAnimatorTarget;
+    private int mShowRippleAlpha;
 
+    boolean mFocused = false;
     boolean mPressed = false;
 
     RippleMaterialDrawable(Context context) {
@@ -139,39 +141,49 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
 
     @Override
     protected boolean onStateChange(int[] stateSet) {
-        boolean changed = super.onStateChange(stateSet);
-
+        final boolean changed = super.onStateChange(stateSet);
+        boolean focused = false;
         boolean pressed = false;
         for (int state : stateSet) {
+            if (state == android.R.attr.state_focused) {
+                focused = true;
+            }
             if (state == android.R.attr.state_pressed) {
                 pressed = true;
-                break;
             }
         }
+        setRippleActive(focused, pressed);
+        return changed;
+    }
 
-        if (mPressed != pressed) {
+    private void setRippleActive(boolean focused, boolean pressed) {
+        if (mFocused != focused || mPressed != pressed) {
+            mFocused = focused;
             mPressed = pressed;
-            if (pressed) {
-                startShowRippleAnimation();
+            if (focused || pressed) {
+                startShowRippleAnimation(pressed);
             } else {
                 startHideRippleAnimation();
             }
         }
-
-        return changed;
     }
 
-    private void startShowRippleAnimation() {
+    private void startShowRippleAnimation(boolean pressed) {
         if (mHideRippleAnimator != null && mHideRippleAnimator.isStarted()) {
             mHideRippleAnimator.cancel();
         }
 
         Drawable rippleDrawable = getDrawableSafe(((RippleState) mLayerMaterialState).mRippleIndex);
         if (rippleDrawable != null) {
+            int showRippleAlpha = pressed ? 255 : 160;
             if (mShowRippleAnimator == null) {
-                mShowRippleAnimator = ObjectAnimator.ofInt(null, "alpha", 0, 255);
+                mShowRippleAnimator = ObjectAnimator.ofInt(null, "alpha", 0, showRippleAlpha);
                 mShowRippleAnimator.setInterpolator(new DecelerateInterpolator());
                 mShowRippleAnimator.setDuration(mAnimationDuration);
+                mShowRippleAlpha = showRippleAlpha;
+            } else if (showRippleAlpha != mShowRippleAlpha) {
+                mShowRippleAnimator.setIntValues(0, showRippleAlpha);
+                mShowRippleAlpha = showRippleAlpha;
             }
             if (mShowAnimatorTarget == null) {
                 mShowAnimatorTarget = rippleDrawable;
