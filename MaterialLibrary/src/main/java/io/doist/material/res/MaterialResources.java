@@ -63,8 +63,8 @@ public class MaterialResources {
     }
 
     public static int getThemeResId(Context context) {
-        if (context instanceof android.support.v7.internal.view.ContextThemeWrapper) {
-            return ((android.support.v7.internal.view.ContextThemeWrapper) context).getThemeResId();
+        if (context instanceof android.support.v7.view.ContextThemeWrapper) {
+            return ((android.support.v7.view.ContextThemeWrapper) context).getThemeResId();
         } else if (context instanceof android.view.ContextThemeWrapper) {
             try {
                 return (int) ReflectionUtils.invokeDeclaredMethod(
