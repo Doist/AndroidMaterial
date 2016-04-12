@@ -145,6 +145,8 @@ public class GradientMaterialDrawable extends GradientDrawable {
                         case 315:
                             st.setOrientation(Orientation.TL_BR);
                             break;
+                        default:
+                            break;
                     }
                 } else {
                     TypedValue tv = a.peekValue(R.styleable.GradientDrawableGradient_android_gradientRadius);
