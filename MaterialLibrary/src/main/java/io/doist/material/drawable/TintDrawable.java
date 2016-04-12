@@ -37,6 +37,13 @@ public class TintDrawable extends WrapperDrawable {
         this(context, drawable, null);
     }
 
+    protected TintDrawable(TintState state, Resources res) {
+        super(state, res);
+        mTintState = (TintState) getConstantState();
+        updateTint();
+        updateAlpha();
+    }
+
     public TintDrawable(Context context, Drawable drawable, int tint) {
         this(context, drawable, ColorStateList.valueOf(tint));
     }
@@ -235,10 +242,4 @@ public class TintDrawable extends WrapperDrawable {
         }
     }
 
-    protected TintDrawable(TintState state, Resources res) {
-        super(state, res);
-        mTintState = (TintState) getConstantState();
-        updateTint();
-        updateAlpha();
-    }
 }

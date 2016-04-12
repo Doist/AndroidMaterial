@@ -34,6 +34,23 @@ public class MaterialResources {
     private LongSparseArray<WeakReference<Drawable.ConstantState>> mDrawableCache;
     private LongSparseArray<WeakReference<Drawable.ConstantState>> mColorDrawableCache;
 
+    public static int[] CONFIG_NATIVE_BITS = new int[]{
+            MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
+            MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
+            MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
+            MaterialConfiguration.NATIVE_CONFIG_TOUCHSCREEN,            // TOUCH SCREEN
+            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD,               // KEYBOARD
+            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD_HIDDEN,        // KEYBOARD HIDDEN
+            MaterialConfiguration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
+            MaterialConfiguration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
+            MaterialConfiguration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
+            MaterialConfiguration.NATIVE_CONFIG_UI_MODE,                // UI MODE
+            MaterialConfiguration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
+            MaterialConfiguration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE
+            MaterialConfiguration.NATIVE_CONFIG_DENSITY,                // DENSITY
+            MaterialConfiguration.NATIVE_CONFIG_LAYOUTDIR,              // LAYOUT DIRECTION
+    };
+
     public static MaterialResources getInstance(Context context, Resources resources) {
         int themeResId = getThemeResId(context);
         MaterialResources instance = sInstances.get(themeResId);
@@ -271,23 +288,6 @@ public class MaterialResources {
             }
         }
     }
-
-    public static int[] CONFIG_NATIVE_BITS = new int[]{
-            MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
-            MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
-            MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
-            MaterialConfiguration.NATIVE_CONFIG_TOUCHSCREEN,            // TOUCH SCREEN
-            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD,               // KEYBOARD
-            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD_HIDDEN,        // KEYBOARD HIDDEN
-            MaterialConfiguration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
-            MaterialConfiguration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
-            MaterialConfiguration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
-            MaterialConfiguration.NATIVE_CONFIG_UI_MODE,                // UI MODE
-            MaterialConfiguration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
-            MaterialConfiguration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE
-            MaterialConfiguration.NATIVE_CONFIG_DENSITY,                // DENSITY
-            MaterialConfiguration.NATIVE_CONFIG_LAYOUTDIR,              // LAYOUT DIRECTION
-    };
 
     private static class MaterialConfiguration {
         /** Configuration.KEYBOARDHIDDEN_SOFT is hidden */

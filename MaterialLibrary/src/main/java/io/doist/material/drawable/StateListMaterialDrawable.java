@@ -136,7 +136,7 @@ public class StateListMaterialDrawable extends StateListDrawable {
                 case android.R.attr.drawable:
                 case android.R.attr.id:
                     // Ignore attributes from StateListDrawableItem.
-                    continue;
+                    break;
                 default:
                     states[j++] = attrs.getAttributeBooleanValue(i, false)
                                   ? stateResId : -stateResId;

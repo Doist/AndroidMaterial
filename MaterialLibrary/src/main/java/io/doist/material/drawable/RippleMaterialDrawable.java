@@ -57,6 +57,11 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
         }
     }
 
+    RippleMaterialDrawable(LayerMaterialState state, Resources res) {
+        super(state, res);
+        setRippleIndex(((RippleState) mLayerMaterialState).mRippleIndex);
+    }
+
     /**
      * Creates a new color animation with the specified color and optional content.
      *
@@ -89,11 +94,6 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
 
     static Drawable createRippleDrawable(Context context, ColorStateList color, Drawable content) {
         return new TintDrawable(context, content.getConstantState().newDrawable().mutate(), color);
-    }
-
-    RippleMaterialDrawable(LayerMaterialState state, Resources res) {
-        super(state, res);
-        setRippleIndex(((RippleState) mLayerMaterialState).mRippleIndex);
     }
 
     @Override
