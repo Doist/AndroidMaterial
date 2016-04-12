@@ -179,7 +179,8 @@ public class MaterialWidgetHandler {
                     textView.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, drawableTop, drawableRight,
                                                                      drawableBottom);
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && (drawableStart != null || drawableEnd != null)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                        && (drawableStart != null || drawableEnd != null)) {
                     Drawable[] drawablesRelative = textView.getCompoundDrawablesRelative();
                     if (drawableStart == null) {
                         drawableStart = drawablesRelative[0];
@@ -187,8 +188,8 @@ public class MaterialWidgetHandler {
                     if (drawableEnd == null) {
                         drawableEnd = drawablesRelative[2];
                     }
-                    textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawableStart, drawablesRelative[1],
-                                                                             drawableEnd, drawablesRelative[2]);
+                    textView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                            drawableStart, drawablesRelative[1], drawableEnd, drawablesRelative[2]);
                 }
 
                 if (drawableTextCursor != null) {
