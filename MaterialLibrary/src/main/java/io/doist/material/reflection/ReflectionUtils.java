@@ -18,6 +18,10 @@ public class ReflectionUtils {
     private static final Map<Class<?>, Map<String, Method>> sClassMethodCache = new ConcurrentHashMap<>(8);
     private static final Map<Class<?>, Map<String, Field>> sClassFieldCache = new ConcurrentHashMap<>(8);
 
+    private ReflectionUtils() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     private static Map<String, Method> ensureMethodCache(Class<?> clazz) {
         Map<String, Method> methodCache = sClassMethodCache.get(clazz);
         if (methodCache == null) {

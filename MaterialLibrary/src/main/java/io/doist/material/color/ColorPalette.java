@@ -7,6 +7,11 @@ import android.util.TypedValue;
 import io.doist.material.R;
 
 public class ColorPalette {
+
+    private ColorPalette() {
+        throw new InstantiationError("Must not instantiate this class");
+    }
+
     public static int resolveAccentColor(Context context) {
         TypedValue value = new TypedValue();
         int colorAccentAttrResId = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?

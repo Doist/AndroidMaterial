@@ -279,11 +279,9 @@ public class MaterialResources {
             final WeakReference<Drawable.ConstantState> ref = cache.valueAt(i);
             if (ref != null) {
                 final Drawable.ConstantState cs = ref.get();
-                if (cs != null) {
-                    if (Configuration.needNewResources(
+                if (cs != null && Configuration.needNewResources(
                             configChanges, cs.getChangingConfigurations())) {
-                        cache.setValueAt(i, null);
-                    }
+                    cache.setValueAt(i, null);
                 }
             }
         }
