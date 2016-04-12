@@ -34,23 +34,6 @@ public class MaterialResources {
     private LongSparseArray<WeakReference<Drawable.ConstantState>> mDrawableCache;
     private LongSparseArray<WeakReference<Drawable.ConstantState>> mColorDrawableCache;
 
-    public static int[] CONFIG_NATIVE_BITS = new int[]{
-            MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
-            MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
-            MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
-            MaterialConfiguration.NATIVE_CONFIG_TOUCHSCREEN,            // TOUCH SCREEN
-            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD,               // KEYBOARD
-            MaterialConfiguration.NATIVE_CONFIG_KEYBOARD_HIDDEN,        // KEYBOARD HIDDEN
-            MaterialConfiguration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
-            MaterialConfiguration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
-            MaterialConfiguration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
-            MaterialConfiguration.NATIVE_CONFIG_UI_MODE,                // UI MODE
-            MaterialConfiguration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
-            MaterialConfiguration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE
-            MaterialConfiguration.NATIVE_CONFIG_DENSITY,                // DENSITY
-            MaterialConfiguration.NATIVE_CONFIG_LAYOUTDIR,              // LAYOUT DIRECTION
-    };
-
     public static MaterialResources getInstance(Context context, Resources resources) {
         int themeResId = getThemeResId(context);
         MaterialResources instance = sInstances.get(themeResId);
@@ -307,6 +290,23 @@ public class MaterialResources {
         private static final int NATIVE_CONFIG_SMALLEST_SCREEN_SIZE = 0x2000;
         private static final int NATIVE_CONFIG_LAYOUTDIR = 0x4000;
 
+        public static final int[] NATIVE_CONFIG_BITS = new int[]{
+                MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
+                MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
+                MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
+                MaterialConfiguration.NATIVE_CONFIG_TOUCHSCREEN,            // TOUCH SCREEN
+                MaterialConfiguration.NATIVE_CONFIG_KEYBOARD,               // KEYBOARD
+                MaterialConfiguration.NATIVE_CONFIG_KEYBOARD_HIDDEN,        // KEYBOARD HIDDEN
+                MaterialConfiguration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
+                MaterialConfiguration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
+                MaterialConfiguration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
+                MaterialConfiguration.NATIVE_CONFIG_UI_MODE,                // UI MODE
+                MaterialConfiguration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
+                MaterialConfiguration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE
+                MaterialConfiguration.NATIVE_CONFIG_DENSITY,                // DENSITY
+                MaterialConfiguration.NATIVE_CONFIG_LAYOUTDIR,              // LAYOUT DIRECTION
+        };
+
         private Class<?>[] mClasses;
         private Object[] mValues;
         private Configuration mConfiguration = new Configuration();
@@ -383,9 +383,9 @@ public class MaterialResources {
 
         private int activityInfoConfigToNative(int input) {
             int output = 0;
-            for (int i = 0; i < CONFIG_NATIVE_BITS.length; i++) {
+            for (int i = 0; i < NATIVE_CONFIG_BITS.length; i++) {
                 if ((input & (1 << i)) != 0) {
-                    output |= CONFIG_NATIVE_BITS[i];
+                    output |= NATIVE_CONFIG_BITS[i];
                 }
             }
             return output;

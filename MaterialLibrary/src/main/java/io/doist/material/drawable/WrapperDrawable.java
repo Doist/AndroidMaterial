@@ -106,7 +106,7 @@ public class WrapperDrawable extends Drawable implements Drawable.Callback {
     public boolean setState(int[] stateSet) {
         if (!Arrays.equals(getState(), stateSet)) {
             boolean stateChanged = mWrapperState.mDrawable.setState(stateSet);
-            return onStateChange(stateSet) | stateChanged;
+            return onStateChange(stateSet) || stateChanged;
         }
         return false;
     }
