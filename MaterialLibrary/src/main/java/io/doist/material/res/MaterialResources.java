@@ -270,40 +270,25 @@ public class MaterialResources {
     }
 
     private static class MaterialConfiguration {
-        /** Configuration.KEYBOARDHIDDEN_SOFT is hidden */
+        /** Configuration.KEYBOARDHIDDEN_SOFT is hidden. */
         private static final int KEYBOARDHIDDEN_SOFT = 3;
 
-        private static final int NATIVE_CONFIG_MCC = 0x0001;
-        private static final int NATIVE_CONFIG_MNC = 0x0002;
-        private static final int NATIVE_CONFIG_LOCALE = 0x0004;
-        private static final int NATIVE_CONFIG_TOUCHSCREEN = 0x0008;
-        private static final int NATIVE_CONFIG_KEYBOARD = 0x0010;
-        private static final int NATIVE_CONFIG_KEYBOARD_HIDDEN = 0x0020;
-        private static final int NATIVE_CONFIG_NAVIGATION = 0x0040;
-        private static final int NATIVE_CONFIG_ORIENTATION = 0x0080;
-        private static final int NATIVE_CONFIG_DENSITY = 0x0100;
-        private static final int NATIVE_CONFIG_SCREEN_SIZE = 0x0200;
-        // private static final int NATIVE_CONFIG_VERSION = 0x0400;
-        private static final int NATIVE_CONFIG_SCREEN_LAYOUT = 0x0800;
-        private static final int NATIVE_CONFIG_UI_MODE = 0x1000;
-        private static final int NATIVE_CONFIG_SMALLEST_SCREEN_SIZE = 0x2000;
-        private static final int NATIVE_CONFIG_LAYOUTDIR = 0x4000;
-
+        // From ActivityInfo.java.
         public static final int[] NATIVE_CONFIG_BITS = new int[]{
-                MaterialConfiguration.NATIVE_CONFIG_MNC,                    // MNC
-                MaterialConfiguration.NATIVE_CONFIG_MCC,                    // MCC
-                MaterialConfiguration.NATIVE_CONFIG_LOCALE,                 // LOCALE
-                MaterialConfiguration.NATIVE_CONFIG_TOUCHSCREEN,            // TOUCH SCREEN
-                MaterialConfiguration.NATIVE_CONFIG_KEYBOARD,               // KEYBOARD
-                MaterialConfiguration.NATIVE_CONFIG_KEYBOARD_HIDDEN,        // KEYBOARD HIDDEN
-                MaterialConfiguration.NATIVE_CONFIG_NAVIGATION,             // NAVIGATION
-                MaterialConfiguration.NATIVE_CONFIG_ORIENTATION,            // ORIENTATION
-                MaterialConfiguration.NATIVE_CONFIG_SCREEN_LAYOUT,          // SCREEN LAYOUT
-                MaterialConfiguration.NATIVE_CONFIG_UI_MODE,                // UI MODE
-                MaterialConfiguration.NATIVE_CONFIG_SCREEN_SIZE,            // SCREEN SIZE
-                MaterialConfiguration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE,   // SMALLEST SCREEN SIZE
-                MaterialConfiguration.NATIVE_CONFIG_DENSITY,                // DENSITY
-                MaterialConfiguration.NATIVE_CONFIG_LAYOUTDIR,              // LAYOUT DIRECTION
+                0x0001, // Configuration.NATIVE_CONFIG_MNC
+                0x0002, // Configuration.NATIVE_CONFIG_MCC
+                0x0004, // Configuration.NATIVE_CONFIG_LOCALE
+                0x0008, // Configuration.NATIVE_CONFIG_TOUCHSCREEN
+                0x0010, // Configuration.NATIVE_CONFIG_KEYBOARD
+                0x0020, // Configuration.NATIVE_CONFIG_KEYBOARD_HIDDEN
+                0x0040, // Configuration.NATIVE_CONFIG_NAVIGATION
+                0x0080, // Configuration.NATIVE_CONFIG_ORIENTATION
+                0x0800, // Configuration.NATIVE_CONFIG_SCREEN_LAYOUT
+                0x1000, // Configuration.NATIVE_CONFIG_UI_MODE
+                0x0200, // Configuration.NATIVE_CONFIG_SCREEN_SIZE
+                0x2000, // Configuration.NATIVE_CONFIG_SMALLEST_SCREEN_SIZE
+                0x0100, // Configuration.NATIVE_CONFIG_DENSITY
+                0x4000, // Configuration.NATIVE_CONFIG_LAYOUTDIR
         };
 
         private Class<?>[] mClasses;
