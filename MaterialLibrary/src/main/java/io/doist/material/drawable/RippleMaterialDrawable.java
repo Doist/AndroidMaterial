@@ -201,7 +201,7 @@ public class RippleMaterialDrawable extends LayerMaterialDrawable {
             currentTime = Math.min(mShowRippleAnimator.getCurrentPlayTime(), mAnimationDuration / 2);
             mShowRippleAnimator.cancel();
         } else {
-            currentTime = mAnimationDuration / 2;
+            currentTime = mAnimationDuration / 2L;
         }
 
         Drawable rippleDrawable = getDrawableSafe(((RippleState) mLayerMaterialState).mRippleIndex);

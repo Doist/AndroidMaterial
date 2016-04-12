@@ -109,12 +109,12 @@ class ElevationUpdateRunnable implements Runnable {
             edgeShaderTop = buildEdgeShader(0, mShadowLengthTop, 0, 0, mShadowAlphaTop);
         }
         if (mDirtyRight || mDirtyLeft) {
-            edgeShaderRight = buildEdgeShader(mShadowLengthLeft + width, 0,
-                                              mShadowLengthLeft + width + mShadowLengthRight, 0, mShadowAlphaRight);
+            edgeShaderRight = buildEdgeShader((float)mShadowLengthLeft + width, 0,
+                                              (float)mShadowLengthLeft + width + mShadowLengthRight, 0, mShadowAlphaRight);
         }
         if (mDirtyBottom || mDirtyTop) {
-            edgeShaderBottom = buildEdgeShader(0, mShadowLengthTop + height,
-                                               0, mShadowLengthTop + height + mShadowLengthBottom, mShadowAlphaBottom);
+            edgeShaderBottom = buildEdgeShader(0, (float)mShadowLengthTop + height,
+                                               0, (float)mShadowLengthTop + height + mShadowLengthBottom, mShadowAlphaBottom);
         }
 
         // Build corner gradients (1 per slice) and draw them. Each corner bitmap is an alpha mask.
