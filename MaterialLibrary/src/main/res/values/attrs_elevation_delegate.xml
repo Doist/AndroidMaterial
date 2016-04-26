@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ElevationDelegate">
+    <declare-styleable name="CompatElevationDelegate">
         <attr name="elevation" />
         <attr name="cornerRadius" format="dimension" />
         <attr name="shownShadows">

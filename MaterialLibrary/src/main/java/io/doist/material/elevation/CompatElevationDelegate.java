@@ -35,7 +35,7 @@ import io.doist.material.R;
  * - Elevated {@link ViewGroup.LayoutParams#MATCH_PARENT} views will be clipped by their parent. Use
  * {@link android.R.attr#clipChildren} explicitly or, if it won't be visible, hide the side (preferred).
  */
-public class ElevationDelegate {
+public class CompatElevationDelegate {
     private static final int SHOW_SHADOW_LEFT = 0x01;
     private static final int SHOW_SHADOW_TOP = 0x02;
     private static final int SHOW_SHADOW_RIGHT = 0x04;
@@ -50,24 +50,24 @@ public class ElevationDelegate {
     private boolean mShowShadowRight = true;
     private boolean mShowShadowBottom = true;
 
-    public ElevationDelegate(View view) {
+    public CompatElevationDelegate(View view) {
         this(view, null, 0);
     }
 
     /**
-     * Creates and returns a configured {@link ElevationDelegate}. Initial setup of the {@link View}, such as wrapping
-     * its background inside a {@link ElevationWrapperDrawable}, is done automatically.
+     * Creates and returns a configured {@link CompatElevationDelegate}. Initial setup of the {@link View}, such as
+     * wrapping its background inside a {@link CompatElevationDrawable}, is done automatically.
      */
-    public ElevationDelegate(View view, AttributeSet attrs, int defStyleAttr) {
+    public CompatElevationDelegate(View view, AttributeSet attrs, int defStyleAttr) {
         mView = view;
 
         // Parse the attrs, if any.
         if (attrs != null) {
-            TypedArray a =
-                    view.getContext().obtainStyledAttributes(attrs, R.styleable.ElevationDelegate, defStyleAttr, 0);
-            mElevation = a.getDimensionPixelOffset(R.styleable.ElevationDelegate_elevation, 0);
-            mCornerRadius = a.getDimensionPixelOffset(R.styleable.ElevationDelegate_cornerRadius, 0);
-            int shownShadows = a.getInt(R.styleable.ElevationDelegate_shownShadows, SHOW_ALL_SHADOWS);
+            TypedArray a = view.getContext().obtainStyledAttributes(
+                    attrs, R.styleable.CompatElevationDelegate, defStyleAttr, 0);
+            mElevation = a.getDimensionPixelOffset(R.styleable.CompatElevationDelegate_elevation, 0);
+            mCornerRadius = a.getDimensionPixelOffset(R.styleable.CompatElevationDelegate_cornerRadius, 0);
+            int shownShadows = a.getInt(R.styleable.CompatElevationDelegate_shownShadows, SHOW_ALL_SHADOWS);
             mShowShadowLeft = (shownShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT;
             mShowShadowTop = (shownShadows & SHOW_SHADOW_TOP) == SHOW_SHADOW_TOP;
             mShowShadowRight = (shownShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT;
@@ -90,7 +90,7 @@ public class ElevationDelegate {
         boolean needsWrap = elevation > mElevation;
         mElevation = elevation;
 
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             if (needsWrap) {
                 unwrap();
@@ -109,7 +109,7 @@ public class ElevationDelegate {
     public void setCornerRadius(float cornerRadius) {
         mCornerRadius = cornerRadius;
 
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             elevationDrawable.setCornerRadius(cornerRadius);
         }
@@ -126,7 +126,7 @@ public class ElevationDelegate {
         mShowShadowRight = right;
         mShowShadowBottom = bottom;
 
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             if (needsWrap) {
                 unwrap();
@@ -139,7 +139,7 @@ public class ElevationDelegate {
     }
 
     /**
-     * Wraps {@link View}'s background in an {@link ElevationWrapperDrawable} and adjusts its padding, size and margins.
+     * Wraps {@link View}'s background in an {@link CompatElevationDrawable} and adjusts its padding, size and margins.
      */
     public void onAttachedToWindow() {
         wrap();
@@ -157,8 +157,8 @@ public class ElevationDelegate {
      */
     public Drawable getOriginalBackground() {
         Drawable background = mView.getBackground();
-        if (background instanceof ElevationWrapperDrawable) {
-            background = ((ElevationWrapperDrawable) background).getWrappedDrawable();
+        if (background instanceof CompatElevationDrawable) {
+            background = ((CompatElevationDrawable) background).getWrappedDrawable();
         }
         return background;
     }
@@ -168,7 +168,7 @@ public class ElevationDelegate {
      */
     public int getOriginalPaddingLeft() {
         int paddingLeft = mView.getPaddingLeft();
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             paddingLeft -= elevationDrawable.getPaddingLeft();
         }
@@ -180,7 +180,7 @@ public class ElevationDelegate {
      */
     public int getOriginalPaddingTop() {
         int paddingTop = mView.getPaddingTop();
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             paddingTop -= elevationDrawable.getPaddingTop();
         }
@@ -192,7 +192,7 @@ public class ElevationDelegate {
      */
     public int getOriginalPaddingRight() {
         int paddingRight = mView.getPaddingRight();
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             paddingRight -= elevationDrawable.getPaddingRight();
         }
@@ -204,7 +204,7 @@ public class ElevationDelegate {
      */
     public int getOriginalPaddingBottom() {
         int paddingBottom = mView.getPaddingBottom();
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             paddingBottom -= elevationDrawable.getPaddingBottom();
         }
@@ -230,10 +230,10 @@ public class ElevationDelegate {
     }
 
     /**
-     * Returns the left padding added by {@link ElevationDelegate} to display the shadow.
+     * Returns the left padding added by {@link CompatElevationDelegate} to display the shadow.
      */
     public int getElevationPaddingLeft() {
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             return elevationDrawable.getPaddingLeft();
         } else {
@@ -242,10 +242,10 @@ public class ElevationDelegate {
     }
 
     /**
-     * Returns the top padding added by {@link ElevationDelegate} to display the shadow.
+     * Returns the top padding added by {@link CompatElevationDelegate} to display the shadow.
      */
     public int getElevationPaddingTop() {
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             return elevationDrawable.getPaddingTop();
         } else {
@@ -254,10 +254,10 @@ public class ElevationDelegate {
     }
 
     /**
-     * Returns the right padding added by {@link ElevationDelegate} to display the shadow.
+     * Returns the right padding added by {@link CompatElevationDelegate} to display the shadow.
      */
     public int getElevationPaddingRight() {
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             return elevationDrawable.getPaddingRight();
         } else {
@@ -266,10 +266,10 @@ public class ElevationDelegate {
     }
 
     /**
-     * Returns the bottom padding added by {@link ElevationDelegate} to display the shadow.
+     * Returns the bottom padding added by {@link CompatElevationDelegate} to display the shadow.
      */
     public int getElevationPaddingBottom() {
-        ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+        CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
         if (elevationDrawable != null) {
             return elevationDrawable.getPaddingBottom();
         } else {
@@ -301,7 +301,7 @@ public class ElevationDelegate {
     public ViewGroup.LayoutParams getOriginalLayoutParams() {
         ViewGroup.LayoutParams params = mView.getLayoutParams();
         if (params != null) {
-            ElevationWrapperDrawable elevationDrawable = getElevationDrawableWrapper();
+            CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
             if (elevationDrawable != null) {
                 int paddingLeft = elevationDrawable.getPaddingLeft();
                 int paddingTop = elevationDrawable.getPaddingTop();
@@ -346,14 +346,14 @@ public class ElevationDelegate {
     private void wrap() {
         Drawable background = mView.getBackground();
         ViewGroup.LayoutParams params = mView.getLayoutParams();
-        if (background != null && !(background instanceof ElevationWrapperDrawable) && params != null) {
+        if (background != null && !(background instanceof CompatElevationDrawable) && params != null) {
             // Remove the drawable to avoid the wrapper drawable callback being removed when it's set on the view below.
             mView.setBackground(null);
 
-            ElevationWrapperDrawable elevationDrawable =
-                    new ElevationWrapperDrawable(background, mView, mElevation, mCornerRadius,
-                                                 mShowShadowLeft, mShowShadowTop,
-                                                 mShowShadowRight, mShowShadowBottom);
+            CompatElevationDrawable elevationDrawable =
+                    new CompatElevationDrawable(background, mView, mElevation, mCornerRadius,
+                                                mShowShadowLeft, mShowShadowTop,
+                                                mShowShadowRight, mShowShadowBottom);
             // Set elevation wrapper drawable around the background.
             mView.setBackground(elevationDrawable);
 
@@ -399,8 +399,8 @@ public class ElevationDelegate {
     private void unwrap() {
         Drawable background = mView.getBackground();
         ViewGroup.LayoutParams params = mView.getLayoutParams();
-        if (background != null && background instanceof ElevationWrapperDrawable && params != null) {
-            ElevationWrapperDrawable elevationDrawable = (ElevationWrapperDrawable) background;
+        if (background != null && background instanceof CompatElevationDrawable && params != null) {
+            CompatElevationDrawable elevationDrawable = (CompatElevationDrawable) background;
 
             // Background.
             mView.setBackground(null); // Removes the callback.
@@ -445,10 +445,10 @@ public class ElevationDelegate {
         }
     }
 
-    private ElevationWrapperDrawable getElevationDrawableWrapper() {
+    private CompatElevationDrawable getElevationDrawableWrapper() {
         Drawable background = mView.getBackground();
-        if (background instanceof ElevationWrapperDrawable) {
-            return (ElevationWrapperDrawable) background;
+        if (background instanceof CompatElevationDrawable) {
+            return (CompatElevationDrawable) background;
         } else {
             return null;
         }

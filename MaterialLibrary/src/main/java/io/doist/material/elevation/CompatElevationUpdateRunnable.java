@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
  *
  * A {@link ShadowUpdateListener} is needed to obtain the result data.
  */
-class ElevationUpdateRunnable implements Runnable {
+class CompatElevationUpdateRunnable implements Runnable {
     private int mLeft;
     private int mTop;
     private int mRight;
@@ -49,13 +49,13 @@ class ElevationUpdateRunnable implements Runnable {
     private int[] mTmpCornerColors = new int[]{Color.TRANSPARENT, Color.TRANSPARENT, -1, Color.TRANSPARENT};
     private float[] mTmpCornerStops = new float[]{0f, -1, -1, 1f};
 
-    public ElevationUpdateRunnable(int left, int top, int right, int bottom, float cornerRadius,
-                                   int shadowLengthLeft, int shadowLengthTop,
-                                   int shadowLengthRight, int shadowLengthBottom,
-                                   float shadowAlphaLeft, float shadowAlphaTop,
-                                   float shadowAlphaRight, float shadowAlphaBottom,
-                                   boolean dirtyLeft, boolean dirtyTop, boolean dirtyRight, boolean dirtyBottom,
-                                   ShadowUpdateListener listener) {
+    public CompatElevationUpdateRunnable(int left, int top, int right, int bottom, float cornerRadius,
+                                         int shadowLengthLeft, int shadowLengthTop,
+                                         int shadowLengthRight, int shadowLengthBottom,
+                                         float shadowAlphaLeft, float shadowAlphaTop,
+                                         float shadowAlphaRight, float shadowAlphaBottom,
+                                         boolean dirtyLeft, boolean dirtyTop, boolean dirtyRight, boolean dirtyBottom,
+                                         ShadowUpdateListener listener) {
         mLeft = left;
         mTop = top;
         mRight = right;
@@ -228,7 +228,7 @@ class ElevationUpdateRunnable implements Runnable {
     }
 
     /**
-     * Listen for shadow updates following {@link ElevationUpdateRunnable} runs.
+     * Listen for shadow updates following {@link CompatElevationUpdateRunnable} runs.
      */
     public interface ShadowUpdateListener {
         void onShadowUpdate(int shadowLeftLength, int shadowTopLength, int shadowRightLength, int shadowBottomLength,

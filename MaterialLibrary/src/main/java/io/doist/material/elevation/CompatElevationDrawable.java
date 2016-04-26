@@ -24,7 +24,7 @@ import io.doist.material.drawable.WrapperDrawable;
 /**
  * Wraps a {@link Drawable} and draws an elevation drop shadow around it.
  */
-class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdateRunnable.ShadowUpdateListener {
+class CompatElevationDrawable extends WrapperDrawable implements CompatElevationUpdateRunnable.ShadowUpdateListener {
     // For calculating each shadow length.
     private static final int LIGHT_HEIGHT_DIP = 800;
     private static final int LIGHT_Y_OFFSET_DIP = 640;
@@ -107,9 +107,9 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
         }
     };
 
-    public ElevationWrapperDrawable(Drawable drawable, View view, float elevation, float cornerRadius,
-                                    boolean showShadowLeft, boolean showShadowTop,
-                                    boolean showShadowRight, boolean showShadowBottom) {
+    public CompatElevationDrawable(Drawable drawable, View view, float elevation, float cornerRadius,
+                                   boolean showShadowLeft, boolean showShadowTop,
+                                   boolean showShadowRight, boolean showShadowBottom) {
 
         super(drawable);
 
@@ -178,7 +178,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
     }
 
     /**
-     * @see {@link ElevationDelegate#setElevation(float)}.
+     * @see {@link CompatElevationDelegate#setElevation(float)}.
      */
     public void setElevation(float elevation) {
         if (mElevation != elevation) {
@@ -191,7 +191,7 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
     }
 
     /**
-     * @see {@link ElevationDelegate#setCornerRadius(float).
+     * @see {@link CompatElevationDelegate#setCornerRadius(float).
      */
     public void setCornerRadius(float cornerRadius) {
         if (mCornerRadius != cornerRadius) {
@@ -367,8 +367,8 @@ class ElevationWrapperDrawable extends WrapperDrawable implements ElevationUpdat
                     float shadowAlphaBottom =
                             MIN_BOTTOM_ALPHA + INC_BOTTOM_ALPHA * shadowLengthBottom / getPaddingBottom();
 
-                    ElevationUpdateRunnable runnable =
-                            new ElevationUpdateRunnable(
+                    CompatElevationUpdateRunnable runnable =
+                            new CompatElevationUpdateRunnable(
                                     mLeft, mTop, mRight, mBottom, mCornerRadius,
                                     shadowLengthLeft, shadowLengthTop, shadowLengthRight, shadowLengthBottom,
                                     shadowAlphaLeft, shadowAlphaTop, shadowAlphaRight, shadowAlphaBottom,

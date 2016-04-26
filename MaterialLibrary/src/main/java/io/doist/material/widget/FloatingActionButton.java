@@ -17,7 +17,7 @@ import io.doist.material.R;
 import io.doist.material.color.ColorPalette;
 import io.doist.material.drawable.RippleMaterialDrawable;
 import io.doist.material.drawable.TintDrawable;
-import io.doist.material.elevation.ElevationDelegate;
+import io.doist.material.elevation.CompatElevationDelegate;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class FloatingActionButton extends ImageButton {
@@ -31,7 +31,7 @@ public class FloatingActionButton extends ImageButton {
     private GradientDrawable mCircleDrawable; // To change the color of the circle.
     private TintDrawable mTintDrawable; // To change the color of the circle in compat mode.
 
-    private ElevationDelegate mElevationDelegate;
+    private CompatElevationDelegate mCompatElevationDelegate;
 
     public FloatingActionButton(Context context) {
         this(context, null);
@@ -107,7 +107,7 @@ public class FloatingActionButton extends ImageButton {
 
     private void initElevation(boolean inCompat, float elevation) {
         if (inCompat) {
-            mElevationDelegate = new ElevationDelegate(this);
+            mCompatElevationDelegate = new CompatElevationDelegate(this);
         }
         setElevation(elevation);
     }
@@ -145,8 +145,8 @@ public class FloatingActionButton extends ImageButton {
 
     @Override
     public void setElevation(float elevation) {
-        if (mElevationDelegate != null) {
-            mElevationDelegate.setElevation(elevation);
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.setElevation(elevation);
         } else {
             super.setElevation(elevation);
         }
@@ -154,8 +154,8 @@ public class FloatingActionButton extends ImageButton {
 
     @Override
     public float getElevation() {
-        if (mElevationDelegate != null) {
-            return mElevationDelegate.getElevation();
+        if (mCompatElevationDelegate != null) {
+            return mCompatElevationDelegate.getElevation();
         } else {
             return super.getElevation();
         }
@@ -193,24 +193,24 @@ public class FloatingActionButton extends ImageButton {
         int radius = getResources().getDimensionPixelOffset(isMini ? R.dimen.fab_mini_radius : R.dimen.fab_radius);
         mSize = radius * 2;
 
-        if (mElevationDelegate != null) {
-            mElevationDelegate.setCornerRadius(radius);
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.setCornerRadius(radius);
         }
 
         // Re-set layout params so that width and height are adjusted accordingly.
         ViewGroup.LayoutParams params = getLayoutParams();
         if (params != null) {
             boolean isAttached = getWindowVisibility() == View.VISIBLE;
-            if (mElevationDelegate != null && isAttached) {
-                mElevationDelegate.onDetachedFromWindow();
+            if (mCompatElevationDelegate != null && isAttached) {
+                mCompatElevationDelegate.onDetachedFromWindow();
             }
 
             params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             setLayoutParams(params);
 
-            if (mElevationDelegate != null && isAttached) {
-                mElevationDelegate.onAttachedToWindow();
+            if (mCompatElevationDelegate != null && isAttached) {
+                mCompatElevationDelegate.onAttachedToWindow();
             }
         }
     }
@@ -235,8 +235,8 @@ public class FloatingActionButton extends ImageButton {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (mElevationDelegate != null) {
-            mElevationDelegate.onAttachedToWindow();
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.onAttachedToWindow();
         }
     }
 
@@ -244,8 +244,8 @@ public class FloatingActionButton extends ImageButton {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if (mElevationDelegate != null) {
-            mElevationDelegate.onDetachedFromWindow();
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.onDetachedFromWindow();
         }
     }
 }
