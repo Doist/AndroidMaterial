@@ -21,10 +21,10 @@ import io.doist.material.reflection.ReflectionUtils;
 import io.doist.material.res.MaterialResources;
 
 public class MaterialWidgetHandler {
-    private static final boolean SKIP = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
+    private static final boolean sNative = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
     public static AttributeSet hideStyleableAttributes(AttributeSet set, Styleable... styleables) {
-        if (SKIP) {
+        if (sNative) {
             return set;
         }
 
@@ -36,7 +36,7 @@ public class MaterialWidgetHandler {
     }
 
     public static void restoreStyleableAttributes(Styleable... styleables) {
-        if (SKIP) {
+        if (sNative) {
             return;
         }
 
@@ -45,9 +45,8 @@ public class MaterialWidgetHandler {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
     public static void init(View view, AttributeSet set, int defStyle, Styleable[] styleables) {
-        if (SKIP) {
+        if (sNative) {
             return;
         }
 
@@ -58,11 +57,20 @@ public class MaterialWidgetHandler {
         }
     }
 
+    public static Drawable getDrawable(View view, int resId) {
+        if (resId != 0) {
+            Context context = view.getContext();
+            return MaterialResources.getInstance(context, context.getResources()).getDrawable(resId);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Applies {@code android:theme} to {@code context} by wrapping it in a {@link ContextThemeWrapper}.
      */
     public static Context themifyContext(Context context, AttributeSet attrs) {
-        if (SKIP) {
+        if (sNative) {
             return context;
         }
 
@@ -266,14 +274,6 @@ public class MaterialWidgetHandler {
                 } finally {
                     ta.recycle();
                 }
-            }
-        },
-
-        POPUP_WINDOW("PopupWindow", "popupBackground") {
-            @Override
-            public void initAttributes(Context context, MaterialResources resources, View view, AttributeSet set,
-                                       int defStyle) {
-                // No support needed.
             }
         },
 
