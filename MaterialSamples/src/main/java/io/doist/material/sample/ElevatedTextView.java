@@ -1,13 +1,14 @@
 package io.doist.material.sample;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import io.doist.material.elevation.ElevationDelegate;
+import io.doist.material.elevation.CompatElevationDelegate;
 
 public class ElevatedTextView extends TextView {
-    private ElevationDelegate mElevationDelegate;
+    private CompatElevationDelegate mCompatElevationDelegate;
 
     public ElevatedTextView(Context context) {
         super(context);
@@ -25,20 +26,26 @@ public class ElevatedTextView extends TextView {
     }
 
     private void init(AttributeSet attrs, int defStyleAttr) {
-        mElevationDelegate = new ElevationDelegate(this, attrs, defStyleAttr);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mCompatElevationDelegate = new CompatElevationDelegate(this, attrs, defStyleAttr);
+        } /* else native elevation can be used. */
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        mElevationDelegate.onAttachedToWindow();
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.onAttachedToWindow();
+        }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        mElevationDelegate.onDetachedFromWindow();
+        if (mCompatElevationDelegate != null) {
+            mCompatElevationDelegate.onDetachedFromWindow();
+        }
     }
 }
