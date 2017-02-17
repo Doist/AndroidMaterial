@@ -75,7 +75,7 @@ public class CompatElevationDelegate {
             boolean showShadowStart = (shownShadows & SHOW_SHADOW_START) == SHOW_SHADOW_START;
             boolean showShadowEnd = (shownShadows & SHOW_SHADOW_END) == SHOW_SHADOW_END;
             mShowShadowLeft = (shownShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT
-                    || isLtr && showShadowStart || !isLtr && showShadowEnd
+                    || isLtr && showShadowStart || !isLtr && showShadowEnd;
             mShowShadowTop = (shownShadows & SHOW_SHADOW_TOP) == SHOW_SHADOW_TOP;
             mShowShadowRight = (shownShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT
                     || isLtr && showShadowEnd || !isLtr && showShadowStart;
