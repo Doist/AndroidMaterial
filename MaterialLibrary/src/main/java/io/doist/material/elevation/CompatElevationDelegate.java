@@ -85,14 +85,14 @@ public class CompatElevationDelegate {
     }
 
     /**
-     * @see {@link View#getElevation()}.
+     * @see View#getElevation()
      */
     public float getElevation() {
         return mElevation;
     }
 
     /**
-     * @see {@link View#setElevation(float)}.
+     * @see View#setElevation(float)
      */
     public void setElevation(float elevation) {
         boolean needsWrap = elevation > mElevation;
