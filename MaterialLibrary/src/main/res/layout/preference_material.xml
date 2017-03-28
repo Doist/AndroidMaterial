@@ -34,7 +34,7 @@
         android:layout_gravity="center"
         android:maxHeight="48dp"
         android:maxWidth="48dp"
-        android:layout_marginRight="16dp" />
+        android:layout_marginRight="32dp" />
 
     <RelativeLayout
         android:layout_width="0dp"
