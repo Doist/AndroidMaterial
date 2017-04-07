@@ -29,18 +29,17 @@
 
     <ImageView
         android:id="@android:id/icon"
-        android:layout_width="wrap_content"
+        android:layout_width="56dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:maxHeight="48dp"
-        android:maxWidth="48dp" />
+        android:maxHeight="56dp"
+        android:scaleType="fitStart" />
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
         android:paddingTop="16dp">
 
         <TextView
