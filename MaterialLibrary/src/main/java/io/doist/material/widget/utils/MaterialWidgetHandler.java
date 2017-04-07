@@ -95,29 +95,49 @@ public class MaterialWidgetHandler {
                         Drawable drawable =
                                 resources.getDrawable(ta.getResourceId(R.styleable.MaterialView_android_background, 0));
 
-                        final int paddingLeft = view.getPaddingLeft();
-                        final int paddingTop = view.getPaddingTop();
-                        final int paddingRight = view.getPaddingRight();
-                        final int paddingBottom = view.getPaddingBottom();
-
                         // Init background.
                         view.setBackground(drawable);
 
                         // Maintain horizontal and vertical padding.
-                        if (paddingLeft > 0 || paddingRight > 0) {
-                            view.setPadding(
-                                    paddingLeft,
-                                    view.getPaddingTop(),
-                                    paddingRight,
-                                    view.getPaddingBottom());
-                        }
+                        final int paddingTop = view.getPaddingTop();
+                        final int paddingBottom = view.getPaddingBottom();
 
-                        if (paddingTop > 0 || paddingBottom > 0) {
-                            view.setPadding(
-                                    view.getPaddingLeft(),
-                                    paddingTop,
-                                    view.getPaddingRight(),
-                                    paddingBottom);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                            final int paddingStart = view.getPaddingStart();
+                            final int paddingEnd = view.getPaddingEnd();
+
+                            if (paddingStart > 0 || paddingEnd > 0) {
+                                view.setPaddingRelative(
+                                        paddingStart,
+                                        view.getPaddingTop(),
+                                        paddingEnd,
+                                        view.getPaddingBottom());
+                            }
+                            if (paddingTop > 0 || paddingBottom > 0) {
+                                view.setPaddingRelative(
+                                        view.getPaddingStart(),
+                                        paddingTop,
+                                        view.getPaddingEnd(),
+                                        paddingBottom);
+                            }
+                        } else {
+                            final int paddingLeft = view.getPaddingLeft();
+                            final int paddingRight = view.getPaddingRight();
+
+                            if (paddingLeft > 0 || paddingRight > 0) {
+                                view.setPadding(
+                                        paddingLeft,
+                                        view.getPaddingTop(),
+                                        paddingRight,
+                                        view.getPaddingBottom());
+                            }
+                            if (paddingTop > 0 || paddingBottom > 0) {
+                                view.setPadding(
+                                        view.getPaddingLeft(),
+                                        paddingTop,
+                                        view.getPaddingRight(),
+                                        paddingBottom);
+                            }
                         }
                     }
                 } finally {

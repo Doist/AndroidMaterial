@@ -24,8 +24,8 @@
     android:clipToPadding="false"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingEnd="?attr/listPreferredItemPaddingRight"
-    android:paddingStart="?attr/listPreferredItemPaddingLeft">
+    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
+    android:paddingStart="?android:attr/listPreferredItemPaddingStart">
 
     <ImageView
         android:id="@android:id/icon"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
+        android:paddingStart="16dp"
         android:paddingTop="16dp">
 
         <TextView

@@ -178,7 +178,7 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
     }
 
     /**
-     * @see {@link CompatElevationDelegate#setElevation(float)}.
+     * @see CompatElevationDelegate#setElevation(float)
      */
     public void setElevation(float elevation) {
         if (mElevation != elevation) {
@@ -191,7 +191,7 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
     }
 
     /**
-     * @see {@link CompatElevationDelegate#setCornerRadius(float).
+     * @see CompatElevationDelegate#setCornerRadius(float)
      */
     public void setCornerRadius(float cornerRadius) {
         if (mCornerRadius != cornerRadius) {

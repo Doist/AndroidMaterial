@@ -62,7 +62,11 @@ public class MaterialCheckedTextView extends CheckedTextView {
     public void setCompoundDrawablesRelativeWithIntrinsicBounds(@DrawableRes int start, @DrawableRes int top,
                                                                 @DrawableRes int end, @DrawableRes int bottom) {
         if (sNative) {
-            super.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, end, bottom);
+            // Don't set compound drawables relative because it breaks spinner popup width calculation.
+            boolean isRtl = getResources().getConfiguration().getLayoutDirection() == LAYOUT_DIRECTION_RTL;
+            int left = isRtl ? end : start;
+            int right = isRtl ? start : end;
+            super.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
         } else {
             super.setCompoundDrawablesRelativeWithIntrinsicBounds(
                     MaterialWidgetHandler.getDrawable(this, start), MaterialWidgetHandler.getDrawable(this, top),

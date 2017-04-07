@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class CompatElevationDelegate {
     private static final int SHOW_SHADOW_TOP = 0x02;
     private static final int SHOW_SHADOW_RIGHT = 0x04;
     private static final int SHOW_SHADOW_BOTTOM = 0x08;
+    private static final int SHOW_SHADOW_START = 0x10;
+    private static final int SHOW_SHADOW_END = 0x20;
     private static final int SHOW_ALL_SHADOWS = 0xff;
 
     private View mView;
@@ -68,23 +71,28 @@ public class CompatElevationDelegate {
             mElevation = a.getDimensionPixelOffset(R.styleable.CompatElevationDelegate_elevation, 0);
             mCornerRadius = a.getDimensionPixelOffset(R.styleable.CompatElevationDelegate_cornerRadius, 0);
             int shownShadows = a.getInt(R.styleable.CompatElevationDelegate_shownShadows, SHOW_ALL_SHADOWS);
-            mShowShadowLeft = (shownShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT;
+            boolean isLtr = ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_LTR;
+            boolean showShadowStart = (shownShadows & SHOW_SHADOW_START) == SHOW_SHADOW_START;
+            boolean showShadowEnd = (shownShadows & SHOW_SHADOW_END) == SHOW_SHADOW_END;
+            mShowShadowLeft = (shownShadows & SHOW_SHADOW_LEFT) == SHOW_SHADOW_LEFT
+                    || isLtr && showShadowStart || !isLtr && showShadowEnd;
             mShowShadowTop = (shownShadows & SHOW_SHADOW_TOP) == SHOW_SHADOW_TOP;
-            mShowShadowRight = (shownShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT;
+            mShowShadowRight = (shownShadows & SHOW_SHADOW_RIGHT) == SHOW_SHADOW_RIGHT
+                    || isLtr && showShadowEnd || !isLtr && showShadowStart;
             mShowShadowBottom = (shownShadows & SHOW_SHADOW_BOTTOM) == SHOW_SHADOW_BOTTOM;
             a.recycle();
         }
     }
 
     /**
-     * @see {@link View#getElevation()}.
+     * @see View#getElevation()
      */
     public float getElevation() {
         return mElevation;
     }
 
     /**
-     * @see {@link View#setElevation(float)}.
+     * @see View#setElevation(float)
      */
     public void setElevation(float elevation) {
         boolean needsWrap = elevation > mElevation;
