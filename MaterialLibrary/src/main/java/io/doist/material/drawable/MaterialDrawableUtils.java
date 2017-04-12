@@ -66,7 +66,8 @@ public class MaterialDrawableUtils {
             drawable = new GradientMaterialDrawable(c);
         //} else if (name.equals("vector")) {
         //} else if (name.equals("animated-vector")) {
-        //} else if (name.equals("scale")) {
+        } else if (name.equals("scale")) {
+            drawable = new ScaleMaterialDrawable(c);
         //} else if (name.equals("clip")) {
         //} else if (name.equals("rotate")) {
         //} else if (name.equals("animated-rotate")) {

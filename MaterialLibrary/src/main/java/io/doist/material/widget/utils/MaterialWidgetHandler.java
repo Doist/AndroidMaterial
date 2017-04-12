@@ -11,6 +11,7 @@ import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -308,6 +309,25 @@ public class MaterialWidgetHandler {
                                 ta.getResourceId(R.styleable.Spinner_android_popupBackground, 0));
                         // Init popupBackground.
                         ((Spinner) view).setPopupBackgroundDrawable(drawable);
+                    }
+                } finally {
+                    ta.recycle();
+                }
+            }
+        },
+
+        PROGRESS_BAR("ProgressBar", "progressDrawable") {
+            @Override
+            public void initAttributes(Context context, MaterialResources resources, View view, AttributeSet set,
+                                       int defStyle) {
+                TypedArray ta = context.obtainStyledAttributes(set, R.styleable.MaterialProgressBar, defStyle, 0);
+                try {
+                    if (ta.hasValue(R.styleable.MaterialProgressBar_android_progressDrawable)) {
+                        Drawable drawable =
+                                resources.getDrawable(
+                                        ta.getResourceId(R.styleable.MaterialProgressBar_android_progressDrawable, 0));
+                        // Init progressDrawable.
+                        ((ProgressBar) view).setProgressDrawable(drawable);
                     }
                 } finally {
                     ta.recycle();

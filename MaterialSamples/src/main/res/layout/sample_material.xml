@@ -6,6 +6,13 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
+    <io.doist.material.widget.MaterialProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false" />
+
     <io.doist.material.widget.MaterialImageView
         android:layout_width="100dip"
         android:layout_height="100dip"

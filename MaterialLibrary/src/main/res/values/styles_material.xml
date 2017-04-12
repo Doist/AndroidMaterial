@@ -64,6 +64,13 @@
         <item name="android:background">@drawable/spinner_textfield_background_material</item>
     </style>
 
+    <!-- ProgressBar -->
+
+    <style name="Widget.Material.ProgressBar.Horizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_material</item>
+        <!-- TODO: Add android:indeterminateDrawable. -->
+    </style>
+
     <!-- Preferences -->
 
     <style name="Preference" />

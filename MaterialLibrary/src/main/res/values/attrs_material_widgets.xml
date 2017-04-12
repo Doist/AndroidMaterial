@@ -35,4 +35,8 @@
         <attr name="android:popupBackground" />
     </declare-styleable>
 
+    <declare-styleable name="MaterialProgressBar">
+        <attr name="android:progressDrawable" />
+    </declare-styleable>
+
 </resources>

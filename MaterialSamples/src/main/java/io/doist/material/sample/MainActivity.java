@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -32,6 +33,24 @@ public class MainActivity extends ActionBarActivity {
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array));
+
+        final ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
+        findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress.setProgress(0);
+                progress.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(progress.getProgress() + progress.getMax() / 100);
+
+                        if (progress.getProgress() != progress.getMax()) {
+                            progress.postDelayed(this, 16);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

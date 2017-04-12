@@ -106,6 +106,15 @@
         <attr name="android:alpha" />
     </declare-styleable>
 
+    <declare-styleable name="ScaleDrawable">
+        <attr name="android:drawable" />
+        <attr name="android:level" />
+        <attr name="android:scaleGravity" />
+        <attr name="android:scaleHeight" />
+        <attr name="android:scaleWidth" />
+        <attr name="android:useIntrinsicSizeAsMinimum" />
+    </declare-styleable>
+
     <declare-styleable name="InsetDrawable">
         <attr name="android:visible" />
         <attr name="android:drawable" />
