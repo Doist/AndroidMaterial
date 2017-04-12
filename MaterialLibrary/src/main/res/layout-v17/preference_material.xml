@@ -29,11 +29,11 @@
 
     <ImageView
         android:id="@android:id/icon"
+        style="@style/preference_icon"
         android:layout_width="56dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:maxHeight="56dp"
-        android:scaleType="fitStart" />
+        android:layout_gravity="center_vertical"
+        android:maxHeight="56dp" />
 
     <RelativeLayout
         android:layout_width="0dp"
