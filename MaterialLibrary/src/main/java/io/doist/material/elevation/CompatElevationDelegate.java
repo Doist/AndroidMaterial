@@ -95,7 +95,7 @@ public class CompatElevationDelegate {
      * @see View#setElevation(float)
      */
     public void setElevation(float elevation) {
-        boolean needsWrap = elevation > mElevation;
+        boolean needsWrap = elevation != mElevation;
         mElevation = elevation;
 
         CompatElevationDrawable elevationDrawable = getElevationDrawableWrapper();
