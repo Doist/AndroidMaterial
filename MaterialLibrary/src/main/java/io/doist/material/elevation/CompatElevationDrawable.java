@@ -337,7 +337,7 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
      */
     private void update(boolean force, boolean async) {
         View view = mViewRef.get();
-        if (view != null) {
+        if (view != null && mElevation > 0) {
             view.getLocationOnScreen(mScreenLocation);
             int left = mScreenLocation[0] + getPaddingLeft();
             int top = mScreenLocation[1] + getPaddingTop();
@@ -379,6 +379,7 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
                         runnable.run();
                     }
                 }
+
             }
         }
     }
