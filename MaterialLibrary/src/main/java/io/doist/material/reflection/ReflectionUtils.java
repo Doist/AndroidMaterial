@@ -99,7 +99,9 @@ public class ReflectionUtils {
             if (method != null) {
                 try {
                     result = method.invoke(receiver, parameters);
-                } catch (InvocationTargetException | IllegalAccessException e) {
+                } catch (InvocationTargetException e) {
+                    Log.w(LOG_TAG, e);
+                } catch (IllegalAccessException e) {
                     Log.w(LOG_TAG, e);
                 }
             }

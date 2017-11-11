@@ -7,45 +7,39 @@ import android.widget.TextView;
 
 import io.doist.material.elevation.CompatElevationDelegate;
 
-public class ElevatedTextView extends TextView {
+public class DemoElevatedTextView extends TextView {
     private CompatElevationDelegate mCompatElevationDelegate;
 
-    public ElevatedTextView(Context context) {
+    public DemoElevatedTextView(Context context) {
         super(context);
         init(null, 0);
     }
 
-    public ElevatedTextView(Context context, AttributeSet attrs) {
+    public DemoElevatedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs, 0);
     }
 
-    public ElevatedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DemoElevatedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs, defStyleAttr);
     }
 
     private void init(AttributeSet attrs, int defStyleAttr) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mCompatElevationDelegate = new CompatElevationDelegate(this, attrs, defStyleAttr);
-        } /* else native elevation can be used. */
+        mCompatElevationDelegate = new CompatElevationDelegate(this, attrs, defStyleAttr);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (mCompatElevationDelegate != null) {
-            mCompatElevationDelegate.onAttachedToWindow();
-        }
+        mCompatElevationDelegate.onAttachedToWindow();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if (mCompatElevationDelegate != null) {
-            mCompatElevationDelegate.onDetachedFromWindow();
-        }
+        mCompatElevationDelegate.onDetachedFromWindow();
     }
 }

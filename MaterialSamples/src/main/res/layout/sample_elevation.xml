@@ -15,7 +15,7 @@
         android:layout_gravity="bottom|start"
         android:elevation="4dip" />
 
-    <io.doist.material.sample.ElevatedTextView
+    <io.doist.material.sample.DemoElevatedTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dip"

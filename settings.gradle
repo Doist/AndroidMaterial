@@ -1,2 +1,2 @@
-include ':MaterialSamples'
 include ':MaterialLibrary'
+include ':MaterialSamples'

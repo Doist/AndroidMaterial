@@ -2,7 +2,7 @@ package io.doist.material.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +28,13 @@ public class MainActivity extends ActionBarActivity {
 
         String[] array = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, array);
-        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autocomplete);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autocomplete);
         autoCompleteTextView.setAdapter(adapter);
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = findViewById(R.id.spinner);
         spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, array));
 
-        final ProgressBar progress = (ProgressBar) findViewById(R.id.progress);
+        final ProgressBar progress = findViewById(R.id.progress);
         findViewById(android.R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
