@@ -345,20 +345,26 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
             int bottom = top + mBounds.height();
 
             if (force || left != mLeft || top != mTop || right != mRight || bottom != mBottom) {
+                // Check if there were changes in the drawable's dimensions.
+                boolean heightChanged = (bottom - top) != (mBottom - mTop);
+                boolean widthChanged = (right - left) != (mRight - mLeft);
+
                 mLeft = left;
                 mTop = top;
                 mRight = right;
                 mBottom = bottom;
-
+                
                 int shadowLengthLeft = getShadowLengthLeft(left);
                 int shadowLengthTop = getShadowLengthTop();
                 int shadowLengthRight = getShadowLengthRight(right);
                 int shadowLengthBottom = getShadowLengthBottom(bottom);
 
-                boolean leftDirty = mShowShadowLeft && (force || shadowLengthLeft != mShadowLengthLeft);
-                boolean topDirty = mShowShadowTop && (force || shadowLengthTop != mShadowLengthTop);
-                boolean rightDirty = mShowShadowRight && (force || shadowLengthRight != mShadowLengthRight);
-                boolean bottomDirty = mShowShadowBottom && (force || shadowLengthBottom != mShadowLengthBottom);
+                boolean leftDirty = mShowShadowLeft && (force || shadowLengthLeft != mShadowLengthLeft || widthChanged);
+                boolean topDirty = mShowShadowTop && (force || shadowLengthTop != mShadowLengthTop || heightChanged);
+                boolean rightDirty =
+                        mShowShadowRight && (force || shadowLengthRight != mShadowLengthRight || widthChanged);
+                boolean bottomDirty =
+                        mShowShadowBottom && (force || shadowLengthBottom != mShadowLengthBottom || heightChanged);
 
                 if (leftDirty || topDirty || rightDirty || bottomDirty) {
                     float shadowAlphaLeft = shadowLengthLeft > shadowLengthRight ? SIDE_ALPHA : AMBIENT_ALPHA;
