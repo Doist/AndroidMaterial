@@ -265,7 +265,7 @@ class CompatElevationDrawable extends WrapperDrawable implements CompatElevation
         int height = mBounds.height();
 
         // Translate the canvas to the area that will be drawn.
-        int count = canvas.save(Canvas.MATRIX_SAVE_FLAG);
+        int count = canvas.save();
         canvas.translate(getPaddingLeft() + mWrappedPadding.left - mShadowLengthLeft,
                          getPaddingTop() + mWrappedPadding.top - mShadowLengthTop);
 
