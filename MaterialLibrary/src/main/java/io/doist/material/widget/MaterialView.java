@@ -2,10 +2,10 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialView extends View {
@@ -32,7 +32,7 @@ public class MaterialView extends View {
 
     @Override
     public void setBackgroundResource(@DrawableRes int resId) {
-        if(sNative) {
+        if (sNative) {
             super.setBackgroundResource(resId);
         } else {
             super.setBackground(MaterialWidgetHandler.getDrawable(this, resId));

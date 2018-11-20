@@ -3,10 +3,10 @@ package io.doist.material.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.RadioButton;
 
+import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialRadioButton extends RadioButton {
@@ -43,7 +43,8 @@ public class MaterialRadioButton extends RadioButton {
     }
 
     @Override
-    public void setCompoundDrawablesWithIntrinsicBounds(@DrawableRes int left, @DrawableRes int top, @DrawableRes int right, @DrawableRes int bottom) {
+    public void setCompoundDrawablesWithIntrinsicBounds(@DrawableRes int left, @DrawableRes int top,
+                                                        @DrawableRes int right, @DrawableRes int bottom) {
         if (sNative) {
             super.setCompoundDrawablesWithIntrinsicBounds(left, top, right, bottom);
         } else {
@@ -55,7 +56,8 @@ public class MaterialRadioButton extends RadioButton {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
-    public void setCompoundDrawablesRelativeWithIntrinsicBounds(@DrawableRes int start, @DrawableRes int top, @DrawableRes int end, @DrawableRes int bottom) {
+    public void setCompoundDrawablesRelativeWithIntrinsicBounds(@DrawableRes int start, @DrawableRes int top,
+                                                                @DrawableRes int end, @DrawableRes int bottom) {
         if (sNative) {
             super.setCompoundDrawablesRelativeWithIntrinsicBounds(start, top, end, bottom);
         } else {

@@ -2,10 +2,10 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ToggleButton;
 
+import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialToggleButton extends ToggleButton {
@@ -32,7 +32,7 @@ public class MaterialToggleButton extends ToggleButton {
 
     @Override
     public void setBackgroundResource(@DrawableRes int resId) {
-        if(sNative) {
+        if (sNative) {
             super.setBackgroundResource(resId);
         } else {
             super.setBackground(MaterialWidgetHandler.getDrawable(this, resId));

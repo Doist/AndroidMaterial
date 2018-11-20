@@ -2,10 +2,10 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialImageView extends ImageView {

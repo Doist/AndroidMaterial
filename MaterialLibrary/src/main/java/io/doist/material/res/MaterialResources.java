@@ -9,14 +9,14 @@ import android.content.res.XmlResourceParser;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.util.ArrayMap;
-import android.support.v4.util.LongSparseArray;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
 import java.lang.ref.WeakReference;
 import java.util.WeakHashMap;
 
+import androidx.collection.ArrayMap;
+import androidx.collection.LongSparseArray;
 import io.doist.material.drawable.MaterialDrawableUtils;
 import io.doist.material.reflection.ReflectionUtils;
 
@@ -63,8 +63,8 @@ public class MaterialResources {
     }
 
     public static int getThemeResId(Context context) {
-        if (context instanceof android.support.v7.view.ContextThemeWrapper) {
-            return ((android.support.v7.view.ContextThemeWrapper) context).getThemeResId();
+        if (context instanceof androidx.appcompat.view.ContextThemeWrapper) {
+            return ((androidx.appcompat.view.ContextThemeWrapper) context).getThemeResId();
         } else if (context instanceof android.view.ContextThemeWrapper) {
             try {
                 return (int) ReflectionUtils.invokeDeclaredMethod(

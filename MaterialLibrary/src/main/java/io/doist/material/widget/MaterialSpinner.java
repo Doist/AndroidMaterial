@@ -2,10 +2,10 @@ package io.doist.material.widget;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
-import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
 
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.widget.AppCompatSpinner;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialSpinner extends AppCompatSpinner {

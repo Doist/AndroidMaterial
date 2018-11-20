@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.util.TypedValue;
+
+import androidx.annotation.Nullable;
 
 /**
  * Helper class for methods of {@link TypedArray} working with {@link MaterialResources}.

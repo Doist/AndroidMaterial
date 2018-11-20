@@ -2,13 +2,14 @@ package io.doist.material.sample;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 public class SettingsActivity extends AppCompatActivity {
     @Override

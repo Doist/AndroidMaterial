@@ -31,10 +31,6 @@
         <attr name="android:foreground" />
     </declare-styleable>
 
-    <declare-styleable name="Spinner">
-        <attr name="android:popupBackground" />
-    </declare-styleable>
-
     <declare-styleable name="MaterialProgressBar">
         <attr name="android:progressDrawable" />
     </declare-styleable>

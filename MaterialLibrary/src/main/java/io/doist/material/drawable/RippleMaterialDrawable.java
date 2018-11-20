@@ -10,13 +10,13 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
 
 import java.io.IOException;
 
+import androidx.annotation.Nullable;
 import io.doist.material.R;
 
 /**

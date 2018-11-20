@@ -3,10 +3,10 @@ package io.doist.material.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
+import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
 public class MaterialEditText extends EditText {
