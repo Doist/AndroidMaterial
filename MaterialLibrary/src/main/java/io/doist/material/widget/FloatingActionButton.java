@@ -20,6 +20,7 @@ import io.doist.material.drawable.TintDrawable;
 import io.doist.material.elevation.CompatElevationDelegate;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
+@SuppressLint("AppCompatCustomView")
 public class FloatingActionButton extends ImageButton {
     private static final int DEFAULT_ELEVATION_DP = 6;
 

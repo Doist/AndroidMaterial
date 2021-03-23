@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="64dip">
@@ -13,7 +14,9 @@
         android:layout_margin="16dip"
         android:text="Lorem ipsum"
         android:layout_gravity="bottom|start"
-        android:elevation="4dip" />
+        android:elevation="4dip"
+        tools:targetApi="lollipop"
+        tools:ignore="HardcodedText" />
 
     <io.doist.material.sample.DemoElevatedTextView
         android:layout_width="wrap_content"
@@ -24,6 +27,7 @@
         android:text="Lorem ipsum"
         android:layout_gravity="bottom|end"
         app:elevation="4dip"
-        app:cornerRadius="9dip" />
+        app:cornerRadius="9dip"
+        tools:ignore="HardcodedText" />
 
 </FrameLayout>

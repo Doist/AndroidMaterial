@@ -1,5 +1,6 @@
 package io.doist.material.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -8,6 +9,7 @@ import android.widget.ImageButton;
 import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
+@SuppressLint("AppCompatCustomView")
 public class MaterialImageButton extends ImageButton {
     private static final boolean sNative = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
