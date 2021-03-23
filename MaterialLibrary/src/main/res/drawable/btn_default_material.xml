@@ -15,6 +15,8 @@
 -->
 
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?attr/colorControlHighlight">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="?attr/colorControlHighlight"
+    tools:ignore="NewApi">
     <item android:drawable="@drawable/btn_default_mtrl_shape" />
 </ripple>

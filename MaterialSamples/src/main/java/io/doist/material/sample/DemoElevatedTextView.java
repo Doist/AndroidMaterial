@@ -1,12 +1,13 @@
 package io.doist.material.sample;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 import io.doist.material.elevation.CompatElevationDelegate;
 
+@SuppressLint("AppCompatCustomView")
 public class DemoElevatedTextView extends TextView {
     private CompatElevationDelegate mCompatElevationDelegate;
 

@@ -14,11 +14,11 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_enabled="false">
         <nine-patch android:alpha="?android:attr/disabledAlpha"
             android:src="@drawable/abc_spinner_mtrl_am_alpha"
-            android:tint="?attr/colorControlNormal" />
+            android:tint="?attr/colorControlNormal" tools:ignore="NewApi" />
     </item>
     <item android:state_focused="false" android:state_pressed="false">
         <nine-patch android:src="@drawable/abc_spinner_mtrl_am_alpha"

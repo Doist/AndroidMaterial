@@ -14,17 +14,20 @@
      limitations under the License.
 -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <nine-patch android:src="@drawable/progress_mtrl_alpha"
             android:tint="?attr/colorControlNormal"
-            android:alpha="?android:attr/disabledAlpha" />
+            android:alpha="?android:attr/disabledAlpha"
+            tools:ignore="NewApi" />
     </item>
     <item android:id="@android:id/secondaryProgress">
         <scale android:scaleWidth="100%">
             <nine-patch android:src="@drawable/progress_mtrl_alpha"
                 android:tint="?attr/colorControlActivated"
-                android:alpha="?android:attr/disabledAlpha" />
+                android:alpha="?android:attr/disabledAlpha"
+                tools:ignore="NewApi" />
         </scale>
     </item>
     <item android:id="@android:id/progress">

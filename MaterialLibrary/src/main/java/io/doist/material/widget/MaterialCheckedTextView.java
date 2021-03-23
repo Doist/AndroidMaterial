@@ -10,6 +10,7 @@ import android.widget.CheckedTextView;
 import androidx.annotation.DrawableRes;
 import io.doist.material.widget.utils.MaterialWidgetHandler;
 
+@SuppressLint("AppCompatCustomView")
 public class MaterialCheckedTextView extends CheckedTextView {
     private static final boolean sNative = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT;
 
